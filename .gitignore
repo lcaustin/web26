@@ -1,0 +1,23 @@
+:# Dependencies
+node_modules/
+.pnpm-store/
+
+# Next.js
+.next/
+out/
+build/
+
+# Payload:qu
+.env
+src/payload-types.ts
+public/media/
+
+# Misc
+.DS_Store
+*.pem
+npm-debug.log*
+pnpm-debug.log*
+
+# Local env files
+.env*.local
+_tmp_*
