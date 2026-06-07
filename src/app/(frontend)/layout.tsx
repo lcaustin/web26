@@ -10,24 +10,23 @@ export const metadata: Metadata = {
 }
 
 // Inline script that runs before paint, so the correct theme is applied
-// immediately (no flash of the wrong theme). Defaults to dark, matching
-// the mockup's `data-theme="dark"` starting state, but respects a stored
-// preference from a previous visit.
+// immediately (no flash of the wrong theme). Defaults to light, but respects
+// a stored preference from a previous visit.
 const themeInitScript = `
 (function () {
   try {
     var stored = localStorage.getItem('lc-theme');
-    var theme = stored === 'light' || stored === 'dark' ? stored : 'dark';
+    var theme = stored === 'light' || stored === 'dark' ? stored : 'light';
     document.documentElement.setAttribute('data-theme', theme);
   } catch (e) {
-    document.documentElement.setAttribute('data-theme', 'dark');
+    document.documentElement.setAttribute('data-theme', 'light');
   }
 })();
 `
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ko" data-theme="dark" suppressHydrationWarning>
+    <html lang="ko" data-theme="light" suppressHydrationWarning>
       <head>
         {/* eslint-disable-next-line @next/next/no-sync-scripts */}
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />

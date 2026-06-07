@@ -12,7 +12,7 @@ const NAV_LINKS = [
 ]
 
 export default function Nav() {
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark')
+  const [theme, setTheme] = useState<'dark' | 'light'>('light')
   const [menuOpen, setMenuOpen] = useState(false)
 
   // Sync local state with whatever the inline init-script already set on <html>
