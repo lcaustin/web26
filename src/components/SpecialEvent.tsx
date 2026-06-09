@@ -25,7 +25,7 @@ type Props = {
 }
 
 const WELCOME_DEFAULTS = {
-  messageKo: '어스틴 주님의교회에 오신 것을 환영합니다',
+  messageKo: '어스틴 주님의교회에 오신 것을 환영합니다!',
   messageEn: 'Welcome to Lord’s Church of Austin — where community and faith grow together',
   registerLabelKo: '새가족 등록 안내',
   registerLabelEn: 'New Family Registration',
