@@ -6,7 +6,7 @@ type QuickLink = {
 }
 
 const FALLBACK: QuickLink[] = [
-  { id: 'f1', name: { ko: '매일말씀묵상', en: 'Daily Scripture Meditation' }, icon: 'ti-bible', href: '#' },
+  { id: 'f1', name: { ko: '매일말씀묵상', en: 'Daily QT' }, icon: 'ti-bible', href: '#' },
   { id: 'f2', name: { ko: '온라인 헌금안내', en: 'Online Giving' }, icon: 'ti-heart', href: '#' },
   { id: 'f3', name: { ko: '예배시간 안내', en: 'Service Times' }, icon: 'ti-clock', href: '/service-times' },
   { id: 'f4', name: { ko: '토요 골방기도', en: 'Saturday Closet Prayer' }, icon: 'ti-candle', href: '#' },

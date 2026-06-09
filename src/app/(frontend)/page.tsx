@@ -7,14 +7,16 @@ import Hero from '@/components/Hero'
 import Nav from '@/components/Nav'
 import QuickLinks from '@/components/QuickLinks'
 import SermonAndNews from '@/components/SermonAndNews'
-import WelcomeBanner from '@/components/WelcomeBanner'
+import SpecialEvent from '@/components/SpecialEvent'
 
 export const dynamic = 'force-dynamic'
 
 export default async function HomePage() {
   const payload = await getPayload({ config })
 
-  const [siteSettings, sermons, news, quickLinks, departments] = await Promise.all([
+  const today = new Date().toISOString()
+
+  const [siteSettings, sermons, news, events, quickLinks, departments] = await Promise.all([
     payload.findGlobal({ slug: 'site-settings' }).catch(() => null),
     payload
       .find({ collection: 'sermons', limit: 1, sort: '-date' })
@@ -22,6 +24,22 @@ export default async function HomePage() {
       .catch(() => []),
     payload
       .find({ collection: 'news', limit: 4, sort: '-date' })
+      .then((r) => r.docs)
+      .catch(() => []),
+    // Special events: news items with both startDate and endDate set, endDate >= today
+    payload
+      .find({
+        collection: 'news',
+        limit: 20,
+        sort: 'eventDates.startDate',
+        where: {
+          and: [
+            { 'eventDates.startDate': { exists: true } },
+            { 'eventDates.endDate': { exists: true } },
+            { 'eventDates.endDate': { greater_than_equal: today } },
+          ],
+        },
+      })
       .then((r) => r.docs)
       .catch(() => []),
     payload
@@ -46,15 +64,25 @@ export default async function HomePage() {
       <Nav />
       <Hero />
 
-      {banner?.enabled !== false && (
-        <WelcomeBanner
-          messageKo={banner?.message?.ko}
-          messageEn={banner?.message?.en}
-          registerLabelKo={banner?.registerLabel?.ko}
-          registerLabelEn={banner?.registerLabel?.en}
-          registerHref={banner?.registerHref}
-        />
-      )}
+      <SpecialEvent
+        events={events
+          .filter((e: any) => e.eventDates?.startDate && e.eventDates?.endDate)
+          .map((e: any) => ({
+            id: e.id,
+            slug: e.slug ?? null,
+            title: { ko: e.title?.ko ?? null, en: e.title?.en ?? null },
+            startDate: e.eventDates.startDate,
+            endDate: e.eventDates.endDate,
+            link: e.link ?? null,
+          }))}
+        welcome={{
+          messageKo: banner?.message?.ko,
+          messageEn: banner?.message?.en,
+          registerLabelKo: banner?.registerLabel?.ko,
+          registerLabelEn: banner?.registerLabel?.en,
+          registerHref: banner?.registerHref,
+        }}
+      />
 
       <SermonAndNews
         sermon={

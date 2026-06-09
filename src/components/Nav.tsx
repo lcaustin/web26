@@ -7,8 +7,8 @@ const NAV_LINKS = [
   { ko: '교회소개', en: 'About', href: '#' },
   { ko: '말씀', en: 'Sermons', href: '#' },
   { ko: '사역', en: 'Ministry', href: '#' },
-  { ko: '다음세대', en: 'Next Gen', href: '#' },
-  { ko: '소식', en: 'News', href: '#' },
+  { ko: '다음세대', en: 'Next Gen', href: '/departments' },
+  { ko: '소식', en: 'News', href: '/news' },
 ]
 
 export default function Nav() {

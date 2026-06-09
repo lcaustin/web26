@@ -1,13 +1,8 @@
-/* Custom admin-panel styling overrides */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap');
 
-:root {
-  --font-body: 'Noto Sans KR', sans-serif !important;
-}
-
-html,
-body,
-#app,
-* {
+/* Apply Noto Sans KR across the entire Payload admin UI */
+*,
+*::before,
+*::after {
   font-family: 'Noto Sans KR', sans-serif !important;
 }

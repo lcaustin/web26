@@ -1,4 +1,4 @@
-:# Dependencies
+# Dependencies
 node_modules/
 .pnpm-store/
 
@@ -7,7 +7,7 @@ node_modules/
 out/
 build/
 
-# Payload:qu
+# Payload
 .env
 src/payload-types.ts
 public/media/

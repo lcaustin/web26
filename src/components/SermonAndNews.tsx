@@ -1,8 +1,67 @@
+'use client'
+
+import { useEffect, useState } from 'react'
+
 // Featured sermon video shown on the landing page's sermon card.
 // Update this when a new sermon recording should be featured.
 const SERMON_VIDEO_ID = 'brdV9aXCun8'
 const SERMON_VIDEO_URL = `https://www.youtube.com/watch?v=${SERMON_VIDEO_ID}`
 const SERMON_VIDEO_THUMB = `https://img.youtube.com/vi/${SERMON_VIDEO_ID}/maxresdefault.jpg`
+const SERMON_VIDEO_EMBED = `https://www.youtube.com/embed/${SERMON_VIDEO_ID}?autoplay=1&rel=0`
+
+// Large modal that plays the featured sermon video in an embedded YouTube player.
+function SermonVideoModal({ onClose }: { onClose: () => void }) {
+  // Close on Escape, and lock background scroll while the modal is open.
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    document.addEventListener('keydown', onKeyDown)
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', onKeyDown)
+      document.body.style.overflow = prevOverflow
+    }
+  }, [onClose])
+
+  return (
+    <div
+      className="video-modal-backdrop"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Sermon video player"
+    >
+      <div className="video-modal" onClick={(e) => e.stopPropagation()}>
+        <button
+          type="button"
+          className="video-modal-close"
+          onClick={onClose}
+          aria-label="Close video"
+        >
+          <i className="ti ti-x" aria-hidden="true" />
+        </button>
+        <div className="video-modal-frame">
+          <iframe
+            src={SERMON_VIDEO_EMBED}
+            title="Sermon video player"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+          />
+        </div>
+        <a
+          className="video-modal-yt-link"
+          href={SERMON_VIDEO_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          YouTube에서 보기 · Watch on YouTube ↗
+        </a>
+      </div>
+    </div>
+  )
+}
 
 type Sermon = {
   title: { ko: string; en: string }
@@ -31,6 +90,8 @@ const formatDate = (iso: string) => {
 }
 
 export default function SermonAndNews({ sermon, news }: Props) {
+  const [videoOpen, setVideoOpen] = useState(false)
+
   return (
     <section>
       <div className="wrap">
@@ -45,14 +106,17 @@ export default function SermonAndNews({ sermon, news }: Props) {
               </a>
             </div>
             <div className="sermon-card">
-              <a
+              <button
+                type="button"
                 className="sermon-thumb"
-                href={SERMON_VIDEO_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Watch this week's sermon on YouTube"
+                onClick={() => setVideoOpen(true)}
+                aria-label="Play this week's sermon video"
                 style={{
                   display: 'block',
+                  width: '100%',
+                  border: 'none',
+                  padding: 0,
+                  cursor: 'pointer',
                   background: `#120d24 url(${SERMON_VIDEO_THUMB}) center / cover no-repeat`,
                 }}
               >
@@ -61,7 +125,7 @@ export default function SermonAndNews({ sermon, news }: Props) {
                     <i className="ti ti-player-play" aria-hidden="true" />
                   </div>
                 </div>
-              </a>
+              </button>
               <div className="sermon-body">
                 <div className="sermon-tag">주일 설교 · SUNDAY SERMON</div>
                 {sermon ? (
@@ -99,7 +163,7 @@ export default function SermonAndNews({ sermon, news }: Props) {
               <span className="sec-title">
                 소식 · <span style={{ fontWeight: 400, color: 'var(--t2)' }}>News</span>
               </span>
-              <a className="view-all" href="#">
+              <a className="view-all" href="/news">
                 전체 보기 View All →
               </a>
             </div>
@@ -125,6 +189,7 @@ export default function SermonAndNews({ sermon, news }: Props) {
           </div>
         </div>
       </div>
+      {videoOpen && <SermonVideoModal onClose={() => setVideoOpen(false)} />}
     </section>
   )
 }

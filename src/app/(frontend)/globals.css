@@ -117,6 +117,29 @@ nav {
 .btn-outline { background: rgba(255, 255, 255, 0.1); color: #fff; border: 1px solid rgba(255, 255, 255, 0.25); border-radius: 7px; padding: 12px 24px; font-family: 'Noto Sans KR', sans-serif; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background 0.15s; }
 .btn-outline:hover { background: rgba(255, 255, 255, 0.18); }
 
+/* ── Special Event Carousel (matches WelcomeBanner style) ── */
+.se-section { background: #5c1e2e; padding: 28px 0; display: flex; align-items: center; position: relative; }
+.se-chevron { width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.2); background: transparent; color: rgba(255,255,255,0.7); display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; flex-shrink: 0; margin: 0 12px; transition: background 0.15s, color 0.15s, border-color 0.15s; }
+.se-chevron:hover:not(.se-chevron--disabled) { background: rgba(255,255,255,0.1); color: #fff; border-color: rgba(255,255,255,0.5); }
+.se-chevron--disabled { opacity: 0.2; cursor: default; }
+.se-inner { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; text-decoration: none; }
+.se-inner--left { animation: se-slide-left 0.35s ease; }
+.se-inner--right { animation: se-slide-right 0.35s ease; }
+@keyframes se-slide-left { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes se-slide-right { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+.se-eyebrow { display: flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #d4a93c; }
+.se-divider { width: 36px; height: 2px; background: rgba(212,169,60,0.6); border-radius: 1px; margin: 2px 0; }
+.se-title-ko { font-size: 20px; font-weight: 500; color: #fff; line-height: 1.3; }
+.se-title-en { font-size: 13px; color: rgba(255,255,255,0.65); letter-spacing: 0.04em; }
+.se-dates { display: flex; align-items: center; gap: 5px; font-size: 12px; color: rgba(255,255,255,0.55); margin-top: 2px; }
+.se-dots { display: flex; justify-content: center; gap: 7px; }
+.se-dot-btn { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.3); border: none; padding: 0; cursor: pointer; transition: background 0.2s, transform 0.2s; }
+.se-dot-btn--active { background: #d4a93c; transform: scale(1.3); }
+@media (max-width: 600px) {
+  .se-chevron { width: 36px; height: 36px; font-size: 20px; margin: 0 6px; }
+  .se-title-ko { font-size: 17px; }
+}
+
 .welcome { background: #5c1e2e; padding: 28px 0; }
 .welcome-inner { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; }
 .welcome-ko { font-size: 20px; font-weight: 500; color: #fff; line-height: 1.3; }
@@ -141,6 +164,65 @@ section { padding: 56px 0; }
 .sermon-thumb { width: 100%; aspect-ratio: 16 / 9; background: #1a1030; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
 .play-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
 .play-btn-c { width: 42px; height: 42px; border-radius: 50%; background: rgba(255, 255, 255, 0.18); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 20px; backdrop-filter: blur(2px); }
+/* Sermon video modal — large lightbox-style player triggered by clicking the sermon thumbnail */
+.video-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(7, 5, 16, 0.82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  backdrop-filter: blur(2px);
+}
+.video-modal {
+  position: relative;
+  width: 100%;
+  max-width: 960px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.video-modal-frame {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+}
+.video-modal-frame iframe { width: 100%; height: 100%; border: 0; display: block; }
+.video-modal-close {
+  position: absolute;
+  top: -44px;
+  right: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.video-modal-close:hover { background: rgba(255, 255, 255, 0.18); }
+.video-modal-yt-link {
+  align-self: center;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.video-modal-yt-link:hover { color: #fff; }
+@media (max-width: 640px) {
+  .video-modal-close { top: -40px; width: 32px; height: 32px; font-size: 16px; }
+}
+
 .sermon-body { padding: 14px 16px; }
 .sermon-tag { font-size: 10px; font-weight: 500; color: var(--gld); letter-spacing: 0.08em; margin-bottom: 4px; transition: color 0.25s; }
 .sermon-title { font-size: 14px; font-weight: 500; color: var(--t1); line-height: 1.45; margin-bottom: 4px; transition: color 0.25s; }
@@ -155,6 +237,12 @@ section { padding: 56px 0; }
 .news-title { font-size: 13px; font-weight: 500; color: var(--t1); line-height: 1.4; margin-bottom: 4px; transition: color 0.25s; }
 .news-date { font-size: 11px; color: var(--t2); transition: color 0.25s; }
 
+.news-page-list { display: flex; flex-direction: column; gap: 32px; }
+.news-page-group { display: flex; flex-direction: column; gap: 12px; }
+.news-page-date-header { font-size: 12px; font-weight: 600; color: var(--gld); letter-spacing: 0.05em; text-transform: uppercase; padding-bottom: 4px; border-bottom: 1px solid var(--bdr); transition: color 0.25s, border-color 0.25s; }
+.news-item--linked .news-item-link { display: flex; align-items: center; gap: 12px; width: 100%; text-decoration: none; color: inherit; }
+.news-item--linked:hover .news-title { color: var(--gld); }
+
 .dept-section { padding: 56px 0; }
 .dept-row { display: grid; gap: 10px; grid-template-columns: repeat(4, 1fr); }
 .dept-row + .dept-row { margin-top: 10px; }
@@ -163,9 +251,9 @@ section { padding: 56px 0; }
 }
 .dept-tile { background: var(--surf); border: 1px solid var(--bdr); border-radius: 10px; padding: 16px 10px; text-align: center; cursor: pointer; transition: background 0.15s, border-color 0.25s; }
 .dept-tile:hover { background: var(--bg-alt); }
-.dept-icon { font-size: 22px; color: var(--gld); margin-bottom: 8px; transition: color 0.25s; }
-.dept-ko { font-size: 12px; font-weight: 500; color: var(--t1); transition: color 0.25s; }
-.dept-en { font-size: 10px; color: var(--t2); transition: color 0.25s; }
+.dept-icon { font-size: 30px; color: var(--gld); margin-bottom: 8px; transition: color 0.25s; }
+.dept-ko { font-size: 15px; font-weight: 500; color: var(--t1); transition: color 0.25s; }
+.dept-en { font-size: 12px; color: var(--t2); transition: color 0.25s; }
 
 .resource-section { background: var(--bg-alt); padding: 56px 0; transition: background 0.25s; }
 .resource-grid { display: grid; gap: 14px; grid-template-columns: repeat(4, 1fr); }
@@ -177,7 +265,7 @@ section { padding: 56px 0; }
 }
 .resource-tile { background: var(--surf); border: 1px solid var(--bdr); border-radius: 10px; padding: 22px 18px; text-align: center; cursor: pointer; transition: background 0.15s, border-color 0.25s; }
 .resource-tile:hover { background: var(--bg); }
-.resource-icon { width: 44px; height: 44px; border-radius: 50%; background: rgba(212, 169, 60, 0.12); display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; font-size: 20px; color: var(--gld); transition: background 0.25s, color 0.25s; }
+.resource-icon { width: 52px; height: 52px; border-radius: 50%; background: rgba(212, 169, 60, 0.12); display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; font-size: 26px; color: var(--gld); transition: background 0.25s, color 0.25s; }
 .resource-ko { font-size: 14px; font-weight: 500; color: var(--t1); margin-bottom: 4px; transition: color 0.25s; }
 .resource-en { font-size: 11px; color: var(--t2); transition: color 0.25s; }
 
@@ -191,3 +279,21 @@ footer { background: var(--bg-alt); border-top: 1px solid var(--bdr); padding: 3
 .footer-copy { width: 100%; font-size: 11px; color: var(--t3); margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--bdr); transition: color 0.25s, border-color 0.25s; }
 
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); }
+
+/* Department detail page */
+.dept-detail-head { padding: 48px 0 28px; border-bottom: 1px solid var(--bdr); transition: border-color 0.25s; }
+.dept-back { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--t2); text-decoration: none; margin-bottom: 18px; transition: color 0.15s; }
+.dept-back:hover { color: var(--link); }
+.dept-detail-icon { width: 52px; height: 52px; border-radius: 50%; background: rgba(212, 169, 60, 0.12); display: flex; align-items: center; justify-content: center; font-size: 24px; color: var(--gld); margin-bottom: 16px; transition: background 0.25s, color 0.25s; }
+.dept-detail-ko { font-size: 26px; font-weight: 500; color: var(--t1); transition: color 0.25s; }
+.dept-detail-en { font-size: 13px; color: var(--t2); letter-spacing: 0.03em; margin-top: 4px; transition: color 0.25s; }
+
+.dept-detail-body { padding: 40px 0 64px; }
+.dept-lang-block { min-width: 0; }
+.dept-lang-block + .dept-lang-block { margin-top: 40px; padding-top: 40px; border-top: 1px solid var(--bdr); transition: border-color 0.25s; }
+.dept-lang-label { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gld); margin-bottom: 14px; }
+.dept-prose { font-family: 'Noto Sans KR', sans-serif; font-size: 14px; line-height: 1.9; color: var(--t1); transition: color 0.25s; }
+.dept-prose p { margin: 0 0 14px; }
+.dept-prose p:last-child { margin-bottom: 0; }
+.dept-prose strong { font-weight: 600; color: var(--t1); }
+.dept-empty { font-size: 13px; color: var(--t3); }
