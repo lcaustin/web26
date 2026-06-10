@@ -4,9 +4,13 @@ import React from 'react'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: "Lord's Church of Austin · 어스틴 주님의교회",
+  title: "어스틴 주님의교회 · Lord's Church of Austin",
   description:
     "예배의 감격으로 변화받아 열방을 섬기는 교회 — Transformed by the Spirit of Worship to Serve the Nations",
+  icons: {
+    icon: 'https://static.lcaustin.org/favicon.ico',
+    apple: 'https://lcaustin.org/_next/static/images/favicon-74192dcc96a0c6c4f823c87e34813c3e.png',
+  },
 }
 
 // Inline script that runs before paint, so the correct theme is applied
