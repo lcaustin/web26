@@ -16,6 +16,7 @@ import { Sermons } from './collections/Sermons.ts'
 import { ServiceTimes } from './collections/ServiceTimes.ts'
 import { Departments } from './collections/Departments.ts'
 import { QuickLinks } from './collections/QuickLinks.ts'
+import { Pages } from './collections/Pages.ts'
 import { SiteSettings } from './globals/SiteSettings.ts'
 
 const filename = fileURLToPath(import.meta.url)
@@ -28,7 +29,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, News, Sermons, ServiceTimes, Departments, QuickLinks],
+  collections: [Users, Media, Pages, News, Sermons, ServiceTimes, Departments, QuickLinks],
   globals: [SiteSettings],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

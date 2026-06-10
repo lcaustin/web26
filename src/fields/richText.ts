@@ -1,6 +1,6 @@
 import type { Field } from 'payload'
 
-import { EXPERIMENTAL_TableFeature, FixedToolbarFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
+import { FixedToolbarFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
 
 /**
  * Shared rich-text editor config: Payload's default Lexical feature set
@@ -15,7 +15,7 @@ import { EXPERIMENTAL_TableFeature, FixedToolbarFeature, lexicalEditor } from '@
  */
 const richTextEditor = () =>
   lexicalEditor({
-    features: ({ defaultFeatures }) => [...defaultFeatures, FixedToolbarFeature(), EXPERIMENTAL_TableFeature()],
+    features: ({ defaultFeatures }) => [...defaultFeatures, FixedToolbarFeature()],
   })
 
 /**
