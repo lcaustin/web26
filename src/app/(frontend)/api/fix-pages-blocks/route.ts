@@ -6,9 +6,7 @@ export async function GET() {
   try {
     const payload = await getPayload({ config })
     // @ts-ignore — access drizzle adapter internals
-    const adapter = payload.db
-    // @ts-ignore
-    const db = adapter.drizzle
+    const db = payload.db.drizzle
 
     const results: string[] = []
 
@@ -38,63 +36,47 @@ export async function GET() {
       results.push('pages_blocks_photo_grid: table not found — will push schema')
     }
 
-    // ── Step 2: Force Payload/Drizzle to re-push the schema ──────────────
-    // Set env flag so pushDevSchema skips its dedup check
-    process.env.PAYLOAD_FORCE_DRIZZLE_PUSH = 'true'
+    // ── Step 2: Manually recreate the tables with correct types ──────────
     try {
-      // @ts-ignore
-      const { pushDevSchema } = await import(
-        '@payloadcms/drizzle/utilities/pushDevSchema'
-      )
-      await pushDevSchema(adapter)
-      results.push('pushDevSchema: completed — pages_blocks_photo_grid recreated with _path text')
-    } catch (pushErr: any) {
-      results.push(`pushDevSchema error: ${pushErr.message}`)
-      // Fallback: manual CREATE TABLE using the correct types
-      try {
-        // Check pages.id type first
-        const pagesIdRes = await db.execute(`
-          SELECT data_type, udt_name FROM information_schema.columns
-          WHERE table_name = 'pages' AND column_name = 'id'
-        `)
-        const pagesIdType = pagesIdRes.rows[0]?.data_type ?? 'integer'
-        const parentRefType = pagesIdType === 'integer' ? 'integer' : 'varchar(255)'
-        results.push(`pages.id type: ${pagesIdType} → using ${parentRefType} for _parent_id`)
+      const pagesIdRes = await db.execute(`
+        SELECT data_type, udt_name FROM information_schema.columns
+        WHERE table_name = 'pages' AND column_name = 'id'
+      `)
+      const pagesIdType = pagesIdRes.rows[0]?.data_type ?? 'integer'
+      const parentRefType = pagesIdType === 'integer' ? 'integer' : 'varchar(255)'
+      results.push(`pages.id type: ${pagesIdType} → using ${parentRefType} for _parent_id`)
 
-        await db.execute(`
-          CREATE TABLE "pages_blocks_photo_grid" (
-            "_order"      integer         NOT NULL,
-            "_parent_id"  ${parentRefType} NOT NULL,
-            "_path"       text            NOT NULL,
-            "id"          varchar(255)    PRIMARY KEY,
-            "block_name"  varchar(255),
-            CONSTRAINT "pages_blocks_photo_grid_parent_id_fk"
-              FOREIGN KEY ("_parent_id") REFERENCES "pages"("id") ON DELETE CASCADE
-          )
-        `)
-        await db.execute(`CREATE INDEX ON "pages_blocks_photo_grid" ("_order")`)
-        await db.execute(`CREATE INDEX ON "pages_blocks_photo_grid" ("_parent_id")`)
-        await db.execute(`CREATE INDEX ON "pages_blocks_photo_grid" ("_path")`)
-        results.push('pages_blocks_photo_grid: manually created with _path text')
+      await db.execute(`
+        CREATE TABLE "pages_blocks_photo_grid" (
+          "_order"      integer         NOT NULL,
+          "_parent_id"  ${parentRefType} NOT NULL,
+          "_path"       text            NOT NULL,
+          "id"          varchar(255)    PRIMARY KEY,
+          "block_name"  varchar(255),
+          CONSTRAINT "pages_blocks_photo_grid_parent_id_fk"
+            FOREIGN KEY ("_parent_id") REFERENCES "pages"("id") ON DELETE CASCADE
+        )
+      `)
+      await db.execute(`CREATE INDEX ON "pages_blocks_photo_grid" ("_order")`)
+      await db.execute(`CREATE INDEX ON "pages_blocks_photo_grid" ("_parent_id")`)
+      await db.execute(`CREATE INDEX ON "pages_blocks_photo_grid" ("_path")`)
+      results.push('pages_blocks_photo_grid: created with _path text')
 
-        await db.execute(`
-          CREATE TABLE "pages_blocks_photo_grid_images" (
-            "_order"      integer        NOT NULL,
-            "_parent_id"  varchar(255)   NOT NULL,
-            "id"          varchar(255)   PRIMARY KEY,
-            "image_id"    ${parentRefType},
-            CONSTRAINT "pages_blocks_photo_grid_images_parent_fk"
-              FOREIGN KEY ("_parent_id") REFERENCES "pages_blocks_photo_grid"("id") ON DELETE CASCADE
-          )
-        `)
-        await db.execute(`CREATE INDEX ON "pages_blocks_photo_grid_images" ("_order")`)
-        await db.execute(`CREATE INDEX ON "pages_blocks_photo_grid_images" ("_parent_id")`)
-        results.push('pages_blocks_photo_grid_images: manually created')
-      } catch (createErr: any) {
-        results.push(`fallback create error: ${createErr.message}`)
-      }
-    } finally {
-      delete process.env.PAYLOAD_FORCE_DRIZZLE_PUSH
+      await db.execute(`
+        CREATE TABLE "pages_blocks_photo_grid_images" (
+          "_order"      integer        NOT NULL,
+          "_parent_id"  varchar(255)   NOT NULL,
+          "id"          varchar(255)   PRIMARY KEY,
+          "image_id"    ${parentRefType},
+          CONSTRAINT "pages_blocks_photo_grid_images_parent_fk"
+            FOREIGN KEY ("_parent_id") REFERENCES "pages_blocks_photo_grid"("id") ON DELETE CASCADE
+        )
+      `)
+      await db.execute(`CREATE INDEX ON "pages_blocks_photo_grid_images" ("_order")`)
+      await db.execute(`CREATE INDEX ON "pages_blocks_photo_grid_images" ("_parent_id")`)
+      results.push('pages_blocks_photo_grid_images: created')
+    } catch (createErr: any) {
+      results.push(`create error: ${createErr.message}`)
     }
 
     return NextResponse.json({ ok: true, results })
