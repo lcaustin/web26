@@ -6,6 +6,7 @@ type Department = {
 }
 
 
+
 const FALLBACK: Department[] = [
   { id: 'f1', name: { ko: '영아부', en: 'Nursery' }, icon: 'ti-baby-carriage' },
   { id: 'f2', name: { ko: '유아부', en: 'Preschool' }, icon: 'ti-mood-kid' },
