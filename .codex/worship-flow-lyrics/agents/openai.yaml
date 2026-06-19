@@ -1,0 +1,4 @@
+interface:
+  display_name: "Worship Flow Lyrics"
+  short_description: "Arrange worship sheet lyrics by flow"
+  default_prompt: "Use $worship-flow-lyrics to extract worship sheet lyrics and arrange them by the flow data."
