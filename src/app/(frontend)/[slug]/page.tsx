@@ -65,13 +65,10 @@ export default async function PageDetail({ params }: Props) {
 
       {/* Hero banner */}
       {heroImageUrl && (
-        <div className="page-hero">
-          <img src={heroImageUrl} alt={page.title?.ko ?? ''} className="page-hero-img" />
-          {heroTagline && (
-            <div className="page-hero-overlay">
-              <p className="page-hero-tagline">{heroTagline}</p>
-            </div>
-          )}
+        <div className="wrap">
+          <div className="page-hero">
+            <img src={heroImageUrl} alt={page.title?.ko ?? ''} className="page-hero-img" />
+          </div>
         </div>
       )}
 
@@ -81,7 +78,7 @@ export default async function PageDetail({ params }: Props) {
           {/* Callout box */}
           {hasCallout && (
             <div className="intro-callout">
-              {!heroImageUrl && (page.callout.tagline?.ko || page.callout.tagline?.en) && (
+              {(page.callout.tagline?.ko || page.callout.tagline?.en) && (
                 <p className="intro-tagline">
                   {page.callout.tagline.ko || page.callout.tagline.en}
                 </p>
