@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
+import AuroraText from './AuroraText'
 
 type NavChild = { ko: string; en: string; href: string; external?: boolean }
 type NavLink = { ko: string; en: string; href: string; children?: NavChild[] }
@@ -90,7 +91,7 @@ export default function Nav() {
       <div className="wrap nav-inner">
         <Link href="/" className="nav-brand">
           <img
-            src="https://lcaustin.org/_next/static/images/LC_logo-d577ea457c18198a982159ad30c9babf.svg"
+            src="/lc-logo.svg"
             alt="Lord's Church of Austin logo"
             onError={(e) => {
               const target = e.currentTarget
@@ -103,7 +104,12 @@ export default function Nav() {
             LC
           </div>
           <div className="nav-name">
-            <div className="ko">주님의교회</div>
+            <img
+              src={theme === 'dark' ? '/logo-text-lcaustin-white.svg' : '/logo-text-lcaustin-black.svg'}
+              alt=""
+              aria-hidden="true"
+              className="nav-name-logo"
+            />
             <div className="en">LORD&apos;S CHURCH OF AUSTIN</div>
           </div>
         </Link>

@@ -84,7 +84,22 @@ nav {
 .nav-brand img { height: 40px; filter: var(--logo-filter); transition: filter 0.25s; }
 .nav-name { line-height: 1.2; }
 .nav-name .ko { font-size: 30px; font-weight: 500; color: var(--t1); transition: color 0.25s; }
-.nav-name .en { font-size: 10px; color: var(--t2); letter-spacing: 0.03em; transition: color 0.25s; }
+.nav-name .en { font-size: 0.53rem; color: var(--t2); letter-spacing: 0.03em; transition: color 0.25s; }
+.nav-brand img.nav-name-logo { height: 30px; width: auto; filter: none; display: block; margin-bottom: 4px; }
+
+@keyframes aurora {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.animate-aurora {
+  animation-name: aurora;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-aurora, .nav-logo-aurora { animation: none; }
+}
 .nav-links { display: flex; align-items: center; gap: 2px; flex: 1; margin-left: 8px; }
 .nav-item { position: relative; }
 .nav-top-link { display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 6px 14px; border-radius: 6px; text-decoration: none; transition: background 0.15s; }
