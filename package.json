@@ -7,7 +7,7 @@
     "build": "cross-env NODE_OPTIONS=--no-deprecation next build",
     "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev",
     "devsafe": "rm -rf .next && cross-env NODE_OPTIONS=--no-deprecation next dev",
-    "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
+    "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types --use-swc",
     "lint": "cross-env NODE_OPTIONS=--no-deprecation next lint",
     "generate-prs": "tsx scripts/generate-prs.ts",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
@@ -20,7 +20,10 @@
     "@payloadcms/ui": "3.85.0",
     "adm-zip": "^0.5.17",
     "cross-env": "^7.0.3",
+    "firebase-admin": "^12.6.0",
+    "google-auth-library": "^9.14.1",
     "graphql": "^16.8.1",
+    "jose": "^5.9.6",
     "next": "16.2.7",
     "payload": "3.85.0",
     "react": "19.0.0",
@@ -28,6 +31,7 @@
     "sharp": "0.33.5"
   },
   "devDependencies": {
+    "@swc-node/register": "^1.10.9",
     "@types/adm-zip": "^0.5.8",
     "@types/node": "^22.5.4",
     "@types/react": "19.0.0",

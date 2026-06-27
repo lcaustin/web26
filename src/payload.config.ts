@@ -17,6 +17,7 @@ import { ServiceTimes } from './collections/ServiceTimes.ts'
 import { Departments } from './collections/Departments.ts'
 import { QuickLinks } from './collections/QuickLinks.ts'
 import { Pages } from './collections/Pages.ts'
+import { DeviceTokens } from './collections/DeviceTokens.ts'
 import { SiteSettings } from './globals/SiteSettings.ts'
 
 const filename = fileURLToPath(import.meta.url)
@@ -29,7 +30,25 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Pages, News, Sermons, ServiceTimes, Departments, QuickLinks],
+  // The Capacitor mobile app's WebView runs on the default Capacitor origin
+  // (https://localhost on Android/iOS unless overridden in capacitor.config.ts),
+  // which is cross-origin relative to the Payload backend's real domain. Without
+  // these, the browser/WebView blocks every native fetch() call with a generic
+  // "Failed to fetch" (CORS preflight rejection), even though the server itself
+  // would have responded fine.
+  cors: ['https://localhost', 'capacitor://localhost', 'http://localhost'],
+  csrf: ['https://localhost', 'capacitor://localhost', 'http://localhost'],
+  collections: [
+    Users,
+    Media,
+    Pages,
+    News,
+    Sermons,
+    ServiceTimes,
+    Departments,
+    QuickLinks,
+    DeviceTokens,
+  ],
   globals: [SiteSettings],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

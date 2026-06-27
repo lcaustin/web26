@@ -27,7 +27,7 @@ export async function GET() {
     sort: 'order',
   })
 
-  const departments = result.docs.map((d: Record<string, unknown>) => ({
+  const departments = result.docs.map((d) => ({
     id: d.id,
     adminTitle: d.adminTitle,
     name: d.name,
