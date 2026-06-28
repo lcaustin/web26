@@ -3,6 +3,11 @@ import { NextResponse } from 'next/server'
 
 import config from '@/payload.config'
 import { getMobileUser } from '@/lib/mobileAuth'
+import { handleOptions, withCors } from '@/lib/cors'
+
+export function OPTIONS(request: Request) {
+  return handleOptions(request)
+}
 
 // In-app account deletion, required by Apple App Store guidelines (5.1.1(v))
 // for any app that supports account creation. Deletes the user's
@@ -12,7 +17,7 @@ export async function POST(request: Request) {
   const user = await getMobileUser(payload, request.headers)
 
   if (!user) {
-    return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
+    return withCors(request, NextResponse.json({ message: 'Unauthorized' }, { status: 401 }))
   }
 
   const tokens = await payload.find({
@@ -27,5 +32,5 @@ export async function POST(request: Request) {
 
   await payload.delete({ collection: 'users', id: user.id })
 
-  return NextResponse.json({ ok: true })
+  return withCors(request, NextResponse.json({ ok: true }))
 }

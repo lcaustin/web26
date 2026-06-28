@@ -4,6 +4,11 @@ import { OAuth2Client } from 'google-auth-library'
 
 import config from '@/payload.config'
 import { signMobileAuthToken } from '@/lib/mobileAuth'
+import { handleOptions, withCors } from '@/lib/cors'
+
+export function OPTIONS(request: Request) {
+  return handleOptions(request)
+}
 
 // Verifies the Google ID token, then finds-or-creates a matching Payload user
 // (matched first by googleId, falling back to email so an existing
@@ -19,13 +24,16 @@ export async function POST(request: Request) {
   const { idToken } = await request.json().catch(() => ({}))
 
   if (!idToken || typeof idToken !== 'string') {
-    return NextResponse.json({ message: 'idToken is required' }, { status: 400 })
+    return withCors(request, NextResponse.json({ message: 'idToken is required' }, { status: 400 }))
   }
 
   if (GOOGLE_CLIENT_IDS.length === 0) {
-    return NextResponse.json(
-      { message: 'Server is missing GOOGLE_WEB_CLIENT_ID / GOOGLE_IOS_CLIENT_ID' },
-      { status: 500 },
+    return withCors(
+      request,
+      NextResponse.json(
+        { message: 'Server is missing GOOGLE_WEB_CLIENT_ID / GOOGLE_IOS_CLIENT_ID' },
+        { status: 500 },
+      ),
     )
   }
 
@@ -37,7 +45,7 @@ export async function POST(request: Request) {
       audience: GOOGLE_CLIENT_IDS,
     })
   } catch {
-    return NextResponse.json({ message: 'Invalid Google ID token' }, { status: 401 })
+    return withCors(request, NextResponse.json({ message: 'Invalid Google ID token' }, { status: 401 }))
   }
 
   const ticket = payloadToken.getPayload()
@@ -45,7 +53,10 @@ export async function POST(request: Request) {
   const email = ticket?.email
 
   if (!googleId || !email) {
-    return NextResponse.json({ message: 'Google token missing sub/email' }, { status: 400 })
+    return withCors(
+      request,
+      NextResponse.json({ message: 'Google token missing sub/email' }, { status: 400 }),
+    )
   }
 
   const payload = await getPayload({ config })
@@ -88,5 +99,5 @@ export async function POST(request: Request) {
 
   const { token } = await signMobileAuthToken(user)
 
-  return NextResponse.json({ user, token })
+  return withCors(request, NextResponse.json({ user, token }))
 }

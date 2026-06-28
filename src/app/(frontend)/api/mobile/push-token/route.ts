@@ -4,6 +4,11 @@ import { NextResponse } from 'next/server'
 import config from '@/payload.config'
 import { getMobileUser } from '@/lib/mobileAuth'
 import { subscribeToTopic, unsubscribeFromTopic } from '@/lib/firebaseAdmin'
+import { handleOptions, withCors } from '@/lib/cors'
+
+export function OPTIONS(request: Request) {
+  return handleOptions(request)
+}
 
 // Called by the mobile app right after push permission is granted (sign-in,
 // sign-up, or any time notification preferences change). Upserts a
@@ -14,15 +19,18 @@ export async function POST(request: Request) {
   const user = await getMobileUser(payload, request.headers)
 
   if (!user) {
-    return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
+    return withCors(request, NextResponse.json({ message: 'Unauthorized' }, { status: 401 }))
   }
 
   const { token, platform, topics } = await request.json().catch(() => ({}))
 
   if (!token || !platform || !Array.isArray(topics)) {
-    return NextResponse.json(
-      { message: 'token, platform, and topics[] are required' },
-      { status: 400 },
+    return withCors(
+      request,
+      NextResponse.json(
+        { message: 'token, platform, and topics[] are required' },
+        { status: 400 },
+      ),
     )
   }
 
@@ -55,5 +63,5 @@ export async function POST(request: Request) {
     })
   }
 
-  return NextResponse.json({ ok: true })
+  return withCors(request, NextResponse.json({ ok: true }))
 }
