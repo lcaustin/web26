@@ -1,9 +1,9 @@
-import * as migration_20260628_052113_add_google_id from './20260628_052113_add_google_id';
+import * as migration_20260628_060000_add_google_id_safe from './20260628_060000_add_google_id_safe';
 
 export const migrations = [
   {
-    up: migration_20260628_052113_add_google_id.up,
-    down: migration_20260628_052113_add_google_id.down,
-    name: '20260628_052113_add_google_id'
+    up: migration_20260628_060000_add_google_id_safe.up,
+    down: migration_20260628_060000_add_google_id_safe.down,
+    name: '20260628_060000_add_google_id_safe'
   },
 ];
