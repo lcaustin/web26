@@ -60,7 +60,7 @@ export default async function DepartmentDetailPage({ params }: Props) {
             <div className="dept-lang-label">한국어</div>
             {hasKo ? (
               <div className="dept-prose">
-                <RichText data={ko} />
+                <RichText data={ko!} />
               </div>
             ) : (
               <p className="dept-empty">아직 등록된 한국어 소개가 없습니다.</p>
@@ -71,7 +71,7 @@ export default async function DepartmentDetailPage({ params }: Props) {
             <div className="dept-lang-label">English</div>
             {hasEn ? (
               <div className="dept-prose">
-                <RichText data={en} />
+                <RichText data={en!} />
               </div>
             ) : (
               <p className="dept-empty">No English description has been added yet.</p>

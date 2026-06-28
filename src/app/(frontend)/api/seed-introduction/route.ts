@@ -74,7 +74,7 @@ export async function GET() {
         sections: [
           {
             blockType: 'richtext',
-            text: { ko: missionKo, en: null },
+            text: { ko: missionKo as any, en: null },
           },
           // Photo grid will be added after running import-introduction-images
         ],

@@ -97,7 +97,7 @@ export async function POST(request: Request) {
     }
   }
 
-  const { token } = await signMobileAuthToken(user)
+  const { token } = await signMobileAuthToken({ id: user.id, email: String(user.email) })
 
   return withCors(request, NextResponse.json({ user, token }))
 }
