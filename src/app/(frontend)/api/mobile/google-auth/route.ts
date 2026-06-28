@@ -59,45 +59,60 @@ export async function POST(request: Request) {
     )
   }
 
-  const payload = await getPayload({ config })
+  try {
+    const payload = await getPayload({ config })
 
-  const byGoogleId = await payload.find({
-    collection: 'users',
-    where: { googleId: { equals: googleId } },
-    limit: 1,
-  })
-
-  let user = byGoogleId.docs[0]
-
-  if (!user) {
-    const byEmail = await payload.find({
+    const byGoogleId = await payload.find({
       collection: 'users',
-      where: { email: { equals: email } },
+      where: { googleId: { equals: googleId } },
       limit: 1,
     })
 
-    if (byEmail.docs[0]) {
-      user = await payload.update({
+    let user = byGoogleId.docs[0]
+
+    if (!user) {
+      const byEmail = await payload.find({
         collection: 'users',
-        id: byEmail.docs[0].id,
-        data: { googleId },
+        where: { email: { equals: email } },
+        limit: 1,
       })
-    } else {
-      user = await payload.create({
-        collection: 'users',
-        data: {
-          email,
-          name: ticket?.name || '',
-          googleId,
-          // Random password: this account only ever authenticates via Google,
-          // but Payload's `auth: true` collections require a password field.
-          password: crypto.randomUUID() + crypto.randomUUID(),
-        },
-      })
+
+      if (byEmail.docs[0]) {
+        user = await payload.update({
+          collection: 'users',
+          id: byEmail.docs[0].id,
+          data: { googleId },
+        })
+      } else {
+        user = await payload.create({
+          collection: 'users',
+          data: {
+            email,
+            name: ticket?.name || '',
+            googleId,
+            // Random password: this account only ever authenticates via Google,
+            // but Payload's `auth: true` collections require a password field.
+            password: crypto.randomUUID() + crypto.randomUUID(),
+          },
+        })
+      }
     }
+
+    const { token } = await signMobileAuthToken({ id: user.id, email: String(user.email) })
+
+    return withCors(request, NextResponse.json({ user, token }))
+  } catch (err: any) {
+    // Without this catch, any DB/runtime error here throws past every
+    // withCors(...) response below, and Next's default error page goes out
+    // with no CORS headers at all — the browser reports a confusing
+    // "blocked by CORS policy" error that hides the real 500.
+    console.error('google-auth error:', err)
+    return withCors(
+      request,
+      NextResponse.json(
+        { message: 'Internal error', error: String(err?.message || err) },
+        { status: 500 },
+      ),
+    )
   }
-
-  const { token } = await signMobileAuthToken({ id: user.id, email: String(user.email) })
-
-  return withCors(request, NextResponse.json({ user, token }))
 }
