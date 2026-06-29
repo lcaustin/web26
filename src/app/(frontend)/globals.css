@@ -151,6 +151,12 @@ nav {
 .hero-title { font-size: 34px; font-weight: 500; color: #fff; line-height: 1.4; margin-bottom: 8px; }
 .hero-sub { font-size: 14px; color: rgba(255, 255, 255, 0.6); margin-bottom: 28px; letter-spacing: 0.02em; }
 .hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+@media (max-width: 600px) {
+  .hero { height: 460px; }
+  .hero-eyebrow { font-size: 10px; margin-bottom: 10px; }
+  .hero-title { font-size: 22px; margin-bottom: 6px; }
+  .hero-sub { font-size: 12px; margin-bottom: 20px; }
+}
 .btn-primary { background: #5c1e2e; color: #fff; border: none; border-radius: 7px; padding: 12px 24px; font-family: 'Noto Sans KR', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: opacity 0.15s; }
 .btn-primary:hover { opacity: 0.85; }
 .btn-outline { background: rgba(255, 255, 255, 0.1); color: #fff; border: 1px solid rgba(255, 255, 255, 0.25); border-radius: 7px; padding: 12px 24px; font-family: 'Noto Sans KR', sans-serif; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background 0.15s; }
