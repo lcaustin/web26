@@ -19,7 +19,13 @@ export const Users: CollectionConfig = {
   admin: {
     useAsTitle: 'email',
   },
-  auth: true,
+  // Default tokenExpiration is 2 hours, which logged mobile users out on
+  // every app restart even though the JWT itself is persisted to disk
+  // (see mobile/src/api/client.ts's use of @capacitor/preferences). Members
+  // expect to stay signed in indefinitely, so issue long-lived tokens instead.
+  auth: {
+    tokenExpiration: 60 * 60 * 24 * 365, // 1 year
+  },
   fields: [
     {
       name: 'name',

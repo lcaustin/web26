@@ -82,7 +82,12 @@ export default function Nav() {
   }, [])
 
   useEffect(() => {
-    setIsNativeApp(new URLSearchParams(window.location.search).get('lc_app') === '1')
+    const params = new URLSearchParams(window.location.search)
+    setIsNativeApp(params.get('lc_app') === '1')
+    // The native app's back arrow on Account/Notifications sends users back
+    // here with ?open_menu=1 so they land with this menu already open,
+    // instead of a closed Home screen.
+    if (params.get('open_menu') === '1') setMenuOpen(true)
   }, [])
 
   const navigateNative = (path: string) => {
