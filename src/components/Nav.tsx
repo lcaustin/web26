@@ -58,17 +58,37 @@ const NAV_LINKS: NavLink[] = [
   { ko: '소식', en: 'News', href: '/news' },
 ]
 
+// Shown only when this page is loaded inside the native mobile app's iframe
+// (flagged via ?lc_app=1, see mobile/src/screens/HomeScreen.tsx). Clicking
+// these posts a message up to the native shell, which has its own React
+// Router and renders Account/Notifications as native screens — they aren't
+// real pages on this site, so we navigate via postMessage instead of href.
+const APP_LINKS = [
+  { ko: '알림 설정', en: 'Notifications', path: '/notifications' },
+  { ko: '내 계정', en: 'Account', path: '/account' },
+]
+
 export default function Nav() {
   const [theme, setTheme] = useState<'dark' | 'light'>('light')
   const [menuOpen, setMenuOpen] = useState(false)
   const [mobileOpen, setMobileOpen] = useState<string | null>(null)
   const [desktopOpen, setDesktopOpen] = useState<string | null>(null)
+  const [isNativeApp, setIsNativeApp] = useState(false)
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     const current = document.documentElement.getAttribute('data-theme')
     if (current === 'light' || current === 'dark') setTheme(current)
   }, [])
+
+  useEffect(() => {
+    setIsNativeApp(new URLSearchParams(window.location.search).get('lc_app') === '1')
+  }, [])
+
+  const navigateNative = (path: string) => {
+    setMenuOpen(false)
+    window.parent?.postMessage({ type: 'lc-native-navigate', path }, '*')
+  }
 
   const toggleTheme = () => {
     const next = theme === 'dark' ? 'light' : 'dark'
@@ -205,6 +225,22 @@ export default function Nav() {
             )}
           </div>
         ))}
+
+        {isNativeApp && (
+          <div className="mobile-menu-app-section">
+            {APP_LINKS.map((link) => (
+              <button
+                key={link.path}
+                type="button"
+                className="mobile-menu-link mobile-menu-app-link"
+                onClick={() => navigateNative(link.path)}
+              >
+                <span className="mobile-ko">{link.ko}</span>
+                <span className="mobile-en">{link.en}</span>
+              </button>
+            ))}
+          </div>
+        )}
       </div>
     </nav>
   )
