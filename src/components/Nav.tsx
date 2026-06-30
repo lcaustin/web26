@@ -88,6 +88,15 @@ export default function Nav() {
     // here with ?open_menu=1 so they land with this menu already open,
     // instead of a closed Home screen.
     if (params.get('open_menu') === '1') setMenuOpen(true)
+    // Sync the native app's persisted theme into the website so both always
+    // match — the native shell saves it to Capacitor Preferences (survives
+    // app restarts) and passes it here on every webview load via ?lc_theme=.
+    const nativeTheme = params.get('lc_theme')
+    if (nativeTheme === 'dark' || nativeTheme === 'light') {
+      setTheme(nativeTheme)
+      document.documentElement.setAttribute('data-theme', nativeTheme)
+      try { localStorage.setItem('lc-theme', nativeTheme) } catch { /* ignore */ }
+    }
   }, [])
 
   const navigateNative = (path: string) => {

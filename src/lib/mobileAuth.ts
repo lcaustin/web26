@@ -1,6 +1,7 @@
 import { SignJWT } from 'jose'
 import type { Payload } from 'payload'
 import type { User } from '@/payload-types'
+import { Users } from '@/collections/Users'
 
 /**
  * Signs a Payload-compatible session JWT for a given user, without requiring
@@ -15,11 +16,13 @@ import type { User } from '@/payload-types'
  * mobile app's Google sign-in flow (which has no password to check) end up
  * with a normal, fully-functional Payload session.
  *
- * Token lifetime matches Payload's default `auth.tokenExpiration` (2 hours,
- * in seconds) since the Users collection doesn't override it. If that ever
- * changes in src/collections/Users.ts, update TOKEN_EXPIRATION_SECONDS too.
+ * Token lifetime is read directly from the Users collection's own auth
+ * config so this can't drift out of sync again the way the old hardcoded
+ * 7200-second constant did (Google sign-in kept issuing 2-hour tokens after
+ * Users.ts was changed to 1 year, since nothing here referenced that value).
  */
-const TOKEN_EXPIRATION_SECONDS = 7200
+const TOKEN_EXPIRATION_SECONDS =
+  typeof Users.auth === 'object' && Users.auth.tokenExpiration ? Users.auth.tokenExpiration : 7200
 
 export async function signMobileAuthToken(user: Pick<User, 'id' | 'email'>) {
   const secret = process.env.PAYLOAD_SECRET

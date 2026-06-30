@@ -51,7 +51,19 @@ export default buildConfig({
   ],
   globals: [SiteSettings],
   editor: lexicalEditor(),
-  secret: process.env.PAYLOAD_SECRET || '',
+  // Falling back to '' when PAYLOAD_SECRET is unset used to fail silently:
+  // any request handled by a runtime where the env var didn't resolve would
+  // sign/verify JWTs with an empty string instead of the real secret, so a
+  // token issued by one invocation could be silently rejected by another —
+  // producing exactly the "valid token immediately treated as logged out"
+  // symptom mobile users hit. Throw loudly instead so a misconfigured
+  // environment fails the deploy/boot, not individual users' sessions.
+  secret: (() => {
+    if (!process.env.PAYLOAD_SECRET) {
+      throw new Error('PAYLOAD_SECRET environment variable is not set')
+    }
+    return process.env.PAYLOAD_SECRET
+  })(),
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },

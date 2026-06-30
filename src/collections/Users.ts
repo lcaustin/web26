@@ -23,8 +23,22 @@ export const Users: CollectionConfig = {
   // every app restart even though the JWT itself is persisted to disk
   // (see mobile/src/api/client.ts's use of @capacitor/preferences). Members
   // expect to stay signed in indefinitely, so issue long-lived tokens instead.
+  //
+  // useSessions: false is required here. Payload 3.x defaults every auth
+  // collection to session-based auth: a real login writes a session record
+  // (with a `sid`) onto the user doc, and the JWT must carry a matching
+  // `sid` or every request is treated as logged out — see
+  // node_modules/payload/dist/auth/strategies/jwt.js. Our mobile app's
+  // Google Sign-In flow (src/lib/mobileAuth.ts) signs a plain
+  // `{ id, collection, email }` JWT with no session/`sid`, exactly mirroring
+  // what Payload's own login endpoint signs — except sessions made that
+  // token always fail the `sid` check, regardless of signature or
+  // expiration. Disabling sessions restores plain stateless-JWT auth, where
+  // `tokenExpiration` alone governs validity for both the built-in
+  // email/password login and the custom Google token.
   auth: {
     tokenExpiration: 60 * 60 * 24 * 365, // 1 year
+    useSessions: false,
   },
   fields: [
     {
