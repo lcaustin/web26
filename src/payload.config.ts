@@ -30,14 +30,22 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  // The Capacitor mobile app's WebView runs on the default Capacitor origin
-  // (https://localhost on Android/iOS unless overridden in capacitor.config.ts),
-  // which is cross-origin relative to the Payload backend's real domain. Without
-  // these, the browser/WebView blocks every native fetch() call with a generic
-  // "Failed to fetch" (CORS preflight rejection), even though the server itself
-  // would have responded fine.
-  cors: ['https://localhost', 'capacitor://localhost', 'http://localhost'],
-  csrf: ['https://localhost', 'capacitor://localhost', 'http://localhost'],
+  // Once either array is non-empty Payload treats it as a strict allowlist,
+  // so every legitimate origin must be listed — both the production site (for
+  // the Payload admin panel's cookie-auth CSRF check) and the Capacitor mobile
+  // app's WebView origins (for native fetch() calls from Android/iOS).
+  cors: [
+    'https://2026.lcaustin.org', // production site + admin panel
+    'https://localhost',         // Capacitor Android (default androidScheme=https)
+    'capacitor://localhost',     // Capacitor iOS
+    'http://localhost',          // local dev
+  ],
+  csrf: [
+    'https://2026.lcaustin.org', // admin panel — must be here or cookie auth is rejected
+    'https://localhost',
+    'capacitor://localhost',
+    'http://localhost',
+  ],
   collections: [
     Users,
     Media,

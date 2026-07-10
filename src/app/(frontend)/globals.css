@@ -164,7 +164,7 @@ nav {
 .btn-outline { background: rgba(255, 255, 255, 0.1); color: #fff; border: 1px solid rgba(255, 255, 255, 0.25); border-radius: 7px; padding: 12px 24px; font-family: 'Noto Sans KR', sans-serif; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background 0.15s; }
 .btn-outline:hover { background: rgba(255, 255, 255, 0.18); }
 
-/* ── Special Event Carousel (matches WelcomeBanner style) ── */
+/* ── Special Event Carousel ── */
 .se-section { background: #5c1e2e; padding: 28px 0; display: flex; align-items: center; position: relative; }
 .se-chevron { width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.2); background: transparent; color: rgba(255,255,255,0.7); display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; flex-shrink: 0; margin: 0 12px; transition: background 0.15s, color 0.15s, border-color 0.15s; }
 .se-chevron:hover:not(.se-chevron--disabled) { background: rgba(255,255,255,0.1); color: #fff; border-color: rgba(255,255,255,0.5); }
@@ -190,7 +190,7 @@ nav {
 .welcome { background: #5c1e2e; padding: 28px 0; }
 .welcome-inner { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; }
 .welcome-ko { font-size: 20px; font-weight: 500; color: #fff; line-height: 1.3; }
-.welcome-en { font-size: 13px; color: rgba(255, 255, 255, 0.65); letter-spacing: 0.04em; }
+.welcome-en { font-size: 13px; color: rgba(255, 255, 255, 0.65); letter-spacing: 0.04em; white-space: pre-line; }
 .welcome-divider { width: 36px; height: 2px; background: rgba(212, 169, 60, 0.6); border-radius: 1px; margin: 2px 0; }
 .welcome-link { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 12px; font-weight: 500; color: #d4a93c; text-decoration: none; border: 1px solid rgba(212, 169, 60, 0.4); border-radius: 999px; padding: 7px 16px; transition: background 0.15s, color 0.15s; }
 .welcome-link:hover { background: rgba(212, 169, 60, 0.12); }
