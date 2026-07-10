@@ -28,7 +28,8 @@
     "payload": "3.85.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "sharp": "0.33.5"
+    "sharp": "0.33.5",
+    "vercel": "^54.18.3"
   },
   "devDependencies": {
     "@swc-node/register": "^1.10.9",
