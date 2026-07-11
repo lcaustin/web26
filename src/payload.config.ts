@@ -1,4 +1,5 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
+import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
 import { buildConfig } from 'payload'
@@ -23,19 +24,40 @@ import { SiteSettings } from './globals/SiteSettings.ts'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL || 'https://2026.lcaustin.org'
+
 export default buildConfig({
+  serverURL: SERVER_URL,
   admin: {
     user: Users.slug,
     importMap: {
       baseDir: path.resolve(dirname),
     },
   },
+  // Google Workspace SMTP — set these four env vars in Vercel:
+  //   EMAIL_FROM        e.g. "LC Austin <noreply@lcaustin.org>"
+  //   EMAIL_USER        your Gmail/Workspace address
+  //   EMAIL_PASSWORD    an App Password (Google Account → Security → App passwords)
+  email: nodemailerAdapter({
+    defaultFromAddress: process.env.EMAIL_FROM || 'noreply@lcaustin.org',
+    defaultFromName: 'LC Austin',
+    transportOptions: {
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    },
+  }),
   // Once either array is non-empty Payload treats it as a strict allowlist,
   // so every legitimate origin must be listed — both the production site (for
   // the Payload admin panel's cookie-auth CSRF check) and the Capacitor mobile
   // app's WebView origins (for native fetch() calls from Android/iOS).
   cors: [
     'https://2026.lcaustin.org', // production site + admin panel
+    'https://lcaustin.org', // production site + admin panel
     'https://localhost',         // Capacitor Android (default androidScheme=https)
     'capacitor://localhost',     // Capacitor iOS
     'http://localhost',          // local dev

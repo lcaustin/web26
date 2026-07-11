@@ -39,6 +39,23 @@ export const Users: CollectionConfig = {
   auth: {
     tokenExpiration: 60 * 60 * 24 * 365, // 1 year
     useSessions: false,
+    forgotPassword: {
+      // Send the reset link to our user-facing page instead of the Payload
+      // admin panel's /admin/reset/:token route, which members wouldn't
+      // recognise.
+      generateEmailHTML: (args?: { token?: string }) => {
+        const token = args?.token
+        const url = `${process.env.NEXT_PUBLIC_SERVER_URL || 'https://2026.lcaustin.org'}/reset-password?token=${token}`
+        return `
+          <p>Hello,</p>
+          <p>You requested a password reset for your LC Austin account.</p>
+          <p><a href="${url}">Reset your password</a></p>
+          <p>This link expires in 1 hour. If you didn't request this, you can ignore this email.</p>
+          <p>— Lord's Church of Austin</p>
+        `
+      },
+      generateEmailSubject: () => Promise.resolve('Reset your LC Austin password'),
+    },
   },
   fields: [
     {
