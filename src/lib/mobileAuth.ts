@@ -1,4 +1,4 @@
-import { SignJWT } from 'jose'
+import { SignJWT, jwtVerify } from 'jose'
 import type { Payload } from 'payload'
 import type { User } from '@/payload-types'
 import { Users } from '@/collections/Users'
@@ -46,8 +46,30 @@ export async function signMobileAuthToken(user: Pick<User, 'id' | 'email'>) {
   return { token, exp }
 }
 
-/** Authenticates an incoming mobile API request and returns the Payload user, or null. */
+/**
+ * Authenticates an incoming mobile API request and returns the Payload user, or null.
+ *
+ * We verify the JWT ourselves with jose rather than calling payload.auth({ headers })
+ * because payload.auth() behaves inconsistently in custom Next.js App Router routes
+ * (it works on Payload's own built-in endpoints but can silently return null in custom
+ * routes). Manual verification is explicit and uses the same secret + algorithm that
+ * signMobileAuthToken() uses to sign, so it's guaranteed to accept any token we issue.
+ */
 export async function getMobileUser(payload: Payload, headers: Headers): Promise<User | null> {
-  const { user } = await payload.auth({ headers })
-  return (user as User) ?? null
+  const authHeader = headers.get('Authorization') ?? headers.get('authorization')
+  const token = authHeader?.replace(/^JWT\s+/i, '')
+  if (!token) return null
+
+  const secret = process.env.PAYLOAD_SECRET
+  if (!secret) return null
+
+  try {
+    const { payload: decoded } = await jwtVerify(token, new TextEncoder().encode(secret))
+    const userId = decoded.id as number
+    if (!userId) return null
+    const user = await payload.findByID({ collection: 'users', id: userId })
+    return (user as User) ?? null
+  } catch {
+    return null
+  }
 }
