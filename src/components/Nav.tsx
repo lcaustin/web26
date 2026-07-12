@@ -12,7 +12,7 @@ const NAV_LINKS: NavLink[] = [
     ko: '교회안내', en: 'About', href: '#',
     children: [
       { ko: '소개', en: 'Introduction', href: '/introduction' },
-      { ko: '주보', en: 'Bulletin', href: '/jubo' },
+      { ko: '주보', en: 'Bulletin', href: '/bulletin' },
       { ko: '예배안내', en: 'Service Hours', href: '/service-hours' },
       { ko: '섬기는이', en: 'Our Staff', href: '/staff' },
     ],
