@@ -43,7 +43,7 @@ export const Videos: CollectionConfig = {
     { name: 'thumbnailUrl', type: 'text', label: 'Thumbnail URL' },
     { name: 'description', type: 'textarea' },
     { name: 'tags', type: 'text' },
-    { name: 'legacyCategory', type: 'text', label: 'Legacy category', admin: { readOnly: true } },
+    { name: 'category', type: 'text', label: 'Category' },
     {
       name: 'publishedAt',
       type: 'date',

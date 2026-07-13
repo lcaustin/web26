@@ -89,12 +89,12 @@ async function main() {
         return `(${Array.from({ length: 10 }, (_, column) => `$${offset + column + 1}`).join(', ')}, COALESCE($${offset + 11}::timestamptz, now()), COALESCE($${offset + 12}::timestamptz, now()))`
       }).join(', ')
       await client.query(
-      `INSERT INTO videos (admin_title, content_type, source, video_id, video_url, thumbnail_url, description, tags, legacy_category, published_at, created_at, updated_at)
+       `INSERT INTO videos (admin_title, content_type, source, video_id, video_url, thumbnail_url, description, tags, category, published_at, created_at, updated_at)
        VALUES ${placeholders}
        ON CONFLICT (source, video_id) DO UPDATE SET
          admin_title = EXCLUDED.admin_title, content_type = EXCLUDED.content_type, video_url = EXCLUDED.video_url,
          thumbnail_url = EXCLUDED.thumbnail_url, description = EXCLUDED.description, tags = EXCLUDED.tags,
-         legacy_category = EXCLUDED.legacy_category, published_at = EXCLUDED.published_at, updated_at = EXCLUDED.updated_at`,
+         category = EXCLUDED.category, published_at = EXCLUDED.published_at, updated_at = EXCLUDED.updated_at`,
       values,
       )
       imported += batch.length
