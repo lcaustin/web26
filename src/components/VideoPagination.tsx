@@ -19,7 +19,7 @@ export default function VideoPagination({ currentPage, totalPages }: Props) {
   const href = (page: number) => page === 1 ? '?' : `?page=${page}`
 
   return (
-    <nav className="archive-pagination" aria-label="Video pages">
+    <nav className="archive-pagination" aria-label="Archive pages">
       {currentPage > 1 ? <Link href={href(currentPage - 1)} aria-label="Previous page">‹</Link> : <span className="is-disabled">‹</span>}
       {pages.map((page, index) => (
         <span key={page} className="archive-pagination-group">

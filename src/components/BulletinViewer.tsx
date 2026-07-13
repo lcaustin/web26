@@ -16,9 +16,7 @@ const formatDate = (iso: string) => {
 /** In-page PDF reader and archive selector for the weekly bulletin. */
 export default function BulletinViewer({ bulletins }: { bulletins: BulletinViewerItem[] }) {
   const [selectedId, setSelectedId] = useState(bulletins[0]?.id)
-  const [visibleCount, setVisibleCount] = useState(5)
   const selected = bulletins.find((bulletin) => bulletin.id === selectedId) ?? bulletins[0]
-  const visibleBulletins = bulletins.slice(0, visibleCount)
 
   if (!selected) return null
 
@@ -46,7 +44,7 @@ export default function BulletinViewer({ bulletins }: { bulletins: BulletinViewe
       <div className="bulletin-archive">
         <div className="dept-lang-label">BULLETIN ARCHIVE</div>
         <div className="bulletin-list">
-          {visibleBulletins.map((bulletin) => {
+          {bulletins.map((bulletin) => {
             const isSelected = bulletin.id === selected.id
             return (
               <button
@@ -67,16 +65,6 @@ export default function BulletinViewer({ bulletins }: { bulletins: BulletinViewe
             )
           })}
         </div>
-        {visibleCount < bulletins.length && (
-          <button
-            type="button"
-            className="bulletin-show-more"
-            onClick={() => setVisibleCount((count) => Math.min(count + 5, bulletins.length))}
-          >
-            <i className="ti ti-plus" aria-hidden="true" />
-            더보기 · Show more
-          </button>
-        )}
       </div>
     </div>
   )

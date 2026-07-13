@@ -5,6 +5,7 @@ import Link from 'next/link'
 import BulletinViewer from '@/components/BulletinViewer'
 import Footer from '@/components/Footer'
 import Nav from '@/components/Nav'
+import VideoPagination from '@/components/VideoPagination'
 
 export const dynamic = 'force-dynamic'
 
@@ -15,14 +16,16 @@ type Bulletin = {
   url?: string | null
 }
 
-export default async function BulletinPage() {
+export default async function BulletinPage({ searchParams }: { searchParams: Promise<{ page?: string }> }) {
+  const { page: pageParam } = await searchParams
+  const page = Math.max(1, Number.parseInt(pageParam || '1', 10) || 1)
   const payload = await getPayload({ config })
 
   const [siteSettings, bulletinsResult] = await Promise.all([
     payload.findGlobal({ slug: 'site-settings' }).catch(() => null),
     payload
-      .find({ collection: 'bulletins', limit: 100, sort: '-issueDate' })
-      .catch(() => ({ docs: [] as Bulletin[] })),
+      .find({ collection: 'bulletins', limit: 15, page, sort: '-issueDate' })
+      .catch(() => ({ docs: [] as Bulletin[], page: 1, totalPages: 1 })),
   ])
 
   const church = siteSettings?.church
@@ -59,6 +62,7 @@ export default async function BulletinPage() {
           ) : (
             <p className="dept-empty">아직 등록된 주보가 없습니다. · No bulletins have been uploaded yet.</p>
           )}
+          <VideoPagination currentPage={bulletinsResult.page ?? 1} totalPages={bulletinsResult.totalPages ?? 1} />
         </div>
       </section>
 

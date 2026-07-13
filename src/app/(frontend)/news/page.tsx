@@ -4,6 +4,7 @@ import Link from 'next/link'
 
 import Footer from '@/components/Footer'
 import Nav from '@/components/Nav'
+import VideoPagination from '@/components/VideoPagination'
 
 export const dynamic = 'force-dynamic'
 
@@ -24,14 +25,16 @@ const formatDate = (iso: string) => {
   return `${y}.${m}.${day}`
 }
 
-export default async function NewsPage() {
+export default async function NewsPage({ searchParams }: { searchParams: Promise<{ page?: string }> }) {
+  const { page: pageParam } = await searchParams
+  const page = Math.max(1, Number.parseInt(pageParam || '1', 10) || 1)
   const payload = await getPayload({ config })
 
   const [siteSettings, newsResult] = await Promise.all([
     payload.findGlobal({ slug: 'site-settings' }).catch(() => null),
     payload
-      .find({ collection: 'news', limit: 100, sort: '-date' })
-      .catch(() => ({ docs: [] as NewsDoc[] })),
+      .find({ collection: 'news', limit: 15, page, sort: '-date' })
+      .catch(() => ({ docs: [] as NewsDoc[], page: 1, totalPages: 1 })),
   ])
 
   const church = siteSettings?.church
@@ -113,6 +116,7 @@ export default async function NewsPage() {
               ))}
             </div>
           )}
+          <VideoPagination currentPage={newsResult.page ?? 1} totalPages={newsResult.totalPages ?? 1} />
         </div>
       </section>
 
