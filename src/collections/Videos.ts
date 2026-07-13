@@ -7,7 +7,7 @@ export const Videos: CollectionConfig = {
   slug: 'videos',
   admin: {
     useAsTitle: 'adminTitle',
-    defaultColumns: ['adminTitle', 'contentType', 'publishedAt', 'source'],
+    defaultColumns: ['adminTitle', 'category', 'publishedAt', 'source'],
   },
   access: {
     read: () => true,
@@ -15,7 +15,7 @@ export const Videos: CollectionConfig = {
   fields: [
     { name: 'adminTitle', type: 'text', required: true, label: 'Title' },
     {
-      name: 'contentType',
+      name: 'category',
       type: 'select',
       required: true,
       defaultValue: 'other',
@@ -43,7 +43,6 @@ export const Videos: CollectionConfig = {
     { name: 'thumbnailUrl', type: 'text', label: 'Thumbnail URL' },
     { name: 'description', type: 'textarea' },
     { name: 'tags', type: 'text' },
-    { name: 'category', type: 'text', label: 'Category' },
     {
       name: 'publishedAt',
       type: 'date',

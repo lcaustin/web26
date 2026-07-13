@@ -82,19 +82,19 @@ async function main() {
       const values = batch.flatMap((video) => [
         video.title || 'Untitled video', contentType(video), video.source, video.video_id, videoUrl(video),
         video.img_large || video.img_small || null, video.description || null, video.tags || null,
-        video.category || null, publishedAt(video), video.created_at?.$date || null, video.updated_at?.$date || null,
+        publishedAt(video), video.created_at?.$date || null, video.updated_at?.$date || null,
       ])
       const placeholders = batch.map((_, row) => {
-        const offset = row * 12
-        return `(${Array.from({ length: 10 }, (_, column) => `$${offset + column + 1}`).join(', ')}, COALESCE($${offset + 11}::timestamptz, now()), COALESCE($${offset + 12}::timestamptz, now()))`
+        const offset = row * 11
+        return `(${Array.from({ length: 9 }, (_, column) => `$${offset + column + 1}`).join(', ')}, COALESCE($${offset + 10}::timestamptz, now()), COALESCE($${offset + 11}::timestamptz, now()))`
       }).join(', ')
       await client.query(
-       `INSERT INTO videos (admin_title, content_type, source, video_id, video_url, thumbnail_url, description, tags, category, published_at, created_at, updated_at)
+       `INSERT INTO videos (admin_title, category, source, video_id, video_url, thumbnail_url, description, tags, published_at, created_at, updated_at)
        VALUES ${placeholders}
        ON CONFLICT (source, video_id) DO UPDATE SET
-         admin_title = EXCLUDED.admin_title, content_type = EXCLUDED.content_type, video_url = EXCLUDED.video_url,
+         admin_title = EXCLUDED.admin_title, category = EXCLUDED.category, video_url = EXCLUDED.video_url,
          thumbnail_url = EXCLUDED.thumbnail_url, description = EXCLUDED.description, tags = EXCLUDED.tags,
-         category = EXCLUDED.category, published_at = EXCLUDED.published_at, updated_at = EXCLUDED.updated_at`,
+         published_at = EXCLUDED.published_at, updated_at = EXCLUDED.updated_at`,
       values,
       )
       imported += batch.length

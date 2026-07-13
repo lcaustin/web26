@@ -19,7 +19,7 @@ export default async function HomePage() {
   const [siteSettings, sermons, news, events, quickLinks, departments] = await Promise.all([
     payload.findGlobal({ slug: 'site-settings' }).catch(() => null),
     payload
-      .find({ collection: 'videos', limit: 1, sort: '-publishedAt', where: { contentType: { equals: 'sermon' } } })
+      .find({ collection: 'videos', limit: 1, sort: '-publishedAt', where: { category: { equals: 'sermon' } } })
       .then((r) => r.docs)
       .catch(() => []),
     payload

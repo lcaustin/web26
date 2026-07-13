@@ -23,7 +23,7 @@ export default async function VideoTypePage({ params }: { params: Promise<{ type
   const payload = await getPayload({ config })
   const [siteSettings, result] = await Promise.all([
     payload.findGlobal({ slug: 'site-settings' }).catch(() => null),
-    payload.find({ collection: 'videos', limit: 100, sort: '-publishedAt', where: { contentType: { equals: metadata.type } } }).catch(() => ({ docs: [] })),
+    payload.find({ collection: 'videos', limit: 100, sort: '-publishedAt', where: { category: { equals: metadata.type } } }).catch(() => ({ docs: [] })),
   ])
   const videos = result.docs.map((video: any): SermonArchiveItem => ({
     id: video.id, title: { ko: video.adminTitle, en: '' }, date: video.publishedAt,
