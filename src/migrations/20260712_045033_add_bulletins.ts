@@ -10,6 +10,7 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
       "updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
       "created_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
       "url" varchar,
+      "prefix" varchar,
       "thumbnail_u_r_l" varchar,
       "filename" varchar,
       "mime_type" varchar,
@@ -19,6 +20,8 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
       "focal_x" numeric,
       "focal_y" numeric
     );
+
+    ALTER TABLE "bulletins" ADD COLUMN IF NOT EXISTS "prefix" varchar;
 
     CREATE INDEX IF NOT EXISTS "bulletins_updated_at_idx" ON "bulletins" USING btree ("updated_at");
     CREATE INDEX IF NOT EXISTS "bulletins_created_at_idx" ON "bulletins" USING btree ("created_at");

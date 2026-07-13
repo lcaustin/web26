@@ -378,10 +378,12 @@ footer { background: var(--bg-alt); border-top: 1px solid var(--bdr); padding: 3
 .bulletin-archive { display: flex; flex-direction: column; gap: 12px; }
 .bulletin-archive .dept-lang-label { margin: 0; }
 .bulletin-list { display: flex; flex-direction: column; gap: 8px; }
-.bulletin-list-item { display: flex; align-items: center; gap: 10px; padding: 14px 16px; background: var(--surf); border: 1px solid var(--bdr); border-radius: 9px; color: var(--t1); text-decoration: none; font-size: 13px; transition: background 0.15s, border-color 0.25s; }
+.bulletin-list-item { width: 100%; display: flex; align-items: center; gap: 10px; padding: 14px 16px; background: var(--surf); border: 1px solid var(--bdr); border-radius: 9px; color: var(--t1); text-align: left; font: inherit; font-size: 13px; cursor: pointer; transition: background 0.15s, border-color 0.25s, color 0.15s; }
 .bulletin-list-item:hover { background: var(--bg-alt); }
+.bulletin-list-item--selected { border-color: var(--gld); background: rgba(212, 169, 60, 0.08); }
 .bulletin-list-item > .ti-file-type-pdf { color: #b73535; font-size: 18px; }
 .bulletin-list-external { margin-left: auto; color: var(--t3); font-size: 14px; }
+.bulletin-list-current { margin-left: auto; color: var(--gld); font-size: 11px; }
 @media (max-width: 600px) {
   .bulletin-latest-head { align-items: flex-start; flex-direction: column; }
   .bulletin-preview { height: 65vh; }
