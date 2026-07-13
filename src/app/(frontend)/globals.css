@@ -374,6 +374,17 @@ footer { background: var(--bg-alt); border-top: 1px solid var(--bdr); padding: 3
 .dept-detail-en { display: inline-block; margin-left: 10px; vertical-align: middle; font-size: 13px; color: var(--t2); letter-spacing: 0.03em; transition: color 0.25s; }
 
 .dept-detail-body { padding: 40px 0 64px; }
+.service-times-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.service-time-card { display: flex; gap: 14px; min-width: 0; padding: 20px; border: 1px solid var(--bdr); border-radius: 10px; background: var(--surf); transition: background 0.25s, border-color 0.25s; }
+.service-time-card:hover { border-color: var(--bdr2); background: var(--bg-alt); }
+.service-time-icon { display: flex; width: 38px; height: 38px; flex: 0 0 38px; align-items: center; justify-content: center; border-radius: 50%; background: rgba(212, 169, 60, 0.12); color: var(--gld); font-size: 18px; }
+.service-time-copy { min-width: 0; }
+.service-time-copy h2 { margin: 0; color: var(--t1); font-size: 16px; font-weight: 500; }
+.service-time-en { margin: 3px 0 0; color: var(--t2); font-size: 12px; }
+.service-time-value { margin: 12px 0 0; color: var(--gld); font-size: 14px; font-weight: 500; }
+.service-time-location { display: flex; align-items: center; gap: 4px; margin: 7px 0 0; color: var(--t2); font-size: 12px; }
+@media (max-width: 900px) { .service-times-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 580px) { .service-times-grid { grid-template-columns: 1fr; } }
 .dept-lang-block { min-width: 0; }
 .dept-lang-block + .dept-lang-block { margin-top: 40px; padding-top: 40px; border-top: 1px solid var(--bdr); transition: border-color 0.25s; }
 .dept-lang-label { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gld); margin-bottom: 14px; }
