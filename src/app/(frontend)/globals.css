@@ -296,7 +296,7 @@ section { padding: 56px 0; }
 .archive-pagination-ellipsis { width: 20px; color: var(--t2); text-align: center; }
 @media (max-width: 600px) {
   .archive-pagination-pages { display: none; }
-  .archive-pagination .archive-pagination-more { display: inline-flex; min-height: 38px; align-items: center; justify-content: center; padding: 0 18px; border: 1px solid var(--bdr2); border-radius: 20px; color: var(--t1); font-size: 13px; text-decoration: none; }
+  .archive-pagination .archive-pagination-more { display: flex; width: 100%; min-height: 42px; align-items: center; justify-content: center; padding: 0 18px; border: 1px solid var(--bdr2); border-radius: 8px; color: var(--t1); font-size: 13px; text-decoration: none; }
   .archive-pagination-more:hover { border-color: var(--gld); color: var(--gld); }
 }
 .sermon-archive-body { padding: 16px; }
