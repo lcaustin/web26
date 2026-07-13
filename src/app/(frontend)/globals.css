@@ -384,6 +384,8 @@ footer { background: var(--bg-alt); border-top: 1px solid var(--bdr); padding: 3
 .bulletin-list-item > .ti-file-type-pdf { color: #b73535; font-size: 18px; }
 .bulletin-list-external { margin-left: auto; color: var(--t3); font-size: 14px; }
 .bulletin-list-current { margin-left: auto; color: var(--gld); font-size: 11px; }
+.bulletin-show-more { align-self: center; display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; padding: 9px 16px; border: 1px solid var(--bdr); border-radius: 999px; background: transparent; color: var(--link); font: inherit; font-size: 12px; cursor: pointer; transition: background 0.15s, border-color 0.25s; }
+.bulletin-show-more:hover { background: var(--bg-alt); }
 @media (max-width: 600px) {
   .bulletin-latest-head { align-items: flex-start; flex-direction: column; }
   .bulletin-preview { height: 65vh; }
