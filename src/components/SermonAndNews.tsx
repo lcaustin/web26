@@ -101,7 +101,7 @@ export default function SermonAndNews({ sermon, news }: Props) {
               <span className="sec-title">
                 설교 · <span style={{ fontWeight: 400, color: 'var(--t2)' }}>Sermon</span>
               </span>
-              <a className="view-all" href="#">
+              <a className="view-all" href="/sermons">
                 전체 보기 View All →
               </a>
             </div>

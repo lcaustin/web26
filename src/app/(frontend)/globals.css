@@ -275,6 +275,23 @@ section { padding: 56px 0; }
 .sermon-title { font-size: 14px; font-weight: 500; color: var(--t1); line-height: 1.45; margin-bottom: 4px; transition: color 0.25s; }
 .sermon-meta { font-size: 11px; color: var(--t2); transition: color 0.25s; }
 
+/* Sunday sermon archive */
+.sermon-page-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.sermon-archive-card { min-width: 0; overflow: hidden; background: var(--surf); border: 1px solid var(--bdr); border-radius: 10px; transition: background 0.25s, border-color 0.25s; }
+.sermon-archive-media { position: relative; display: flex; width: 100%; aspect-ratio: 16 / 9; align-items: center; justify-content: center; border: 0; background: #1a1030 center / cover no-repeat; color: #fff; cursor: pointer; }
+.sermon-archive-media::after { content: ''; position: absolute; inset: 0; background: rgba(7, 5, 16, 0.28); transition: background 0.15s; }
+.sermon-archive-media:hover::after { background: rgba(7, 5, 16, 0.12); }
+.sermon-archive-media .play-btn-c { position: relative; z-index: 1; }
+.sermon-archive-media--empty { color: var(--gld); cursor: default; background: var(--bg-alt); font-size: 34px; }
+.sermon-archive-media--empty::after { display: none; }
+.sermon-archive-body { padding: 16px; }
+.sermon-archive-body h2 { margin: 0; color: var(--t1); font-size: 15px; font-weight: 500; line-height: 1.45; }
+.sermon-archive-en { margin: 5px 0 8px; color: var(--t2); font-size: 12px; line-height: 1.45; }
+.sermon-archive-body .sermon-meta { margin-top: 9px; }
+.sermon-video-unavailable { display: flex; min-height: 280px; align-items: center; justify-content: center; padding: 24px; background: #120d24; color: rgba(255, 255, 255, 0.7); font-size: 14px; text-align: center; }
+@media (max-width: 900px) { .sermon-page-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 580px) { .sermon-page-grid { grid-template-columns: 1fr; } }
+
 .news-card { display: flex; flex-direction: column; flex: 1; }
 .news-list { display: flex; flex-direction: column; gap: 10px; flex: 1; justify-content: space-between; }
 .news-item { background: var(--surf); border: 1px solid var(--bdr); border-radius: 10px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; transition: background 0.25s, border-color 0.25s; }
