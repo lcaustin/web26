@@ -12,7 +12,9 @@ const types: Record<string, { type: string; ko: string; en: string; icon: string
   'daily-devotion': { type: 'daily-devotion', ko: '매일말씀묵상', en: 'Daily Devotion', icon: 'ti-bible' },
   worship: { type: 'worship', ko: '예배실황', en: 'Worship Recordings', icon: 'ti-device-tv' },
   choir: { type: 'choir', ko: '성가대', en: 'Choir', icon: 'ti-music' },
-  'special-music': { type: 'special-music', ko: '특송', en: 'Special Music', icon: 'ti-music' },
+  'offering-song': { type: 'offering-song', ko: '헌금송', en: 'Offering Song', icon: 'ti-music' },
+  // Keep the previous URL working while the category uses its new name.
+  'special-music': { type: 'offering-song', ko: '헌금송', en: 'Offering Song', icon: 'ti-music' },
   ministry: { type: 'ministry', ko: '부서 영상', en: 'Ministry Videos', icon: 'ti-users' },
   other: { type: 'other', ko: '영상', en: 'Videos', icon: 'ti-video' },
 }

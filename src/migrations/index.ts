@@ -4,6 +4,7 @@ import * as migration_20260712_045033_add_bulletins from './20260712_045033_add_
 import * as migration_20260712_150000_add_videos from './20260712_150000_add_videos';
 import * as migration_20260712_160000_rename_video_category from './20260712_160000_rename_video_category';
 import * as migration_20260713_000000_use_english_video_category from './20260713_000000_use_english_video_category';
+import * as migration_20260713_001000_rename_offering_song_category from './20260713_001000_rename_offering_song_category';
 
 export const migrations = [
   {
@@ -35,5 +36,10 @@ export const migrations = [
     up: migration_20260713_000000_use_english_video_category.up,
     down: migration_20260713_000000_use_english_video_category.down,
     name: '20260713_000000_use_english_video_category',
+  },
+  {
+    up: migration_20260713_001000_rename_offering_song_category.up,
+    down: migration_20260713_001000_rename_offering_song_category.down,
+    name: '20260713_001000_rename_offering_song_category',
   },
 ];

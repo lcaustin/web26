@@ -24,7 +24,7 @@ export const Videos: CollectionConfig = {
         { label: 'Daily Devotion', value: 'daily-devotion' },
         { label: 'Worship Recording', value: 'worship' },
         { label: 'Choir', value: 'choir' },
-        { label: 'Special Music', value: 'special-music' },
+        { label: 'Offering Song', value: 'offering-song' },
         { label: 'Ministry / Department', value: 'ministry' },
         { label: 'Other', value: 'other' },
       ],

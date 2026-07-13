@@ -45,7 +45,7 @@ function contentType(video: LegacyVideo) {
   const text = `${video.tags || ''} ${video.title || ''} ${video.description || ''}`
   if (category === '매일말씀묵상' || text.includes('daily')) return 'daily-devotion'
   if (category === '성가대' || text.includes('찬양대')) return 'choir'
-  if (category === '특송' || text.includes('헌금송') || text.includes('특송')) return 'special-music'
+  if (category === '특송' || text.includes('헌금송') || text.includes('특송')) return 'offering-song'
   if (text.includes('주일설교')) return 'sermon'
   if (text.includes('예배실황') || text.includes('금요예배') || text.includes('경배와찬양')) return 'worship'
   if (text.includes('교육부') || text.includes('영아부') || text.includes('유아부') || text.includes('초등부') || text.includes('중고등부') || text.includes('대학부') || text.includes('청년부')) return 'ministry'
