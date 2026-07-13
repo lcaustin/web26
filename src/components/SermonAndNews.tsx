@@ -9,8 +9,26 @@ const SERMON_VIDEO_URL = `https://www.youtube.com/watch?v=${SERMON_VIDEO_ID}`
 const SERMON_VIDEO_THUMB = `https://img.youtube.com/vi/${SERMON_VIDEO_ID}/maxresdefault.jpg`
 const SERMON_VIDEO_EMBED = `https://www.youtube.com/embed/${SERMON_VIDEO_ID}?autoplay=1&rel=0`
 
+const getEmbedUrl = (videoUrl: string) => {
+  try {
+    const url = new URL(videoUrl)
+    if (url.hostname.includes('youtu.be')) {
+      const id = url.pathname.split('/').filter(Boolean)[0]
+      return id ? `https://www.youtube.com/embed/${id}?autoplay=1&rel=0` : null
+    }
+    if (url.hostname.includes('youtube.com')) {
+      const id = url.searchParams.get('v')
+      return id ? `https://www.youtube.com/embed/${id}?autoplay=1&rel=0` : null
+    }
+    const vimeoMatch = url.hostname.includes('vimeo.com') && url.pathname.match(/\/(\d+)/)
+    return vimeoMatch ? `https://player.vimeo.com/video/${vimeoMatch[1]}?autoplay=1` : null
+  } catch {
+    return null
+  }
+}
+
 // Large modal that plays the featured sermon video in an embedded YouTube player.
-function SermonVideoModal({ onClose }: { onClose: () => void }) {
+function SermonVideoModal({ onClose, videoUrl }: { onClose: () => void; videoUrl: string }) {
   // Close on Escape, and lock background scroll while the modal is open.
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -44,7 +62,7 @@ function SermonVideoModal({ onClose }: { onClose: () => void }) {
         </button>
         <div className="video-modal-frame">
           <iframe
-            src={SERMON_VIDEO_EMBED}
+            src={getEmbedUrl(videoUrl) || SERMON_VIDEO_EMBED}
             title="Sermon video player"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
@@ -52,7 +70,7 @@ function SermonVideoModal({ onClose }: { onClose: () => void }) {
         </div>
         <a
           className="video-modal-yt-link"
-          href={SERMON_VIDEO_URL}
+          href={videoUrl}
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -67,6 +85,8 @@ type Sermon = {
   title: { ko: string; en: string }
   preacher?: { ko?: string | null; en?: string | null } | null
   date: string
+  videoUrl?: string | null
+  thumbnailUrl?: string | null
 }
 
 type NewsItem = {
@@ -91,6 +111,8 @@ const formatDate = (iso: string) => {
 
 export default function SermonAndNews({ sermon, news }: Props) {
   const [videoOpen, setVideoOpen] = useState(false)
+  const featuredVideoUrl = sermon?.videoUrl || SERMON_VIDEO_URL
+  const featuredThumbnail = sermon?.thumbnailUrl || SERMON_VIDEO_THUMB
 
   return (
     <section>
@@ -117,7 +139,7 @@ export default function SermonAndNews({ sermon, news }: Props) {
                   border: 'none',
                   padding: 0,
                   cursor: 'pointer',
-                  background: `#120d24 url(${SERMON_VIDEO_THUMB}) center / cover no-repeat`,
+                  background: `#120d24 url(${featuredThumbnail}) center / cover no-repeat`,
                 }}
               >
                 <div className="play-overlay">
@@ -189,7 +211,7 @@ export default function SermonAndNews({ sermon, news }: Props) {
           </div>
         </div>
       </div>
-      {videoOpen && <SermonVideoModal onClose={() => setVideoOpen(false)} />}
+      {videoOpen && <SermonVideoModal onClose={() => setVideoOpen(false)} videoUrl={featuredVideoUrl} />}
     </section>
   )
 }

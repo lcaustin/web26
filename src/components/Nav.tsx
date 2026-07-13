@@ -21,9 +21,9 @@ const NAV_LINKS: NavLink[] = [
     ko: '말씀&찬양', en: 'Sermon & Worship', href: '#',
     children: [
       { ko: '주일설교', en: 'Sunday Sermon', href: '/sermons' },
-      { ko: '매일말씀묵상', en: 'Daily Devotion', href: 'https://lcaustin.org/dailyqt', external: true },
-      { ko: '예배실황', en: 'Worship Live', href: 'https://lcaustin.org/video/worship', external: true },
-      { ko: '성가대', en: 'Choir', href: 'https://lcaustin.org/video/choir', external: true },
+      { ko: '매일말씀묵상', en: 'Daily Devotion', href: '/videos/daily-devotion' },
+      { ko: '예배실황', en: 'Worship Live', href: '/videos/worship' },
+      { ko: '성가대', en: 'Choir', href: '/videos/choir' },
     ],
   },
   {

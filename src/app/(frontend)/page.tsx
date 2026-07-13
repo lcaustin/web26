@@ -19,7 +19,7 @@ export default async function HomePage() {
   const [siteSettings, sermons, news, events, quickLinks, departments] = await Promise.all([
     payload.findGlobal({ slug: 'site-settings' }).catch(() => null),
     payload
-      .find({ collection: 'sermons', limit: 1, sort: '-date' })
+      .find({ collection: 'videos', limit: 1, sort: '-publishedAt', where: { contentType: { equals: 'sermon' } } })
       .then((r) => r.docs)
       .catch(() => []),
     payload
@@ -88,9 +88,10 @@ export default async function HomePage() {
         sermon={
           sermons[0]
             ? {
-                title: sermons[0].title,
-                preacher: sermons[0].preacher,
-                date: sermons[0].date,
+                title: { ko: sermons[0].adminTitle, en: '' },
+                date: sermons[0].publishedAt,
+                videoUrl: sermons[0].videoUrl,
+                thumbnailUrl: sermons[0].thumbnailUrl,
               }
             : null
         }

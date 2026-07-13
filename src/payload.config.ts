@@ -15,6 +15,7 @@ import { Users } from './collections/Users.ts'
 import { Media } from './collections/Media.ts'
 import { News } from './collections/News.ts'
 import { Sermons } from './collections/Sermons.ts'
+import { Videos } from './collections/Videos.ts'
 import { ServiceTimes } from './collections/ServiceTimes.ts'
 import { Departments } from './collections/Departments.ts'
 import { QuickLinks } from './collections/QuickLinks.ts'
@@ -84,6 +85,7 @@ export default buildConfig({
     Pages,
     News,
     Sermons,
+    Videos,
     Bulletins,
     ServiceTimes,
     Departments,

@@ -81,7 +81,7 @@ function SermonVideoModal({ sermon, onClose }: { sermon: SermonArchiveItem; onCl
   )
 }
 
-export default function SermonArchive({ sermons }: { sermons: SermonArchiveItem[] }) {
+export default function SermonArchive({ sermons, label = '주일 설교 · SUNDAY SERMON' }: { sermons: SermonArchiveItem[]; label?: string }) {
   const [selected, setSelected] = useState<SermonArchiveItem | null>(null)
 
   return (
@@ -107,7 +107,7 @@ export default function SermonArchive({ sermons }: { sermons: SermonArchiveItem[
                 </div>
               )}
               <div className="sermon-archive-body">
-                <div className="sermon-tag">주일 설교 · SUNDAY SERMON</div>
+                <div className="sermon-tag">{label}</div>
                 <h2>{sermon.title.ko || sermon.title.en || 'Untitled Sermon'}</h2>
                 {sermon.title.en && sermon.title.ko && <p className="sermon-archive-en">{sermon.title.en}</p>}
                 <div className="sermon-meta">

@@ -13,17 +13,16 @@ export default async function SermonsPage() {
 
   const [siteSettings, sermonsResult] = await Promise.all([
     payload.findGlobal({ slug: 'site-settings' }).catch(() => null),
-    payload.find({ collection: 'sermons', limit: 100, sort: '-date', depth: 1 }).catch(() => ({ docs: [] })),
+    payload.find({ collection: 'videos', limit: 100, sort: '-publishedAt', where: { contentType: { equals: 'sermon' } } }).catch(() => ({ docs: [] })),
   ])
 
   const church = siteSettings?.church
-  const sermons = sermonsResult.docs.map((sermon: any): SermonArchiveItem => ({
-    id: sermon.id,
-    title: sermon.title,
-    preacher: sermon.preacher,
-    date: sermon.date,
-    videoUrl: sermon.videoUrl,
-    thumbnailUrl: typeof sermon.thumbnail === 'object' ? sermon.thumbnail?.url : null,
+  const sermons = sermonsResult.docs.map((video: any): SermonArchiveItem => ({
+    id: video.id,
+    title: { ko: video.adminTitle, en: '' },
+    date: video.publishedAt,
+    videoUrl: video.videoUrl,
+    thumbnailUrl: video.thumbnailUrl,
   }))
 
   return (
