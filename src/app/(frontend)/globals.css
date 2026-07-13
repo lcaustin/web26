@@ -371,7 +371,7 @@ footer { background: var(--bg-alt); border-top: 1px solid var(--bdr); padding: 3
 .dept-back:hover { color: var(--link); }
 .dept-detail-icon { width: 52px; height: 52px; border-radius: 50%; background: rgba(212, 169, 60, 0.12); display: inline-flex; align-items: center; justify-content: center; margin-right: 12px; vertical-align: middle; font-size: 24px; color: var(--gld); transition: background 0.25s, color 0.25s; }
 .dept-detail-ko { display: inline-block; margin: 0; vertical-align: middle; font-size: 26px; font-weight: 500; color: var(--t1); transition: color 0.25s; }
-.dept-detail-en { font-size: 13px; color: var(--t2); letter-spacing: 0.03em; margin-top: 4px; transition: color 0.25s; }
+.dept-detail-en { display: inline-block; margin-left: 10px; vertical-align: middle; font-size: 13px; color: var(--t2); letter-spacing: 0.03em; transition: color 0.25s; }
 
 .dept-detail-body { padding: 40px 0 64px; }
 .dept-lang-block { min-width: 0; }
