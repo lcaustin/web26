@@ -5,15 +5,18 @@ import Link from 'next/link'
 import Footer from '@/components/Footer'
 import Nav from '@/components/Nav'
 import SermonArchive, { type SermonArchiveItem } from '@/components/SermonArchive'
+import VideoPagination from '@/components/VideoPagination'
 
 export const dynamic = 'force-dynamic'
 
-export default async function SermonsPage() {
+export default async function SermonsPage({ searchParams }: { searchParams: Promise<{ page?: string }> }) {
+  const { page: pageParam } = await searchParams
+  const page = Math.max(1, Number.parseInt(pageParam || '1', 10) || 1)
   const payload = await getPayload({ config })
 
   const [siteSettings, sermonsResult] = await Promise.all([
     payload.findGlobal({ slug: 'site-settings' }).catch(() => null),
-    payload.find({ collection: 'videos', limit: 100, sort: '-publishedAt', where: { category: { equals: 'sermon' } } }).catch(() => ({ docs: [] })),
+    payload.find({ collection: 'videos', limit: 15, page, sort: '-publishedAt', where: { category: { equals: 'sermon' } } }).catch(() => ({ docs: [], page: 1, totalPages: 1 })),
   ])
 
   const church = siteSettings?.church
@@ -50,6 +53,7 @@ export default async function SermonsPage() {
           ) : (
             <p className="dept-empty">등록된 설교가 없습니다. · No sermons have been added yet.</p>
           )}
+          <VideoPagination currentPage={sermonsResult.page ?? 1} totalPages={sermonsResult.totalPages ?? 1} />
         </div>
       </section>
 
