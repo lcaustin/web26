@@ -20,16 +20,23 @@ export default function VideoPagination({ currentPage, totalPages }: Props) {
 
   return (
     <nav className="archive-pagination" aria-label="Archive pages">
-      {currentPage > 1 ? <Link href={href(currentPage - 1)} aria-label="Previous page">‹</Link> : <span className="is-disabled">‹</span>}
-      {pages.map((page, index) => (
-        <span key={page} className="archive-pagination-group">
-          {index > 0 && page - pages[index - 1] > 1 && <span className="archive-pagination-ellipsis">…</span>}
-          <Link href={href(page)} className={page === currentPage ? 'is-current' : undefined} aria-current={page === currentPage ? 'page' : undefined}>
-            {page}
-          </Link>
-        </span>
-      ))}
-      {currentPage < totalPages ? <Link href={href(currentPage + 1)} aria-label="Next page">›</Link> : <span className="is-disabled">›</span>}
+      <div className="archive-pagination-pages">
+        {currentPage > 1 ? <Link href={href(currentPage - 1)} aria-label="Previous page">‹</Link> : <span className="is-disabled">‹</span>}
+        {pages.map((page, index) => (
+          <span key={page} className="archive-pagination-group">
+            {index > 0 && page - pages[index - 1] > 1 && <span className="archive-pagination-ellipsis">…</span>}
+            <Link href={href(page)} className={page === currentPage ? 'is-current' : undefined} aria-current={page === currentPage ? 'page' : undefined}>
+              {page}
+            </Link>
+          </span>
+        ))}
+        {currentPage < totalPages ? <Link href={href(currentPage + 1)} aria-label="Next page">›</Link> : <span className="is-disabled">›</span>}
+      </div>
+      {currentPage < totalPages && (
+        <Link className="archive-pagination-more" href={href(currentPage + 1)}>
+          더보기 · Show more
+        </Link>
+      )}
     </nav>
   )
 }
