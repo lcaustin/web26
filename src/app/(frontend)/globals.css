@@ -294,10 +294,16 @@ section { padding: 56px 0; }
 .archive-pagination > span.is-disabled { opacity: 0.35; }
 .archive-pagination-group { display: inline-flex; align-items: center; gap: 6px; }
 .archive-pagination-ellipsis { width: 20px; color: var(--t2); text-align: center; }
+.archive-mobile-show-more { display: none; }
+.archive-load-error { margin: 12px 0 0; color: var(--link); font-size: 13px; text-align: center; }
 @media (max-width: 600px) {
+  .archive-pagination--mobile-hidden { display: none; }
   .archive-pagination-pages { display: none; }
   .archive-pagination .archive-pagination-more { display: flex; width: 100%; min-height: 42px; align-items: center; justify-content: center; padding: 0 18px; border: 1px solid var(--bdr2); border-radius: 8px; color: var(--t1); font-size: 13px; text-decoration: none; }
   .archive-pagination-more:hover { border-color: var(--gld); color: var(--gld); }
+  .archive-mobile-show-more { display: flex; width: 100%; min-height: 42px; align-items: center; justify-content: center; margin-top: 36px; border: 1px solid var(--bdr2); border-radius: 8px; background: var(--bg); color: var(--t1); font: inherit; font-size: 13px; cursor: pointer; }
+  .archive-mobile-show-more:hover { border-color: var(--gld); color: var(--gld); }
+  .archive-mobile-show-more:disabled { opacity: 0.65; cursor: wait; }
 }
 .sermon-archive-body { padding: 16px; }
 .sermon-archive-body h2 { margin: 0; color: var(--t1); font-size: 15px; font-weight: 500; line-height: 1.45; }

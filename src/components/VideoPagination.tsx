@@ -3,6 +3,7 @@ import Link from 'next/link'
 type Props = {
   currentPage: number
   totalPages: number
+  mobileHidden?: boolean
 }
 
 function pageWindow(currentPage: number, totalPages: number) {
@@ -13,13 +14,13 @@ function pageWindow(currentPage: number, totalPages: number) {
   return [...pages].sort((a, b) => a - b)
 }
 
-export default function VideoPagination({ currentPage, totalPages }: Props) {
+export default function VideoPagination({ currentPage, totalPages, mobileHidden = false }: Props) {
   if (totalPages <= 1) return null
   const pages = pageWindow(currentPage, totalPages)
   const href = (page: number) => page === 1 ? '?' : `?page=${page}`
 
   return (
-    <nav className="archive-pagination" aria-label="Archive pages">
+    <nav className={`archive-pagination${mobileHidden ? ' archive-pagination--mobile-hidden' : ''}`} aria-label="Archive pages">
       <div className="archive-pagination-pages">
         {currentPage > 1 ? <Link href={href(currentPage - 1)} aria-label="Previous page">‹</Link> : <span className="is-disabled">‹</span>}
         {pages.map((page, index) => (

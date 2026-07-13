@@ -81,13 +81,42 @@ function SermonVideoModal({ sermon, onClose }: { sermon: SermonArchiveItem; onCl
   )
 }
 
-export default function SermonArchive({ sermons, label = '주일 설교 · SUNDAY SERMON' }: { sermons: SermonArchiveItem[]; label?: string }) {
+type Props = {
+  sermons: SermonArchiveItem[]
+  label?: string
+  category?: string
+  initialPage?: number
+  totalPages?: number
+}
+
+export default function SermonArchive({ sermons, label = '주일 설교 · SUNDAY SERMON', category, initialPage = 1, totalPages = 1 }: Props) {
   const [selected, setSelected] = useState<SermonArchiveItem | null>(null)
+  const [items, setItems] = useState(sermons)
+  const [page, setPage] = useState(initialPage)
+  const [loading, setLoading] = useState(false)
+  const [loadError, setLoadError] = useState(false)
+
+  const loadMore = async () => {
+    if (!category || loading || page >= totalPages) return
+    setLoading(true)
+    setLoadError(false)
+    try {
+      const response = await fetch(`/api/videos?category=${encodeURIComponent(category)}&page=${page + 1}`)
+      if (!response.ok) throw new Error('Unable to load more videos')
+      const result = await response.json() as { docs: SermonArchiveItem[]; page: number }
+      setItems((current) => [...current, ...result.docs])
+      setPage(result.page)
+    } catch {
+      setLoadError(true)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <>
       <div className="sermon-page-grid">
-        {sermons.map((sermon) => {
+        {items.map((sermon) => {
           const hasVideo = Boolean(sermon.videoUrl)
           return (
             <article key={sermon.id} className="sermon-archive-card">
@@ -120,6 +149,12 @@ export default function SermonArchive({ sermons, label = '주일 설교 · SUNDA
           )
         })}
       </div>
+      {category && page < totalPages && (
+        <button type="button" className="archive-mobile-show-more" onClick={loadMore} disabled={loading}>
+          {loading ? '불러오는 중… · Loading…' : '더보기 · Show more'}
+        </button>
+      )}
+      {loadError && <p className="archive-load-error">영상을 불러올 수 없습니다. · Unable to load more videos.</p>}
       {selected && <SermonVideoModal sermon={selected} onClose={() => setSelected(null)} />}
     </>
   )
