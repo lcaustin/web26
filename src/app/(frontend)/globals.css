@@ -282,7 +282,7 @@ section { padding: 56px 0; }
 .sermon-archive-media::after { content: ''; position: absolute; inset: 0; background: rgba(7, 5, 16, 0.12); transition: background 0.15s; }
 .sermon-archive-media:hover::after { background: rgba(7, 5, 16, 0.04); }
 /* The thumbnail and centered play control remain sharp. */
-.sermon-archive-media .play-btn-c { position: absolute; z-index: 1; top: 50%; left: 50%; width: 32px; height: 32px; font-size: 15px; transform: translate(-50%, -50%); background: rgba(12, 8, 28, 0.72); }
+.sermon-archive-media .play-btn-c { position: absolute; z-index: 1; top: 50%; left: 50%; width: 32px; height: 32px; font-size: 15px; transform: translate(-50%, -50%); background: transparent; border: 1.5px solid rgba(255, 255, 255, 0.92); }
 .sermon-archive-media--empty { color: var(--gld); cursor: default; background: var(--bg-alt); font-size: 34px; }
 .sermon-archive-media--empty::after { display: none; }
 .sermon-archive-body { padding: 16px; }
