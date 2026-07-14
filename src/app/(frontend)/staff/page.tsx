@@ -15,7 +15,7 @@ const groups = [
   { key: 'evangelists', ko: '전도사', en: 'Evangelists', roles: ['전도사'] },
   { key: 'ministry', ko: '간사 / 지휘자', en: 'Ministry Staff', roles: ['간사', '지휘자'], roleOrder: ['간사', '지휘자'] },
   { key: 'elders', ko: '장로', en: 'Elders', roles: ['장로'], statusOrder: ['원로', '은퇴', '시무', '협동'] },
-  { key: 'kwonsa', ko: '권사', en: 'Kwonsa', roles: ['권사'], statusOrder: ['은퇴', '시무', '협동', '명예'] },
+  { key: 'kwonsa', ko: '권사', en: 'Senior Deaconess', roles: ['권사'], statusOrder: ['은퇴', '시무', '협동', '명예'] },
   { key: 'ordained-deacons', ko: '안수집사', en: 'Ordained Deacons', roles: ['안수집사'], statusOrder: ['시무', '협동'] },
 ]
 
