@@ -40,6 +40,14 @@ export const Bulletins: CollectionConfig = {
         description: 'The Sunday date displayed in the bulletin archive.',
       },
     },
+    // Payload's S3 storage adapter stores the object prefix here. Historic
+    // bulletins use `uploads/file` rather than the new `bulletins` prefix, so
+    // this must remain part of the schema rather than being auto-removed.
+    {
+      name: 'prefix',
+      type: 'text',
+      admin: { hidden: true },
+    },
   ],
   upload: {
     // Disabled automatically by the S3 adapter when the R2 environment

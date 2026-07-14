@@ -36,14 +36,13 @@ const NAV_LINKS: NavLink[] = [
     ],
   },
   {
-    ko: '부서', en: 'Departments', href: '/departments',
+    ko: '다음세대', en: 'Next Generation', href: '/departments',
     children: [
       { ko: '영아부', en: 'Nursery', href: '/departments/nursery' },
       { ko: '유아부', en: 'Preschool', href: '/departments/preschool' },
       { ko: '초등부', en: 'Elementary', href: '/departments/elementary' },
       { ko: '중고등부', en: 'Youth', href: '/departments/youth' },
-      { ko: '대학부', en: 'College', href: '/departments/youngadult' },
-      { ko: '청년부', en: 'Young Adult', href: '/departments/youngadult' },
+      { ko: '대학청년부', en: 'College & Young Adult', href: '/departments/youngadult' },
       { ko: '에노스', en: 'Enos', href: '/departments/enos' },
     ],
   },

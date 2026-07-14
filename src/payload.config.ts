@@ -36,6 +36,7 @@ const hasR2Storage = Boolean(
     process.env.R2_ENDPOINT &&
     R2_PUBLIC_URL,
 )
+const hasEmailCredentials = Boolean(process.env.EMAIL_USER && process.env.EMAIL_PASSWORD)
 
 export default buildConfig({
   serverURL: SERVER_URL,
@@ -49,19 +50,23 @@ export default buildConfig({
   //   EMAIL_FROM        e.g. "LC Austin <noreply@lcaustin.org>"
   //   EMAIL_USER        your Gmail/Workspace address
   //   EMAIL_PASSWORD    an App Password (Google Account → Security → App passwords)
-  email: nodemailerAdapter({
-    defaultFromAddress: process.env.EMAIL_FROM || 'noreply@lcaustin.org',
-    defaultFromName: 'LC Austin',
-    transportOptions: {
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true,
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD,
-      },
-    },
-  }),
+  ...(hasEmailCredentials
+    ? {
+        email: nodemailerAdapter({
+          defaultFromAddress: process.env.EMAIL_FROM || 'noreply@lcaustin.org',
+          defaultFromName: 'LC Austin',
+          transportOptions: {
+            host: 'smtp.gmail.com',
+            port: 465,
+            secure: true,
+            auth: {
+              user: process.env.EMAIL_USER,
+              pass: process.env.EMAIL_PASSWORD,
+            },
+          },
+        }),
+      }
+    : {}),
   // Once either array is non-empty Payload treats it as a strict allowlist,
   // so every legitimate origin must be listed — both the production site (for
   // the Payload admin panel's cookie-auth CSRF check) and the Capacitor mobile

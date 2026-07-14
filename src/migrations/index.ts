@@ -7,6 +7,8 @@ import * as migration_20260713_000000_use_english_video_category from './2026071
 import * as migration_20260713_001000_rename_offering_song_category from './20260713_001000_rename_offering_song_category';
 import * as migration_20260713_002000_limit_sermon_category from './20260713_002000_limit_sermon_category';
 import * as migration_20260713_003000_classify_sermons_by_title from './20260713_003000_classify_sermons_by_title';
+import * as migration_20260713_010000_add_service_time_admin_title from './20260713_010000_add_service_time_admin_title';
+import * as migration_20260713_011000_add_service_time_group from './20260713_011000_add_service_time_group';
 
 export const migrations = [
   {
@@ -53,5 +55,15 @@ export const migrations = [
     up: migration_20260713_003000_classify_sermons_by_title.up,
     down: migration_20260713_003000_classify_sermons_by_title.down,
     name: '20260713_003000_classify_sermons_by_title',
+  },
+  {
+    up: migration_20260713_010000_add_service_time_admin_title.up,
+    down: migration_20260713_010000_add_service_time_admin_title.down,
+    name: '20260713_010000_add_service_time_admin_title',
+  },
+  {
+    up: migration_20260713_011000_add_service_time_group.up,
+    down: migration_20260713_011000_add_service_time_group.down,
+    name: '20260713_011000_add_service_time_group',
   },
 ];
