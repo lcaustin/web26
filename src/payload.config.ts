@@ -17,6 +17,7 @@ import { News } from './collections/News.ts'
 import { Sermons } from './collections/Sermons.ts'
 import { Videos } from './collections/Videos.ts'
 import { ServiceTimes } from './collections/ServiceTimes.ts'
+import { Staff } from './collections/Staff.ts'
 import { Departments } from './collections/Departments.ts'
 import { QuickLinks } from './collections/QuickLinks.ts'
 import { Bulletins } from './collections/Bulletins.ts'
@@ -93,6 +94,7 @@ export default buildConfig({
     Videos,
     Bulletins,
     ServiceTimes,
+    Staff,
     Departments,
     QuickLinks,
     DeviceTokens,

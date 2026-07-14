@@ -9,6 +9,8 @@ import * as migration_20260713_002000_limit_sermon_category from './20260713_002
 import * as migration_20260713_003000_classify_sermons_by_title from './20260713_003000_classify_sermons_by_title';
 import * as migration_20260713_010000_add_service_time_admin_title from './20260713_010000_add_service_time_admin_title';
 import * as migration_20260713_011000_add_service_time_group from './20260713_011000_add_service_time_group';
+import * as migration_20260713_012000_add_staff from './20260713_012000_add_staff';
+import * as migration_20260713_013000_update_staff_import_fields from './20260713_013000_update_staff_import_fields';
 
 export const migrations = [
   {
@@ -65,5 +67,15 @@ export const migrations = [
     up: migration_20260713_011000_add_service_time_group.up,
     down: migration_20260713_011000_add_service_time_group.down,
     name: '20260713_011000_add_service_time_group',
+  },
+  {
+    up: migration_20260713_012000_add_staff.up,
+    down: migration_20260713_012000_add_staff.down,
+    name: '20260713_012000_add_staff',
+  },
+  {
+    up: migration_20260713_013000_update_staff_import_fields.up,
+    down: migration_20260713_013000_update_staff_import_fields.down,
+    name: '20260713_013000_update_staff_import_fields',
   },
 ];

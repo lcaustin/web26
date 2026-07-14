@@ -9,7 +9,7 @@
 - [x] 교회안내 - 소개 (Church Guide - Introduction)
 - [x] 교회안내 - 주보 (Church Guide - Weekly Bulletin)
 - [x] 교회안내 - 예배안내 (Church Guide - Service Times/Guide)
-- [ ] 교회안내 - 섬기는이 (Church Guide - Servants/Staff)
+- [x] 교회안내 - 섬기는이 (Church Guide - Servants/Staff)
 - [ ] 교회안내 - 연혁 (Church Guide - History)
 - [x] 말씀&찬양 - 주일설교 (Sermons & Praise - Sunday Sermons)
 - [x] 말씀&찬양 - 매일말씀묵상 (Sermons & Praise - Daily Devotionals)
