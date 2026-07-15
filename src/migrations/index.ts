@@ -11,6 +11,7 @@ import * as migration_20260713_010000_add_service_time_admin_title from './20260
 import * as migration_20260713_011000_add_service_time_group from './20260713_011000_add_service_time_group';
 import * as migration_20260713_012000_add_staff from './20260713_012000_add_staff';
 import * as migration_20260713_013000_update_staff_import_fields from './20260713_013000_update_staff_import_fields';
+import * as migration_20260714_010000_add_training_pages from './20260714_010000_add_training_pages';
 
 export const migrations = [
   {
@@ -77,5 +78,10 @@ export const migrations = [
     up: migration_20260713_013000_update_staff_import_fields.up,
     down: migration_20260713_013000_update_staff_import_fields.down,
     name: '20260713_013000_update_staff_import_fields',
+  },
+  {
+    up: migration_20260714_010000_add_training_pages.up,
+    down: migration_20260714_010000_add_training_pages.down,
+    name: '20260714_010000_add_training_pages',
   },
 ];

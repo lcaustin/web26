@@ -3,6 +3,7 @@ import Link from 'next/link'
 type Props = {
   currentPage: number
   totalPages: number
+  basePath?: string
   mobileHidden?: boolean
 }
 
@@ -14,10 +15,17 @@ function pageWindow(currentPage: number, totalPages: number) {
   return [...pages].sort((a, b) => a - b)
 }
 
-export default function VideoPagination({ currentPage, totalPages, mobileHidden = false }: Props) {
+export default function VideoPagination({ currentPage, totalPages, basePath = '', mobileHidden = false }: Props) {
   if (totalPages <= 1) return null
   const pages = pageWindow(currentPage, totalPages)
-  const href = (page: number) => page === 1 ? '?' : `?page=${page}`
+  const href = (page: number) => {
+    const [path = '', queryString = ''] = basePath.split('?')
+    const params = new URLSearchParams(queryString)
+    if (page === 1) params.delete('page')
+    else params.set('page', String(page))
+    const query = params.toString()
+    return `${path}${query ? `?${query}` : ''}` || '?'
+  }
 
   return (
     <nav className={`archive-pagination${mobileHidden ? ' archive-pagination--mobile-hidden' : ''}`} aria-label="Archive pages">

@@ -124,6 +124,113 @@ export const Pages: CollectionConfig = {
       },
     },
 
+    {
+      name: 'layout',
+      type: 'select',
+      label: '페이지 레이아웃 (Page Layout)',
+      defaultValue: 'default',
+      options: [
+        { label: 'Default', value: 'default' },
+        { label: 'Training & Ministry', value: 'training' },
+      ],
+      admin: {
+        description: '훈련&사역 페이지는 Training & Ministry를 선택하세요.',
+      },
+    },
+    {
+      name: 'training',
+      type: 'group',
+      label: '훈련&사역 설정 (Training Page Settings)',
+      admin: {
+        condition: (_, siblingData) => siblingData?.layout === 'training',
+      },
+      fields: [
+        {
+          name: 'heroStyle',
+          type: 'select',
+          label: '이미지 표시 방식',
+          defaultValue: 'none',
+          options: [
+            { label: 'None', value: 'none' },
+            { label: 'Overlay hero', value: 'overlay' },
+            { label: 'Wide banner', value: 'banner' },
+            { label: 'Feature image in panel', value: 'feature' },
+          ],
+        },
+        {
+          name: 'heroTitle',
+          type: 'text',
+          label: '히어로 제목',
+        },
+        {
+          name: 'heroSubtitle',
+          type: 'text',
+          label: '히어로 부제목',
+        },
+        {
+          name: 'panelTitle',
+          type: 'text',
+          label: '본문 상단 제목',
+        },
+        {
+          name: 'panelSubtitle',
+          type: 'text',
+          label: '본문 상단 부제목',
+        },
+        {
+          name: 'showDivider',
+          type: 'checkbox',
+          label: '제목 아래 세로 구분선 표시',
+          defaultValue: false,
+        },
+        {
+          name: 'body',
+          type: 'textarea',
+          label: '본문',
+          admin: {
+            description: '문단은 빈 줄로 구분합니다.',
+          },
+        },
+        {
+          name: 'registerUrl',
+          type: 'text',
+          label: '신청 링크',
+        },
+        {
+          name: 'registerLabel',
+          type: 'text',
+          label: '신청 버튼 문구',
+          defaultValue: '신청하기',
+        },
+        {
+          name: 'closedMessage',
+          type: 'text',
+          label: '신청 마감 문구',
+        },
+        {
+          name: 'videoSearchKeyword',
+          type: 'text',
+          label: '영상 검색 키워드',
+        },
+        {
+          name: 'videoTitle',
+          type: 'text',
+          label: '영상 섹션 제목',
+          defaultValue: '영상',
+        },
+        {
+          name: 'videoSubtitle',
+          type: 'text',
+          label: '영상 섹션 부제목',
+        },
+        {
+          name: 'videoArchiveLabel',
+          type: 'text',
+          label: '영상 목록 라벨',
+        },
+      ],
+    },
+
     // Content sections — drag to reorder; mix richtext and photo grids freely
     {
       name: 'sections',
