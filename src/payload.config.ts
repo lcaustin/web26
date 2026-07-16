@@ -23,6 +23,8 @@ import { QuickLinks } from './collections/QuickLinks.ts'
 import { Bulletins } from './collections/Bulletins.ts'
 import { Pages } from './collections/Pages.ts'
 import { DeviceTokens } from './collections/DeviceTokens.ts'
+import { PhotoAlbums } from './collections/PhotoAlbums.ts'
+import { PhotoItems } from './collections/PhotoItems.ts'
 import { SiteSettings } from './globals/SiteSettings.ts'
 
 const filename = fileURLToPath(import.meta.url)
@@ -96,6 +98,8 @@ export default buildConfig({
     ServiceTimes,
     Staff,
     Departments,
+    PhotoAlbums,
+    PhotoItems,
     QuickLinks,
     DeviceTokens,
   ],

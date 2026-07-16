@@ -138,6 +138,32 @@ export const Pages: CollectionConfig = {
       },
     },
     {
+      name: 'mission',
+      type: 'group',
+      label: '선교지 설정 (Mission Settings)',
+      admin: {
+        condition: (_, siblingData) => siblingData?.slug === 'mission',
+      },
+      fields: [
+        {
+          name: 'overseas',
+          type: 'textarea',
+          label: '해외선교 목록',
+          admin: {
+            description: '한 줄에 한 항목씩 입력하세요. 국가 | 선교사 | 후원 공동체 순서로 | 기호로 구분합니다.',
+          },
+        },
+        {
+          name: 'partners',
+          type: 'textarea',
+          label: '단체 및 교회 목록',
+          admin: {
+            description: '한 줄에 한 항목씩 입력하세요. 단체 | 담당자 순서로 | 기호로 구분합니다.',
+          },
+        },
+      ],
+    },
+    {
       name: 'training',
       type: 'group',
       label: '훈련&사역 설정 (Training Page Settings)',

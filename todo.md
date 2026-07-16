@@ -19,6 +19,7 @@
 - [x] 훈련사역 - 신구약 맥잡기 (Training Ministry - Bible Overview)
 - [x] 훈련사역 - 크라운재정교실 (Training Ministry - Crown Financial Class)
 - [x] 훈련사역 - 가온토요학교 (Training Ministry - Gaon Saturday School)
+- [x] 훈련사역 - 선교지 (Training Ministry - Mission)
 - [ ] 미디어 - 사진 (Media - Photos)
 - [ ] 미디어 - 영상 (Media - Videos)
 - [ ] 미디어 - 뉴스 (Media - News)

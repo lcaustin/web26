@@ -34,6 +34,7 @@ const NAV_LINKS: NavLink[] = [
       { ko: '신구약 맥잡기', en: 'Bible Panorama', href: '/biblepanorama' },
       { ko: '크라운 재정교실', en: 'Crown Finance', href: '/crown-finance' },
       { ko: '가온토요학교', en: 'Gaon School', href: '/gaonschool' },
+      { ko: '선교지', en: 'Mission', href: '/mission' },
     ],
   },
   {
@@ -50,9 +51,9 @@ const NAV_LINKS: NavLink[] = [
   {
     ko: '미디어', en: 'Media', href: '#',
     children: [
-      { ko: '사진', en: 'Photos', href: '#' },
-      { ko: '영상', en: 'Videos', href: '#' },
-      { ko: 'LC News', en: 'LC News', href: '#' },
+      { ko: '사진', en: 'Photos', href: '/photos' },
+      { ko: '영상', en: 'Videos', href: '/videos' },
+      { ko: 'LC News', en: 'LC News', href: '/lcnews' },
     ],
   },
   { ko: '소식', en: 'News', href: '/news' },

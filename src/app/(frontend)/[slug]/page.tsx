@@ -35,6 +35,13 @@ function pageVideoWhere(keyword?: string | null): Where | undefined {
   }
 }
 
+function missionRows(value?: string | null) {
+  return (value ?? '')
+    .split('\n')
+    .map((row) => row.split('|').map((cell) => cell.trim()))
+    .filter((cells) => cells.some(Boolean))
+}
+
 export default async function PageDetail({ params }: Props) {
   const { slug } = await params
   const payload = await getPayload({ config })
@@ -51,7 +58,9 @@ export default async function PageDetail({ params }: Props) {
 
   const church = siteSettings?.church
   const isTrainingPage = page.layout === 'training'
+  const isMissionPage = page.slug === 'mission'
   const training = page.training ?? {}
+  const mission = page.mission ?? {}
 
   const hasCallout =
     page.callout?.tagline?.ko ||
@@ -105,7 +114,34 @@ export default async function PageDetail({ params }: Props) {
         </div>
       </header>
 
-      {isTrainingPage ? (
+      {isMissionPage ? (
+        <section className="dept-detail-body">
+          <div className="wrap mission-page">
+            {heroImageUrl && <img className="training-wide-banner" src={heroImageUrl} alt={page.title?.ko ?? ''} />}
+            {training.body && <p className="mission-intro">{training.body}</p>}
+            <section className="mission-section">
+              <h2>해외선교</h2>
+              <div className="mission-table-wrap">
+                <table className="mission-table">
+                  <tbody>{missionRows(mission.overseas).map((row, index) => (
+                    <tr key={index}>{[0, 1, 2].map((column) => <td key={column}>{row[column] ?? ''}</td>)}</tr>
+                  ))}</tbody>
+                </table>
+              </div>
+            </section>
+            <section className="mission-section">
+              <h2>단체 및 교회</h2>
+              <div className="mission-table-wrap">
+                <table className="mission-table">
+                  <tbody>{missionRows(mission.partners).map((row, index) => (
+                    <tr key={index}>{[0, 1].map((column) => <td key={column}>{row[column] ?? ''}</td>)}</tr>
+                  ))}</tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+        </section>
+      ) : isTrainingPage ? (
         <section className="dept-detail-body">
           <div className="wrap">
             {heroImageUrl && training.heroStyle === 'overlay' && (

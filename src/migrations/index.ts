@@ -12,6 +12,10 @@ import * as migration_20260713_011000_add_service_time_group from './20260713_01
 import * as migration_20260713_012000_add_staff from './20260713_012000_add_staff';
 import * as migration_20260713_013000_update_staff_import_fields from './20260713_013000_update_staff_import_fields';
 import * as migration_20260714_010000_add_training_pages from './20260714_010000_add_training_pages';
+import * as migration_20260714_011000_add_mission_page from './20260714_011000_add_mission_page';
+import * as migration_20260714_012000_add_mission_table_data from './20260714_012000_add_mission_table_data';
+import * as migration_20260714_013000_add_department_hero_media from './20260714_013000_add_department_hero_media';
+import * as migration_20260714_014000_add_photo_gallery from './20260714_014000_add_photo_gallery';
 
 export const migrations = [
   {
@@ -83,5 +87,25 @@ export const migrations = [
     up: migration_20260714_010000_add_training_pages.up,
     down: migration_20260714_010000_add_training_pages.down,
     name: '20260714_010000_add_training_pages',
+  },
+  {
+    up: migration_20260714_011000_add_mission_page.up,
+    down: migration_20260714_011000_add_mission_page.down,
+    name: '20260714_011000_add_mission_page',
+  },
+  {
+    up: migration_20260714_012000_add_mission_table_data.up,
+    down: migration_20260714_012000_add_mission_table_data.down,
+    name: '20260714_012000_add_mission_table_data',
+  },
+  {
+    up: migration_20260714_013000_add_department_hero_media.up,
+    down: migration_20260714_013000_add_department_hero_media.down,
+    name: '20260714_013000_add_department_hero_media',
+  },
+  {
+    up: migration_20260714_014000_add_photo_gallery.up,
+    down: migration_20260714_014000_add_photo_gallery.down,
+    name: '20260714_014000_add_photo_gallery',
   },
 ];

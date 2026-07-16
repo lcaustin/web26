@@ -52,6 +52,30 @@ export const Departments: CollectionConfig = {
       enLabel: 'Description (English)',
     }),
     {
+      name: 'heroImageUrl',
+      type: 'text',
+      label: '배너 이미지 URL',
+      admin: { description: '부서 페이지 상단 배너의 이미지 경로 또는 전체 URL입니다.' },
+    },
+    {
+      name: 'heroTitle',
+      type: 'textarea',
+      label: '배너 제목',
+      admin: { description: '줄바꿈을 사용해 제목을 여러 줄로 표시할 수 있습니다.' },
+    },
+    {
+      name: 'heroSubtitle',
+      type: 'textarea',
+      label: '배너 부제목 / 말씀',
+      admin: { description: '배너 제목 아래에 표시됩니다. 줄바꿈을 사용할 수 있습니다.' },
+    },
+    {
+      name: 'youtubeUrl',
+      type: 'text',
+      label: '소개 영상 YouTube URL',
+      admin: { description: 'YouTube watch URL 또는 embed URL을 붙여 넣으세요.' },
+    },
+    {
       name: 'icon',
       type: 'text',
       required: true,
