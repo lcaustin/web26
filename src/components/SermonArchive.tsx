@@ -96,6 +96,16 @@ export default function SermonArchive({ sermons, label = '주일 설교 · SUNDA
   const [loading, setLoading] = useState(false)
   const [loadError, setLoadError] = useState(false)
 
+  // Pagination navigates within the same route, so this client component is
+  // preserved by Next.js. Reset its initial state when the server delivers a
+  // different page of videos.
+  useEffect(() => {
+    setItems(sermons)
+    setPage(initialPage)
+    setSelected(null)
+    setLoadError(false)
+  }, [sermons, initialPage])
+
   const loadMore = async () => {
     if (!category || loading || page >= totalPages) return
     setLoading(true)

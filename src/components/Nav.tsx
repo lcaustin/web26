@@ -53,7 +53,6 @@ const NAV_LINKS: NavLink[] = [
     children: [
       { ko: '사진', en: 'Photos', href: '/photos' },
       { ko: '영상', en: 'Videos', href: '/videos' },
-      { ko: 'LC News', en: 'LC News', href: '/lcnews' },
     ],
   },
   { ko: '소식', en: 'News', href: '/news' },

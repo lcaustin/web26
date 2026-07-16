@@ -421,7 +421,7 @@ footer { background: var(--bg-alt); border-top: 1px solid var(--bdr); padding: 3
 .dept-language-grid { display: flex; flex-direction: column; gap: 48px; max-width: 920px; }
 .dept-lang-block { min-width: 0; }
 .dept-lang-block + .dept-lang-block { margin: 0; padding-top: 26px; border-top: 1px solid var(--bdr); }
-.dept-language-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 18px; padding-bottom: 13px; border-bottom: 1px solid var(--bdr); }
+.dept-language-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
 .dept-language-heading .dept-lang-label { margin: 0; }
 .dept-language-heading span { color: var(--t3); font-size: 11px; letter-spacing: 0.06em; }
 .dept-info-grid { overflow: hidden; border-top: 1px solid var(--bdr); }
