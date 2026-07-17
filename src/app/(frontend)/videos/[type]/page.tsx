@@ -28,7 +28,7 @@ export default async function VideoTypePage({ params, searchParams }: { params: 
   const payload = await getPayload({ config })
   const [siteSettings, result] = await Promise.all([
     payload.findGlobal({ slug: 'site-settings' }).catch(() => null),
-    payload.find({ collection: 'videos', limit: 15, page, sort: '-publishedAt', where: { category: { equals: metadata.type } } }).catch(() => ({ docs: [], page: 1, totalPages: 1 })),
+    payload.find({ collection: 'videos', limit: 15, page, sort: '-publishedAt', where: { category: { equals: metadata.type } } }).catch(() => ({ docs: [], page: 1, totalPages: 1, totalDocs: 0 })),
   ])
   const videos = result.docs.map((video: any): SermonArchiveItem => ({
     id: video.id, title: { ko: video.adminTitle, en: '' }, date: video.publishedAt,
@@ -37,7 +37,7 @@ export default async function VideoTypePage({ params, searchParams }: { params: 
   const church = siteSettings?.church
   return <div className="site" id="site"><Nav />
     <header className="dept-detail-head"><div className="wrap"><Link href="/" className="dept-back"><i className="ti ti-arrow-left" aria-hidden="true" />홈 · Home</Link><div className="dept-detail-icon"><i className={metadata.icon} aria-hidden="true" /></div><h1 className="dept-detail-ko">{metadata.ko}</h1><div className="dept-detail-en">{metadata.en}</div></div></header>
-    <section className="dept-detail-body"><div className="wrap">{videos.length ? <SermonArchive sermons={videos} label={`${metadata.ko} · ${metadata.en.toUpperCase()}`} category={metadata.type} initialPage={result.page ?? 1} totalPages={result.totalPages ?? 1} /> : <p className="dept-empty">등록된 영상이 없습니다. · No videos have been added yet.</p>}<VideoPagination currentPage={result.page ?? 1} totalPages={result.totalPages ?? 1} mobileHidden /></div></section>
+    <section className="dept-detail-body"><div className="wrap">{videos.length ? <SermonArchive sermons={videos} label={`${metadata.ko} · ${metadata.en.toUpperCase()}`} category={metadata.type} initialPage={result.page ?? 1} totalPages={result.totalPages ?? 1} totalDocs={result.totalDocs ?? 0} /> : <p className="dept-empty">등록된 영상이 없습니다. · No videos have been added yet.</p>}<VideoPagination currentPage={result.page ?? 1} totalPages={result.totalPages ?? 1} mobileHidden /></div></section>
     <Footer nameKo={church?.name?.ko} nameEn={church?.name?.en} addressKo={church?.address?.ko} phone={church?.phone} email={church?.email} />
   </div>
 }

@@ -16,7 +16,7 @@ export default async function SermonsPage({ searchParams }: { searchParams: Prom
 
   const [siteSettings, sermonsResult] = await Promise.all([
     payload.findGlobal({ slug: 'site-settings' }).catch(() => null),
-    payload.find({ collection: 'videos', limit: 15, page, sort: '-publishedAt', where: { category: { equals: 'sermon' } } }).catch(() => ({ docs: [], page: 1, totalPages: 1 })),
+    payload.find({ collection: 'videos', limit: 15, page, sort: '-publishedAt', where: { category: { equals: 'sermon' } } }).catch(() => ({ docs: [], page: 1, totalPages: 1, totalDocs: 0 })),
   ])
 
   const church = siteSettings?.church
@@ -49,7 +49,7 @@ export default async function SermonsPage({ searchParams }: { searchParams: Prom
       <section className="dept-detail-body">
         <div className="wrap">
           {sermons.length > 0 ? (
-            <SermonArchive sermons={sermons} category="sermon" initialPage={sermonsResult.page ?? 1} totalPages={sermonsResult.totalPages ?? 1} />
+            <SermonArchive sermons={sermons} category="sermon" initialPage={sermonsResult.page ?? 1} totalPages={sermonsResult.totalPages ?? 1} totalDocs={sermonsResult.totalDocs ?? 0} />
           ) : (
             <p className="dept-empty">등록된 설교가 없습니다. · No sermons have been added yet.</p>
           )}

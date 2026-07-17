@@ -85,33 +85,50 @@ type Props = {
   sermons: SermonArchiveItem[]
   label?: string
   category?: string
+  loadMoreUrl?: string
   initialPage?: number
   totalPages?: number
+  totalDocs?: number
 }
 
-export default function SermonArchive({ sermons, label = '주일 설교 · SUNDAY SERMON', category, initialPage = 1, totalPages = 1 }: Props) {
+export default function SermonArchive({ sermons, label = '주일 설교 · SUNDAY SERMON', category, loadMoreUrl, initialPage = 1, totalPages = 1, totalDocs = 0 }: Props) {
   const [selected, setSelected] = useState<SermonArchiveItem | null>(null)
   const [items, setItems] = useState(sermons)
   const [page, setPage] = useState(initialPage)
   const [loading, setLoading] = useState(false)
   const [loadError, setLoadError] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const media = window.matchMedia('(max-width: 760px)')
+    const update = () => setIsMobile(media.matches)
+    update()
+    media.addEventListener('change', update)
+    return () => media.removeEventListener('change', update)
+  }, [])
 
   // Pagination navigates within the same route, so this client component is
   // preserved by Next.js. Reset its initial state when the server delivers a
   // different page of videos.
   useEffect(() => {
-    setItems(sermons)
+    setItems(isMobile ? sermons.slice(0, 10) : sermons)
     setPage(initialPage)
     setSelected(null)
     setLoadError(false)
-  }, [sermons, initialPage])
+  }, [sermons, initialPage, isMobile])
+
+  const effectiveTotalPages = isMobile && totalDocs ? Math.ceil(totalDocs / 10) : totalPages
 
   const loadMore = async () => {
-    if (!category || loading || page >= totalPages) return
+    const endpoint = loadMoreUrl || (category ? `/api/videos?category=${encodeURIComponent(category)}` : null)
+    if (!endpoint || loading || page >= effectiveTotalPages) return
     setLoading(true)
     setLoadError(false)
     try {
-      const response = await fetch(`/api/videos?category=${encodeURIComponent(category)}&page=${page + 1}`)
+      const url = new URL(endpoint, window.location.origin)
+      url.searchParams.set('page', String(page + 1))
+      url.searchParams.set('limit', isMobile ? '10' : '15')
+      const response = await fetch(url.pathname + url.search)
       if (!response.ok) throw new Error('Unable to load more videos')
       const result = await response.json() as { docs: SermonArchiveItem[]; page: number }
       setItems((current) => [...current, ...result.docs])
@@ -159,7 +176,7 @@ export default function SermonArchive({ sermons, label = '주일 설교 · SUNDA
           )
         })}
       </div>
-      {category && page < totalPages && (
+      {(loadMoreUrl || category) && page < effectiveTotalPages && (
         <button type="button" className="archive-mobile-show-more" onClick={loadMore} disabled={loading}>
           {loading ? '불러오는 중… · Loading…' : '더보기 · Show more'}
         </button>
