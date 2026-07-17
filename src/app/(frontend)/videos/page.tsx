@@ -55,7 +55,6 @@ export default async function VideosPage({ searchParams }: { searchParams: Promi
   const videoHref = (nextCategory: string) => {
     const params = new URLSearchParams()
     if (nextCategory) params.set('category', nextCategory)
-    if (keyword) params.set('q', keyword)
     const search = params.toString()
     return '/videos' + (search ? '?' + search : '')
   }

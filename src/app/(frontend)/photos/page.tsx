@@ -39,7 +39,6 @@ export default async function PhotosPage({ searchParams }: { searchParams: Promi
   const photoHref = (nextCategory: string) => {
     const params = new URLSearchParams()
     if (nextCategory) params.set('category', nextCategory)
-    if (query) params.set('q', query)
     const search = params.toString()
     return '/photos' + (search ? '?' + search : '')
   }

@@ -16,6 +16,7 @@ import * as migration_20260714_011000_add_mission_page from './20260714_011000_a
 import * as migration_20260714_012000_add_mission_table_data from './20260714_012000_add_mission_table_data';
 import * as migration_20260714_013000_add_department_hero_media from './20260714_013000_add_department_hero_media';
 import * as migration_20260714_014000_add_photo_gallery from './20260714_014000_add_photo_gallery';
+import * as migration_20260716_000000_add_bulletin_news_source from './20260716_000000_add_bulletin_news_source';
 
 export const migrations = [
   {
@@ -107,5 +108,10 @@ export const migrations = [
     up: migration_20260714_014000_add_photo_gallery.up,
     down: migration_20260714_014000_add_photo_gallery.down,
     name: '20260714_014000_add_photo_gallery',
+  },
+  {
+    up: migration_20260716_000000_add_bulletin_news_source.up,
+    down: migration_20260716_000000_add_bulletin_news_source.down,
+    name: '20260716_000000_add_bulletin_news_source',
   },
 ];

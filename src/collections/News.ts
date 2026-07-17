@@ -19,6 +19,11 @@ export const News: CollectionConfig = {
   admin: {
     useAsTitle: 'adminTitle',
     defaultColumns: ['adminTitle', 'date', 'slug', 'updatedAt'],
+    components: {
+      edit: {
+        beforeDocumentControls: ['@/components/admin/CancelNewsEdit'],
+      },
+    },
   },
   access: {
     read: () => true,
@@ -64,6 +69,14 @@ export const News: CollectionConfig = {
       koLabel: '내용 (Korean)',
       enLabel: 'Content (English)',
     }),
+    {
+      name: 'sourceBulletin',
+      type: 'relationship',
+      relationTo: 'bulletins',
+      label: 'Source Bulletin',
+      admin: { position: 'sidebar', readOnly: true, description: 'Set automatically for announcements extracted from a bulletin PDF.' },
+    },
+    { name: 'extractionKey', type: 'text', unique: true, admin: { hidden: true } },
     {
       name: 'date',
       type: 'date',

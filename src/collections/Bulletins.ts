@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { syncBulletinNews } from '../lib/bulletin-news.ts'
 
 /**
  * Weekly church bulletins. Each document is the uploaded PDF itself, with an
@@ -21,6 +22,20 @@ export const Bulletins: CollectionConfig = {
           data.adminTitle = `${String(data.issueDate).slice(0, 10)} 주보`
         }
         return data
+      },
+    ],
+    afterChange: [
+      async ({ doc, operation, req }) => {
+        // A bulletin is parsed once on upload. Its extracted News records are
+        // linked back to this document, so they never duplicate manual/home-page news.
+        if (operation === 'create') await syncBulletinNews(req.payload, doc)
+        return doc
+      },
+    ],
+    afterDelete: [
+      async ({ doc, req }) => {
+        const { docs } = await req.payload.find({ collection: 'news', limit: 100, where: { sourceBulletin: { equals: doc.id } } })
+        await Promise.all(docs.map((item: any) => req.payload.delete({ collection: 'news', id: item.id })))
       },
     ],
   },
