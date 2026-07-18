@@ -1,5 +1,6 @@
 import config from '@payload-config'
 import { getPayload } from 'payload'
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 
@@ -8,6 +9,21 @@ import Nav from '@/components/Nav'
 import PhotoLightbox from '@/components/PhotoLightbox'
 
 export const dynamic = 'force-dynamic'
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params
+  const payload = await getPayload({ config })
+  const result = await payload.find({ collection: 'photo-albums', where: { slug: { equals: slug } }, limit: 1 }).catch(() => ({ docs: [] }))
+  const album: any = result.docs[0]
+  if (!album) return { title: '사진 앨범', robots: { index: false, follow: false } }
+  const cover = imageUrl(album.coverImageUrl)
+  return {
+    title: album.title,
+    description: album.description || `${album.title} · 어스틴 주님의교회 사진 앨범`,
+    alternates: { canonical: `/photos/${album.slug}` },
+    ...(cover ? { openGraph: { images: [{ url: cover }] } } : {}),
+  }
+}
 
 const base = (process.env.R2_PUBLIC_URL || 'https://pub-2f2b09ce26ca48ca9b726870a49512c2.r2.dev').replace(/\/$/, '')
 const imageUrl = (url?: string | null) => {

@@ -9,6 +9,7 @@ import VideoPagination from '@/components/VideoPagination'
 import PhotoAlbumGrid from '@/components/PhotoAlbumGrid'
 
 export const dynamic = 'force-dynamic'
+export const metadata = { title: '사진', description: '어스틴 주님의교회 사진 앨범입니다.', alternates: { canonical: '/photos' } }
 
 const base = (process.env.R2_PUBLIC_URL || 'https://pub-2f2b09ce26ca48ca9b726870a49512c2.r2.dev').replace(/\/$/, '')
 const imageUrl = (url?: string | null) => {

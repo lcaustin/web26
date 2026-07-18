@@ -8,6 +8,7 @@ import chronicles from '@/data/chronicles.json'
 import HistoryTimeline from './HistoryTimeline'
 
 export const dynamic = 'force-dynamic'
+export const metadata = { title: '교회 연혁', description: '어스틴 주님의교회의 연혁입니다.', alternates: { canonical: '/history' } }
 
 type Chronicle = {
   _id?: { $oid?: string }

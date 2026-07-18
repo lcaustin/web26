@@ -9,6 +9,7 @@ import SermonArchive, { type SermonArchiveItem } from '@/components/SermonArchiv
 import VideoPagination from '@/components/VideoPagination'
 
 export const dynamic = 'force-dynamic'
+export const metadata = { title: '영상', description: '어스틴 주님의교회 설교와 예배 영상을 만나보세요.', alternates: { canonical: '/videos' } }
 
 function keywordWhere(keyword: string): Where | undefined {
   if (!keyword) return undefined

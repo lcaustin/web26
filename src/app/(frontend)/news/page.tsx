@@ -9,6 +9,7 @@ import VideoPagination from '@/components/VideoPagination'
 import NewsList, { type NewsListItem } from '@/components/NewsList'
 
 export const dynamic = 'force-dynamic'
+export const metadata = { title: '교회 소식', description: '어스틴 주님의교회 최신 소식과 공지입니다.', alternates: { canonical: '/news' } }
 
 type NewsDoc = {
   id: string | number

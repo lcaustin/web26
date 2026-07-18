@@ -8,6 +8,7 @@ import Nav from '@/components/Nav'
 import VideoPagination from '@/components/VideoPagination'
 
 export const dynamic = 'force-dynamic'
+export const metadata = { title: '교회 주보', description: '어스틴 주님의교회 주간 주보입니다.', alternates: { canonical: '/bulletin' } }
 
 type Bulletin = {
   id: number | string

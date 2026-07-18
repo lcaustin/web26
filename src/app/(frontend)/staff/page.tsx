@@ -7,6 +7,7 @@ import Nav from '@/components/Nav'
 import StaffPhoto from './StaffPhoto'
 
 export const dynamic = 'force-dynamic'
+export const metadata = { title: '섬기는이', description: '어스틴 주님의교회 섬기는이들을 소개합니다.', alternates: { canonical: '/staff' } }
 
 const staffAssetBaseUrl = (process.env.R2_PUBLIC_URL || 'https://pub-2f2b09ce26ca48ca9b726870a49512c2.r2.dev').replace(/\/$/, '')
 

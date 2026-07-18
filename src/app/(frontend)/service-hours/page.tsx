@@ -6,6 +6,7 @@ import Footer from '@/components/Footer'
 import Nav from '@/components/Nav'
 
 export const dynamic = 'force-dynamic'
+export const metadata = { title: '예배 안내', description: '어스틴 주님의교회 예배 시간과 모임 안내입니다.', alternates: { canonical: '/service-hours' } }
 
 const serviceIcon = (name: string) => {
   if (name.includes('새벽')) return 'ti-sunrise'

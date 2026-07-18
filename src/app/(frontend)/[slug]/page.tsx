@@ -1,5 +1,6 @@
 import config from '@payload-config'
 import { getPayload } from 'payload'
+import type { Metadata } from 'next'
 import type { Where } from 'payload'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
@@ -13,6 +14,20 @@ export const dynamic = 'force-dynamic'
 
 type Props = {
   params: Promise<{ slug: string }>
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params
+  const payload = await getPayload({ config })
+  const result = await payload.find({ collection: 'pages', where: { slug: { equals: slug } }, limit: 1 }).catch(() => ({ docs: [] }))
+  const page: any = result.docs[0]
+  if (!page) return { title: '어스틴 주님의교회', robots: { index: false, follow: false } }
+  const title = page.title?.ko || page.title?.en || '어스틴 주님의교회'
+  return {
+    title,
+    description: page.subtitle?.en || page.subtitle?.ko || `${title} · 어스틴 주님의교회`,
+    alternates: { canonical: `/${page.slug}` },
+  }
 }
 
 const assetBaseUrl = (process.env.R2_PUBLIC_URL || 'https://pub-2f2b09ce26ca48ca9b726870a49512c2.r2.dev').replace(/\/$/, '')

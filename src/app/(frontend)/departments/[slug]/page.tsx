@@ -1,5 +1,6 @@
 import config from '@payload-config'
 import { getPayload } from 'payload'
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { RichText } from '@payloadcms/richtext-lexical/react'
@@ -11,6 +12,20 @@ export const dynamic = 'force-dynamic'
 
 type Props = {
   params: Promise<{ slug: string }>
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params
+  const payload = await getPayload({ config })
+  const result = await payload.find({ collection: 'departments', where: { slug: { equals: slug } }, limit: 1 }).catch(() => ({ docs: [] }))
+  const department: any = result.docs[0]
+  if (!department) return { title: '다음세대', robots: { index: false, follow: false } }
+  const title = department.name?.ko || department.name?.en || '다음세대'
+  return {
+    title,
+    description: department.name?.en || `${title} · 어스틴 주님의교회 다음세대`,
+    alternates: { canonical: `/departments/${department.slug}` },
+  }
 }
 
 type DepartmentEntry = {

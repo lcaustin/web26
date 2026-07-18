@@ -8,6 +8,7 @@ import SermonArchive, { type SermonArchiveItem } from '@/components/SermonArchiv
 import VideoPagination from '@/components/VideoPagination'
 
 export const dynamic = 'force-dynamic'
+export const metadata = { title: '주일 설교', description: '어스틴 주님의교회 주일 설교 영상입니다.', alternates: { canonical: '/sermons' } }
 
 export default async function SermonsPage({ searchParams }: { searchParams: Promise<{ page?: string }> }) {
   const { page: pageParam } = await searchParams
