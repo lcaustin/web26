@@ -58,7 +58,30 @@ const VIDEO_COVER_STYLE: Partial<CSSStyleDeclaration> = {
   opacity: '0.85',
 }
 
-export default function Hero() {
+const HERO_DEFAULTS = {
+  taglineKo: '예배의 감격으로 변화받아\n열방을 섬기는 교회',
+  taglineEn: 'Transformed by the Spirit of Worship to Serve the Nations',
+  sermonButtonKo: '이번 주 말씀',
+  sermonButtonEn: 'This Week’s Sermon',
+  sermonButtonHref: '/sermons',
+  directionsHref: 'https://www.google.com/maps/search/?api=1&query=11900%20Ranch%20Rd%20620%20N%2C%20Cedar%20Park%2C%20TX%2078613',
+}
+
+export default function Hero({
+  taglineKo,
+  taglineEn,
+  sermonButtonKo,
+  sermonButtonEn,
+  sermonButtonHref,
+  directionsHref,
+}: {
+  taglineKo?: string | null
+  taglineEn?: string | null
+  sermonButtonKo?: string | null
+  sermonButtonEn?: string | null
+  sermonButtonHref?: string | null
+  directionsHref?: string | null
+}) {
   const containerRef = useRef<HTMLDivElement>(null)
   const playerRef = useRef<YouTubePlayer | null>(null)
   const indexRef = useRef(0)
@@ -131,21 +154,17 @@ export default function Hero() {
       <div className="hero-overlay" />
       <div className="hero-content">
         <div className="hero-eyebrow">Lord&apos;s Church of Austin · 어스틴 주님의교회</div>
-        <div className="hero-title">
-          예배의 감격으로 변화받아
-          <br />
-          열방을 섬기는 교회
-        </div>
-        <div className="hero-sub">Transformed by the Spirit of Worship to Serve the Nations</div>
+        <div className="hero-title">{taglineKo || HERO_DEFAULTS.taglineKo}</div>
+        <div className="hero-sub">{taglineEn || HERO_DEFAULTS.taglineEn}</div>
         <div className="hero-btns">
-          <button type="button" className="btn-primary">
+          <a href={sermonButtonHref || HERO_DEFAULTS.sermonButtonHref} className="btn-primary">
             <i className="ti ti-player-play" aria-hidden="true" />
-            이번 주 말씀 · This Week&apos;s Sermon
-          </button>
-          <button type="button" className="btn-outline">
+            {sermonButtonKo || HERO_DEFAULTS.sermonButtonKo} · {sermonButtonEn || HERO_DEFAULTS.sermonButtonEn}
+          </a>
+          <a href={directionsHref || HERO_DEFAULTS.directionsHref} className="btn-outline" target="_blank" rel="noopener noreferrer">
             <i className="ti ti-map-pin" aria-hidden="true" />
             오시는 길 · Directions
-          </button>
+          </a>
         </div>
       </div>
     </div>

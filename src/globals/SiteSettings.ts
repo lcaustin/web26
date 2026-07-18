@@ -13,6 +13,32 @@ export const SiteSettings: GlobalConfig = {
   fields: [
     {
       type: 'group',
+      name: 'hero',
+      label: 'Hero Section',
+      fields: [
+        bilingualText('tagline', {
+          label: 'Hero Tagline',
+          required: false,
+          koLabel: '태그라인 (Korean)',
+          enLabel: 'Tagline (English)',
+          multiline: true,
+        }),
+        bilingualText('sermonButtonLabel', {
+          label: 'Sermon Button Label Override',
+          required: false,
+          koLabel: '버튼 텍스트 (Korean)',
+          enLabel: 'Button Label (English)',
+        }),
+        {
+          name: 'sermonButtonHref',
+          type: 'text',
+          label: 'Sermon Button Link URL Override',
+          admin: { description: 'Leave blank for the automatic Daily Devotion / Sunday Sermon link.' },
+        },
+      ],
+    },
+    {
+      type: 'group',
       name: 'welcomeBanner',
       label: 'Welcome Banner',
       fields: [
@@ -27,6 +53,7 @@ export const SiteSettings: GlobalConfig = {
           required: false,
           koLabel: '메시지 (Korean)',
           enLabel: 'Message (English)',
+          multiline: true,
         }),
         bilingualText('registerLabel', {
           label: 'Registration Button Label',
