@@ -16,6 +16,7 @@ function toSlug(str: string): string {
 // 소식 (News / Announcements) — shown as mini-cards on the landing page
 export const News: CollectionConfig = {
   slug: 'news',
+  defaultSort: '-date',
   admin: {
     useAsTitle: 'adminTitle',
     defaultColumns: ['adminTitle', 'date', 'slug', 'updatedAt'],
@@ -96,6 +97,13 @@ export const News: CollectionConfig = {
       name: 'eventDates',
       type: 'group',
       label: 'Special Event Dates (optional)',
+      validate: (value) => {
+        const dates = (value || {}) as { startDate?: string | null; endDate?: string | null }
+        if (Boolean(dates.startDate) !== Boolean(dates.endDate)) {
+          return 'Enter both an event start date and an event end date, or leave both blank.'
+        }
+        return true
+      },
       admin: {
         description:
           'Set both dates to feature this item in the Special Event carousel on the home page. Leave blank for regular announcements.',

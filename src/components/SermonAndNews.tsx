@@ -91,6 +91,8 @@ type Sermon = {
 
 type NewsItem = {
   id: string | number
+  slug?: string | null
+  link?: string | null
   title: { ko: string; en: string }
   date: string
 }
@@ -191,21 +193,28 @@ export default function SermonAndNews({ sermon, news }: Props) {
             </div>
             <div className="news-card">
               <div className="news-list">
-                {news.map((item) => (
-                  <div className="news-item" key={item.id}>
-                    <div className="news-accent" />
-                    <div className="news-info">
-                      <div className="news-title">
-                        {item.title.ko}
-                        <br />
-                        <span style={{ fontWeight: 400, color: 'var(--t2)', fontSize: 11 }}>
-                          {item.title.en}
-                        </span>
-                      </div>
-                      <div className="news-date">{formatDate(item.date)}</div>
+                {news.map((item) => {
+                  const href = item.link || (item.slug ? `/news/${item.slug}` : `/news/${item.id}`)
+                  const isExternal = Boolean(item.link)
+                  return (
+                    <div className="news-item news-item--linked" key={item.id}>
+                      <a className="news-item-link" href={href} {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
+                        <div className="news-accent" />
+                        <div className="news-info">
+                          <div className="news-title">
+                            {item.title.ko}
+                            <br />
+                            <span style={{ fontWeight: 400, color: 'var(--t2)', fontSize: 11 }}>
+                              {item.title.en}
+                            </span>
+                          </div>
+                          <div className="news-date">{formatDate(item.date)}</div>
+                        </div>
+                        {isExternal && <i className="ti ti-external-link" style={{ color: 'var(--t3)', fontSize: 14, marginLeft: 'auto' }} aria-hidden="true" />}
+                      </a>
                     </div>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             </div>
           </div>
