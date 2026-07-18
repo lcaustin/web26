@@ -326,8 +326,8 @@ section { padding: 56px 0; }
 .news-mobile-more { display: none; width: 100%; min-height: 42px; margin-top: 24px; border: 1px solid var(--bdr2); border-radius: 8px; background: transparent; color: var(--t1); font: inherit; font-size: 13px; cursor: pointer; }
 .news-mobile-more:disabled { opacity: 0.6; cursor: wait; }
 .news-page-group { display: flex; flex-direction: column; gap: 12px; }
-@media (min-width: 1025px) { .news-page-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 10px 24px; } }
-@media (max-width: 760px) { .news-mobile-more { display: block; } }
+@media (min-width: 721px) { .news-page-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 10px 24px; } }
+@media (max-width: 600px) { .news-mobile-more { display: block; } }
 .news-page-date-header { font-size: 12px; font-weight: 600; color: var(--gld); letter-spacing: 0.05em; text-transform: uppercase; padding-bottom: 4px; border-bottom: 1px solid var(--bdr); transition: color 0.25s, border-color 0.25s; }
 .news-item--linked .news-item-link { display: flex; align-items: center; gap: 12px; width: 100%; text-decoration: none; color: inherit; }
 .news-item--linked:hover .news-title { color: var(--gld); }
@@ -649,7 +649,10 @@ footer { background: var(--bg-alt); border-top: 1px solid var(--bdr); padding: 3
 .bulletin-list-current { margin-left: auto; color: var(--gld); font-size: 11px; }
 .bulletin-show-more { align-self: center; display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; padding: 9px 16px; border: 1px solid var(--bdr); border-radius: 999px; background: transparent; color: var(--link); font: inherit; font-size: 12px; cursor: pointer; transition: background 0.15s, border-color 0.25s; }
 .bulletin-show-more:hover { background: var(--bg-alt); }
+.bulletin-mobile-more { display: none; width: 100%; min-height: 42px; margin-top: 24px; border: 1px solid var(--bdr2); border-radius: 8px; background: transparent; color: var(--t1); font: inherit; font-size: 13px; cursor: pointer; }
+.bulletin-mobile-more:disabled { opacity: 0.6; cursor: wait; }
 @media (max-width: 600px) {
+  .bulletin-mobile-more { display: block; }
   .bulletin-latest-head { align-items: flex-start; flex-direction: column; }
   .bulletin-preview { height: 65vh; }
 }

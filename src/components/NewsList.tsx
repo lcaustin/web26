@@ -29,7 +29,7 @@ export default function NewsList({ initialNews, initialPage, totalPages, totalDo
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    const media = window.matchMedia('(max-width: 760px)')
+    const media = window.matchMedia('(max-width: 600px)')
     const update = () => setIsMobile(media.matches)
     update()
     media.addEventListener('change', update)

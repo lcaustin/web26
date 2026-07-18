@@ -39,8 +39,9 @@ async function ocrBulletin(url: string, workingDirectory: string) {
   await run('pdftoppm', ['-f', '1', '-l', '1', '-png', '-r', '144', pdf, imagePrefix])
   // Bulletin PDFs use a fixed three-column layout; this isolates the middle announcements column.
   await run('sips', ['-c', '700', '600', '--cropOffset', '0', '620', `${imagePrefix}-1.png`, '--out', crop])
-  const { stdout } = await run('tesseract', [crop, 'stdout', '-l', 'kor+eng', '--psm', '6'])
-  return stdout
+  const { stdout: croppedText } = await run('tesseract', [crop, 'stdout', '-l', 'kor+eng', '--psm', '6'])
+  const { stdout: fullPageText } = await run('tesseract', [`${imagePrefix}-1.png`, 'stdout', '-l', 'kor+eng', '--psm', '6'])
+  return { croppedText, fullPageText }
 }
 
 async function main() {
@@ -54,13 +55,19 @@ async function main() {
     const key = [bulletin.prefix, bulletin.filename].filter(Boolean).join('/')
     if (!key) throw new Error(`Bulletin ${date} has no uploaded PDF filename`)
     await mkdir(workingDirectory, { recursive: true })
-    const articles = parseBulletinAnnouncements(await ocrBulletin(`${publicURL}/${key}`, workingDirectory))
+    const { croppedText, fullPageText } = await ocrBulletin(`${publicURL}/${key}`, workingDirectory)
+    const articles = parseBulletinAnnouncements(croppedText)
+    if (!articles.length) articles.push(...parseBulletinAnnouncements(fullPageText))
     if (!articles.length) throw new Error('No eligible announcements found. Check the bulletin layout or OCR output.')
 
     await client.query('BEGIN')
     await client.query('DELETE FROM news WHERE source_bulletin_id = $1', [bulletin.id])
     for (const [index, article] of articles.entries()) {
-      await client.query('INSERT INTO news (admin_title, title_ko, title_en, content_ko, content_en, date, source_bulletin_id, extraction_key, slug, created_at, updated_at) VALUES ($1,$2,\'\',$3,$4,$5,$6,$7,$8,now(),now())', [article.title, article.title, lexical(article.body), lexical(''), bulletin.issue_date, bulletin.id, `${bulletin.id}:${index + 1}`, `bulletin-${date}-${index + 1}`])
+      await client.query(`
+        INSERT INTO news (admin_title, title_ko, title_en, content_ko, content_en, date, source_bulletin_id, extraction_key, slug, created_at, updated_at)
+        SELECT $1, $2, '', $3, $4, $5, $6, $7, $8, now(), now()
+        WHERE NOT EXISTS (SELECT 1 FROM news WHERE title_ko = $2)
+      `, [article.title, article.title, lexical(article.body), lexical(''), bulletin.issue_date, bulletin.id, `${bulletin.id}:${index + 1}`, `bulletin-${date}-${index + 1}`])
     }
     await client.query('COMMIT')
     console.log(`Imported ${articles.length} announcements from ${date}.`)

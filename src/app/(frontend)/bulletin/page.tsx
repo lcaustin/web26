@@ -24,7 +24,7 @@ export default async function BulletinPage({ searchParams }: { searchParams: Pro
   const [siteSettings, bulletinsResult] = await Promise.all([
     payload.findGlobal({ slug: 'site-settings' }).catch(() => null),
     payload
-      .find({ collection: 'bulletins', limit: 15, page, sort: '-issueDate' })
+      .find({ collection: 'bulletins', limit: 5, page, sort: '-issueDate' })
       .catch(() => ({ docs: [] as Bulletin[], page: 1, totalPages: 1 })),
   ])
 
@@ -53,16 +53,18 @@ export default async function BulletinPage({ searchParams }: { searchParams: Pro
         <div className="wrap bulletin-layout">
           {bulletins.length > 0 ? (
             <BulletinViewer
-              bulletins={bulletins.map((bulletin) => ({
+              initialBulletins={bulletins.map((bulletin) => ({
                 id: bulletin.id,
                 issueDate: bulletin.issueDate,
                 url: bulletin.url!,
               }))}
+              initialPage={bulletinsResult.page ?? 1}
+              totalPages={bulletinsResult.totalPages ?? 1}
             />
           ) : (
             <p className="dept-empty">아직 등록된 주보가 없습니다. · No bulletins have been uploaded yet.</p>
           )}
-          <VideoPagination currentPage={bulletinsResult.page ?? 1} totalPages={bulletinsResult.totalPages ?? 1} />
+          <VideoPagination currentPage={bulletinsResult.page ?? 1} totalPages={bulletinsResult.totalPages ?? 1} mobileHidden />
         </div>
       </section>
 

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export type BulletinViewerItem = {
   id: number | string
@@ -14,9 +14,36 @@ const formatDate = (iso: string) => {
 }
 
 /** In-page PDF reader and archive selector for the weekly bulletin. */
-export default function BulletinViewer({ bulletins }: { bulletins: BulletinViewerItem[] }) {
-  const [selectedId, setSelectedId] = useState(bulletins[0]?.id)
+export default function BulletinViewer({ initialBulletins, initialPage, totalPages }: {
+  initialBulletins: BulletinViewerItem[]
+  initialPage: number
+  totalPages: number
+}) {
+  const [bulletins, setBulletins] = useState(initialBulletins)
+  const [page, setPage] = useState(initialPage)
+  const [selectedId, setSelectedId] = useState(initialBulletins[0]?.id)
+  const [loading, setLoading] = useState(false)
   const selected = bulletins.find((bulletin) => bulletin.id === selectedId) ?? bulletins[0]
+
+  useEffect(() => {
+    setBulletins(initialBulletins)
+    setPage(initialPage)
+    setSelectedId(initialBulletins[0]?.id)
+  }, [initialBulletins, initialPage])
+
+  const loadMore = async () => {
+    if (loading || page >= totalPages) return
+    setLoading(true)
+    try {
+      const response = await fetch(`/api/bulletins?page=${page + 1}`)
+      if (!response.ok) throw new Error('Unable to load bulletins')
+      const result = await response.json() as { docs: BulletinViewerItem[]; page: number }
+      setBulletins((current) => [...current, ...result.docs])
+      setPage(result.page)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   if (!selected) return null
 
@@ -66,6 +93,11 @@ export default function BulletinViewer({ bulletins }: { bulletins: BulletinViewe
           })}
         </div>
       </div>
+      {page < totalPages && (
+        <button className="bulletin-mobile-more" type="button" onClick={loadMore} disabled={loading}>
+          {loading ? '불러오는 중… · Loading…' : '더보기 · Show more'}
+        </button>
+      )}
     </div>
   )
 }

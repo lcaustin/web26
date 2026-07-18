@@ -12,7 +12,6 @@ const NAV_LINKS: NavLink[] = [
     ko: '교회안내', en: 'About', href: '#',
     children: [
       { ko: '소개', en: 'Introduction', href: '/introduction' },
-      { ko: '주보', en: 'Bulletin', href: '/bulletin' },
       { ko: '예배안내', en: 'Service Hours', href: '/service-hours' },
       { ko: '섬기는이', en: 'Our Staff', href: '/staff' },
       { ko: '연혁', en: 'History', href: '/history' },
@@ -55,7 +54,13 @@ const NAV_LINKS: NavLink[] = [
       { ko: '영상', en: 'Videos', href: '/videos' },
     ],
   },
-  { ko: '소식', en: 'News', href: '/news' },
+  {
+    ko: '소식', en: 'News', href: '/news',
+    children: [
+      { ko: '교회소식', en: 'Church News', href: '/news' },
+      { ko: '주보', en: 'Bulletin', href: '/bulletin' },
+    ],
+  },
 ]
 
 // Shown only when this page is loaded inside the native mobile app's iframe
