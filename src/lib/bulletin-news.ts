@@ -6,6 +6,8 @@ type Bulletin = { id: number | string; issueDate: string; url?: string | null }
 type ExtractedAnnouncement = { title: string; body: string }
 
 const normalize = (value: string) => value.replace(/\r/g, '').replace(/[ \t]+/g, ' ').trim()
+const omittedTitles = new Set(['교인동정', '환영', '감사'])
+const shouldImport = (title: string) => !omittedTitles.has(normalize(title).split('/')[0].trim())
 const keyFor = (bulletinID: Bulletin['id'], index: number, title: string) =>
   `${bulletinID}:${index}:${createHash('sha1').update(title).digest('hex').slice(0, 12)}`
 
@@ -22,16 +24,16 @@ const lexicalText = (text: string) => ({
 /** Extract the numbered announcements under the bulletin's Church News section. */
 export function parseBulletinAnnouncements(text: string): ExtractedAnnouncement[] {
   const lines = text.split('\n').map(normalize).filter(Boolean)
-  const heading = lines.findIndex((line) => /^(교회\s*소식|교회소식|광고|church\s+news|announcements?)$/i.test(line))
+  const heading = lines.findIndex((line) => /(교회\s*소식|교회소식|광고|church\s+news|ouncements?)/i.test(line))
   if (heading < 0) return []
 
   const section = lines.slice(heading + 1)
   const chunks: string[][] = []
   let current: string[] | null = null
   for (const line of section) {
-    if (/^(?:\d{1,2}[.)]|[①-⑳]|[•▪●▶])\s*/.test(line)) {
+    if (/^(?:\d{1,2}[.,)]|[①-⑳]|[•▪●▶])\s*/.test(line)) {
       if (current?.length) chunks.push(current)
-      current = [line.replace(/^(?:\d{1,2}[.)]|[①-⑳]|[•▪●▶])\s*/, '')]
+      current = [line.replace(/^(?:\d{1,2}[.,)]|[①-⑳]|[•▪●▶])\s*/, '')]
     } else if (current) {
       current.push(line)
     }
@@ -46,7 +48,7 @@ export function parseBulletinAnnouncements(text: string): ExtractedAnnouncement[
       const title = normalize(remainder ? possibleTitle : first).slice(0, 140)
       return { title, body: normalize(remainder ? [remainder, ...rest].join('\n') : body) }
     })
-    .filter((item) => item.title.length > 1 && item.body.length > 2)
+    .filter((item) => item.title.length > 1 && item.body.length > 2 && shouldImport(item.title))
     .slice(0, 30)
 }
 
