@@ -207,8 +207,8 @@ section { padding: 56px 0; }
   .two-col { grid-template-columns: 1fr; }
 }
 
-.sermon-card { background: var(--surf); border: 1px solid var(--bdr); border-radius: 10px; overflow: hidden; transition: background 0.25s, border-color 0.25s; display: flex; flex-direction: column; flex: 1; }
-.sermon-thumb { width: 100%; aspect-ratio: 16 / 9; background: #1a1030; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+.video-card { background: var(--surf); border: 1px solid var(--bdr); border-radius: 10px; overflow: hidden; transition: background 0.25s, border-color 0.25s; display: flex; flex-direction: column; flex: 1; }
+.video-thumb { width: 100%; aspect-ratio: 16 / 9; background: #1a1030; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
 .play-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
 .play-btn-c { width: 42px; height: 42px; border-radius: 50%; background: rgba(255, 255, 255, 0.18); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 20px; backdrop-filter: blur(2px); }
 /* Sermon video modal — large lightbox-style player triggered by clicking the sermon thumbnail */
@@ -270,21 +270,21 @@ section { padding: 56px 0; }
   .video-modal-close { top: -40px; width: 32px; height: 32px; font-size: 16px; }
 }
 
-.sermon-body { padding: 14px 16px; }
-.sermon-tag { font-size: 10px; font-weight: 500; color: var(--gld); letter-spacing: 0.08em; margin-bottom: 4px; transition: color 0.25s; }
-.sermon-title { font-size: 14px; font-weight: 500; color: var(--t1); line-height: 1.45; margin-bottom: 4px; transition: color 0.25s; }
-.sermon-meta { font-size: 11px; color: var(--t2); transition: color 0.25s; }
+.video-body { padding: 14px 16px; }
+.video-tag { font-size: 10px; font-weight: 500; color: var(--gld); letter-spacing: 0.08em; margin-bottom: 4px; transition: color 0.25s; }
+.video-title { font-size: 14px; font-weight: 500; color: var(--t1); line-height: 1.45; margin-bottom: 4px; transition: color 0.25s; }
+.video-meta { font-size: 11px; color: var(--t2); transition: color 0.25s; }
 
 /* Sunday sermon archive */
-.sermon-page-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
-.sermon-archive-card { min-width: 0; overflow: hidden; background: var(--surf); border: 1px solid var(--bdr); border-radius: 10px; transition: background 0.25s, border-color 0.25s; }
-.sermon-archive-media { position: relative; display: flex; width: 100%; aspect-ratio: 16 / 9; align-items: center; justify-content: center; border: 0; background: #1a1030 center / cover no-repeat; color: #fff; cursor: pointer; }
-.sermon-archive-media::after { content: ''; position: absolute; inset: 0; background: rgba(7, 5, 16, 0.12); transition: background 0.15s; }
-.sermon-archive-media:hover::after { background: rgba(7, 5, 16, 0.04); }
+.video-page-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.video-archive-card { min-width: 0; overflow: hidden; background: var(--surf); border: 1px solid var(--bdr); border-radius: 10px; transition: background 0.25s, border-color 0.25s; }
+.video-archive-media { position: relative; display: flex; width: 100%; aspect-ratio: 16 / 9; align-items: center; justify-content: center; border: 0; background: #1a1030 center / cover no-repeat; color: #fff; cursor: pointer; }
+.video-archive-media::after { content: ''; position: absolute; inset: 0; background: rgba(7, 5, 16, 0.12); transition: background 0.15s; }
+.video-archive-media:hover::after { background: rgba(7, 5, 16, 0.04); }
 /* The thumbnail and centered play control remain sharp. */
-.sermon-archive-media .play-btn-c { position: absolute; z-index: 1; top: 50%; left: 50%; width: 32px; height: 32px; font-size: 15px; transform: translate(-50%, -50%); background: transparent; border: 1.5px solid rgba(255, 255, 255, 0.92); }
-.sermon-archive-media--empty { color: var(--gld); cursor: default; background: var(--bg-alt); font-size: 34px; }
-.sermon-archive-media--empty::after { display: none; }
+.video-archive-media .play-btn-c { position: absolute; z-index: 1; top: 50%; left: 50%; width: 32px; height: 32px; font-size: 15px; transform: translate(-50%, -50%); background: transparent; border: 1.5px solid rgba(255, 255, 255, 0.92); }
+.video-archive-media--empty { color: var(--gld); cursor: default; background: var(--bg-alt); font-size: 34px; }
+.video-archive-media--empty::after { display: none; }
 .archive-pagination { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 36px; padding: 16px 0; background: var(--bg); transition: background 0.25s; }
 .archive-pagination-pages { display: flex; align-items: center; justify-content: center; gap: 6px; }
 .archive-pagination .archive-pagination-more { display: none; }
@@ -305,13 +305,13 @@ section { padding: 56px 0; }
   .archive-mobile-show-more:hover { border-color: var(--gld); color: var(--gld); }
   .archive-mobile-show-more:disabled { opacity: 0.65; cursor: wait; }
 }
-.sermon-archive-body { padding: 16px; }
-.sermon-archive-body h2 { margin: 0; color: var(--t1); font-size: 15px; font-weight: 500; line-height: 1.45; }
-.sermon-archive-en { margin: 5px 0 8px; color: var(--t2); font-size: 12px; line-height: 1.45; }
-.sermon-archive-body .sermon-meta { margin-top: 9px; }
-.sermon-video-unavailable { display: flex; min-height: 280px; align-items: center; justify-content: center; padding: 24px; background: #120d24; color: rgba(255, 255, 255, 0.7); font-size: 14px; text-align: center; }
-@media (max-width: 800px) { .sermon-page-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 560px) { .sermon-page-grid { grid-template-columns: 1fr; } }
+.video-archive-body { padding: 16px; }
+.video-archive-body h2 { margin: 0; color: var(--t1); font-size: 15px; font-weight: 500; line-height: 1.45; }
+.video-archive-en { margin: 5px 0 8px; color: var(--t2); font-size: 12px; line-height: 1.45; }
+.video-archive-body .video-meta { margin-top: 9px; }
+.video-unavailable { display: flex; min-height: 280px; align-items: center; justify-content: center; padding: 24px; background: #120d24; color: rgba(255, 255, 255, 0.7); font-size: 14px; text-align: center; }
+@media (max-width: 800px) { .video-page-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .video-page-grid { grid-template-columns: 1fr; } }
 
 .news-card { display: flex; flex-direction: column; flex: 1; }
 .news-list { display: flex; flex-direction: column; gap: 10px; flex: 1; justify-content: space-between; }

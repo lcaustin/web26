@@ -50,7 +50,7 @@ export default async function HomePage() {
         .catch(() => [])
       : Promise.resolve([]),
     payload
-      .find({ collection: 'news', limit: 4, sort: '-date' })
+      .find({ collection: 'news', limit: 5, sort: '-date' })
       .then((r) => r.docs)
       .catch(() => []),
     // Special events: news items with both startDate and endDate set, endDate >= today

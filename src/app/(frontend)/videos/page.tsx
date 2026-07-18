@@ -111,7 +111,7 @@ export default async function VideosPage({ searchParams }: { searchParams: Promi
             </Link>)}
           </nav>
           {videos.length ? (
-            <SermonArchive sermons={videos} label={keyword ? `${keyword} · SEARCH` : `${selectedCategory?.ko || '영상'} · ${(selectedCategory?.en || 'Videos').toUpperCase()}`} loadMoreUrl={`/api/videos${querySuffix}`} initialPage={result.page ?? 1} totalPages={result.totalPages ?? 1} totalDocs={result.totalDocs ?? 0} />
+            <SermonArchive sermons={videos} label={keyword ? `${keyword} · SEARCH` : category ? `${selectedCategory?.ko} · ${selectedCategory?.en?.toUpperCase()}` : ''} loadMoreUrl={`/api/videos${querySuffix}`} initialPage={result.page ?? 1} totalPages={result.totalPages ?? 1} totalDocs={result.totalDocs ?? 0} />
           ) : (
             <p className="dept-empty">등록된 영상이 없습니다. · No videos have been added yet.</p>
           )}

@@ -111,6 +111,12 @@ const formatDate = (iso: string) => {
   return `${y}.${m}.${day}`
 }
 
+const withoutLeadingISODate = (title?: string | null) => {
+  if (!title) return ''
+  const trimmed = title.replace(/^\s*\d{4}-\d{2}-\d{2}(?:\s*[-|·:]\s*)?/, '').trim()
+  return trimmed || title
+}
+
 export default function SermonAndNews({ sermon, news }: Props) {
   const [videoOpen, setVideoOpen] = useState(false)
   const featuredVideoUrl = sermon?.videoUrl || SERMON_VIDEO_URL
@@ -129,10 +135,10 @@ export default function SermonAndNews({ sermon, news }: Props) {
                 전체 보기 View All →
               </a>
             </div>
-            <div className="sermon-card">
+            <div className="video-card">
               <button
                 type="button"
-                className="sermon-thumb"
+                className="video-thumb"
                 onClick={() => setVideoOpen(true)}
                 aria-label="Play this week's sermon video"
                 style={{
@@ -150,32 +156,32 @@ export default function SermonAndNews({ sermon, news }: Props) {
                   </div>
                 </div>
               </button>
-              <div className="sermon-body">
-                <div className="sermon-tag">주일 설교 · SUNDAY SERMON</div>
+              <div className="video-body">
+                <div className="video-tag">주일 설교 · SUNDAY SERMON</div>
                 {sermon ? (
                   <>
-                    <div className="sermon-title">
-                      {sermon.title.ko}
+                    <div className="video-title">
+                      {withoutLeadingISODate(sermon.title.ko)}
                       <br />
                       <span style={{ fontWeight: 400, color: 'var(--t2)', fontSize: 12 }}>
-                        {sermon.title.en}
+                        {withoutLeadingISODate(sermon.title.en)}
                       </span>
                     </div>
-                    <div className="sermon-meta">
+                    <div className="video-meta">
                       {formatDate(sermon.date)}
                       {sermon.preacher?.ko ? ` · 담임목사 ${sermon.preacher.ko}` : ''}
                     </div>
                   </>
                 ) : (
                   <>
-                    <div className="sermon-title">
+                    <div className="video-title">
                       하나님의 사랑 안에 거하라
                       <br />
                       <span style={{ fontWeight: 400, color: 'var(--t2)', fontSize: 12 }}>
                         Abide in the Love of God
                       </span>
                     </div>
-                    <div className="sermon-meta">2025.05.11 · 담임목사 홍길동</div>
+                    <div className="video-meta">2025.05.11 · 담임목사 홍길동</div>
                   </>
                 )}
               </div>

@@ -16,6 +16,14 @@ const formatDate = (iso: string) => {
   return year && month && day ? `${year}.${month}.${day}` : iso
 }
 
+// Imported video titles occasionally repeat their ISO publish date at the
+// beginning. The card already shows that date in its metadata row.
+const withoutLeadingISODate = (title?: string | null) => {
+  if (!title) return ''
+  const trimmed = title.replace(/^\s*\d{4}-\d{2}-\d{2}(?:\s*[-|·:]\s*)?/, '').trim()
+  return trimmed || title
+}
+
 const getEmbedUrl = (videoUrl: string) => {
   try {
     const url = new URL(videoUrl)
@@ -67,7 +75,7 @@ function SermonVideoModal({ sermon, onClose }: { sermon: SermonArchiveItem; onCl
             />
           </div>
         ) : (
-          <div className="sermon-video-unavailable">
+          <div className="video-unavailable">
             <p>이 영상은 사이트에서 재생할 수 없습니다. · This video cannot be played here.</p>
           </div>
         )}
@@ -142,31 +150,33 @@ export default function SermonArchive({ sermons, label = '주일 설교 · SUNDA
 
   return (
     <>
-      <div className="sermon-page-grid">
+      <div className="video-page-grid">
         {items.map((sermon) => {
           const hasVideo = Boolean(sermon.videoUrl)
+          const titleKo = withoutLeadingISODate(sermon.title.ko)
+          const titleEn = withoutLeadingISODate(sermon.title.en)
           return (
-            <article key={sermon.id} className="sermon-archive-card">
+            <article key={sermon.id} className="video-archive-card">
               {hasVideo ? (
                 <button
                   type="button"
-                  className="sermon-archive-media"
+                  className="video-archive-media"
                   onClick={() => setSelected(sermon)}
-                  aria-label={`${sermon.title.ko || sermon.title.en || 'Sermon'} video play`}
+                  aria-label={`${titleKo || titleEn || 'Sermon'} video play`}
                   style={sermon.thumbnailUrl ? { backgroundImage: `url(${sermon.thumbnailUrl})` } : undefined}
                 >
                   <span className="play-btn-c"><i className="ti ti-player-play" aria-hidden="true" /></span>
                 </button>
               ) : (
-                <div className="sermon-archive-media sermon-archive-media--empty">
+                <div className="video-archive-media video-archive-media--empty">
                   <i className="ti ti-microphone-2" aria-hidden="true" />
                 </div>
               )}
-              <div className="sermon-archive-body">
-                <div className="sermon-tag">{label}</div>
-                <h2>{sermon.title.ko || sermon.title.en || 'Untitled Sermon'}</h2>
-                {sermon.title.en && sermon.title.ko && <p className="sermon-archive-en">{sermon.title.en}</p>}
-                <div className="sermon-meta">
+              <div className="video-archive-body">
+                {label && <div className="video-tag">{label}</div>}
+                <h2>{titleKo || titleEn || 'Untitled Sermon'}</h2>
+                {titleEn && titleKo && <p className="video-archive-en">{titleEn}</p>}
+                <div className="video-meta">
                   {formatDate(sermon.date)}
                   {sermon.preacher?.ko && ` · ${sermon.preacher.ko}`}
                   {!sermon.preacher?.ko && sermon.preacher?.en && ` · ${sermon.preacher.en}`}
