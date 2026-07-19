@@ -13,7 +13,7 @@ const FALLBACK: Department[] = [
   { id: 'f3', name: { ko: '초등부', en: 'Elementary' }, icon: 'ti-school' },
   { id: 'f4', name: { ko: '중고등부', en: 'Youth' }, icon: 'ti-backpack' },
   { id: 'f5', name: { ko: '대학청년부', en: 'College & Young Adult' }, icon: 'ti-users' },
-  { id: 'f6', name: { ko: 'EM', en: 'English Ministry' }, icon: 'ti-world' },
+  { id: 'f6', name: { ko: '영어예배부', en: 'English Ministry' }, icon: 'ti-world' },
   { id: 'f7', name: { ko: '에노스', en: 'Enos (Senior)' }, icon: 'ti-user-circle' },
   { id: 'f8', name: { ko: '가온학교', en: 'Gaon School' }, icon: 'ti-book' },
 ]

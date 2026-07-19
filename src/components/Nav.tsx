@@ -32,7 +32,6 @@ const NAV_LINKS: NavLink[] = [
       { ko: '커피브레이크', en: 'Coffee Break', href: '/coffeebreak' },
       { ko: '신구약 맥잡기', en: 'Bible Panorama', href: '/biblepanorama' },
       { ko: '크라운 재정교실', en: 'Crown Finance', href: '/crown-finance' },
-      { ko: '가온토요학교', en: 'Gaon School', href: '/gaonschool' },
       { ko: '선교지', en: 'Mission', href: '/mission' },
     ],
   },
@@ -44,7 +43,9 @@ const NAV_LINKS: NavLink[] = [
       { ko: '초등부', en: 'Elementary', href: '/departments/elementary' },
       { ko: '중고등부', en: 'Youth', href: '/departments/youth' },
       { ko: '대학청년부', en: 'College & Young Adult', href: '/departments/youngadult' },
+      { ko: '영어예배부', en: 'English Ministry', href: '/departments/englishministry' },
       { ko: '에노스', en: 'Enos', href: '/departments/enos' },
+      { ko: '가온토요학교', en: 'Gaon School', href: '/gaonschool' },
     ],
   },
   {

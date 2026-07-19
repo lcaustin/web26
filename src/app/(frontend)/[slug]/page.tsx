@@ -86,6 +86,9 @@ export default async function PageDetail({ params }: Props) {
   const heroImageUrl =
     normalizeAssetUrl(page.heroImage?.url as string | undefined) ??
     normalizeAssetUrl(page.heroImageUrl as string | undefined)
+  const offeringCheckImageUrl = page.slug === 'offering'
+    ? `${assetBaseUrl}/pages/offering/offering-check-sample.jpg`
+    : null
 
   const sections: any[] = page.sections ?? []
   const videoKeyword = training.videoSearchKeyword as string | undefined
@@ -297,6 +300,13 @@ export default async function PageDetail({ params }: Props) {
 
             return null
           })}
+
+          {offeringCheckImageUrl && (
+            <figure className="offering-check-sample">
+              <img src={offeringCheckImageUrl} alt="온라인 헌금 수표 작성 예시" />
+              <figcaption>현장 예배 시 체크 작성 예시</figcaption>
+            </figure>
+          )}
 
         </div>
       </section>

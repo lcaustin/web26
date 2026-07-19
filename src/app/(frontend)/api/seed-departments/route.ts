@@ -17,7 +17,7 @@ const departmentSeedItems = [
   { name: { ko: '초등부', en: 'Elementary' }, icon: 'ti-school', order: 2 },
   { name: { ko: '중고등부', en: 'Youth' }, icon: 'ti-backpack', order: 3 },
   { name: { ko: '대학청년부', en: 'College & Young Adult' }, icon: 'ti-users', order: 4 },
-  { name: { ko: 'EM', en: 'English Ministry' }, icon: 'ti-world', order: 5 },
+  { name: { ko: '영어예배부', en: 'English Ministry' }, icon: 'ti-world', order: 5 },
   { name: { ko: '에노스', en: 'Enos (Senior)' }, icon: 'ti-user-circle', order: 6 },
   { name: { ko: '가온학교', en: 'Gaon School' }, icon: 'ti-book', order: 7 },
 ]

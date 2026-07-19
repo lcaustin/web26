@@ -30,7 +30,7 @@ export const QuickLinks: CollectionConfig = {
       name: 'href',
       type: 'text',
       required: true,
-      admin: { description: 'Internal path (e.g. "/service-times") or external URL' },
+      admin: { description: 'Internal path (e.g. "/service-hours") or external URL' },
     },
     {
       name: 'order',

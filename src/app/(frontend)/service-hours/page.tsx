@@ -52,24 +52,23 @@ export default async function ServiceHoursPage() {
       <section className="dept-detail-body">
         <div className="wrap">
           {result.docs.length ? (
-            <div className="service-time-sections">
+            <div className="service-hour-sections">
               {serviceGroups.map((group) => (
-                <section className="service-time-section" key={group.key}>
-                  <div className="service-time-section-head">
+                <section className="service-hour-section" key={group.key}>
+                  <div className="service-hour-section-head">
                     <i className={`ti ${group.icon}`} aria-hidden="true" />
                     <div><h2>{group.ko}</h2><p>{group.en}</p></div>
                   </div>
                   <div className="service-times-grid">
-                    {group.services.map((service: any, index: number) => (
-                      <article className="service-time-card" key={service.id}>
-                        <div className="service-time-card-decor" aria-hidden="true" />
-                        <span className="service-time-index">{String(index + 1).padStart(2, '0')}</span>
-                        <div className="service-time-icon"><i className={`ti ${serviceIcon(service.name?.ko || '')}`} aria-hidden="true" /></div>
-                        <div className="service-time-copy">
+                    {group.services.map((service: any) => (
+                      <article className="service-hour-card" key={service.id}>
+                        <div className="service-hour-card-decor" aria-hidden="true" />
+                        <div className="service-hour-icon"><i className={`ti ${serviceIcon(service.name?.ko || '')}`} aria-hidden="true" /></div>
+                        <div className="service-hour-copy">
                           <h3>{service.name?.ko || service.name?.en}</h3>
-                          {service.name?.ko && service.name?.en && <p className="service-time-en">{service.name.en}</p>}
-                          <p className="service-time-value">{service.time}</p>
-                          {service.location && <p className="service-time-location"><i className="ti ti-map-pin" aria-hidden="true" />{service.location}</p>}
+                          {service.name?.ko && service.name?.en && <p className="service-hour-en">{service.name.en}</p>}
+                          <p className="service-hour-value">{service.time}</p>
+                          {service.location && <p className="service-hour-location"><i className="ti ti-map-pin" aria-hidden="true" />{service.location}</p>}
                         </div>
                       </article>
                     ))}

@@ -210,7 +210,7 @@ section { padding: 56px 0; }
 .video-card { background: var(--surf); border: 1px solid var(--bdr); border-radius: 10px; overflow: hidden; transition: background 0.25s, border-color 0.25s; display: flex; flex-direction: column; flex: 1; }
 .video-thumb { width: 100%; aspect-ratio: 16 / 9; background: #1a1030; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
 .play-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
-.play-btn-c { width: 42px; height: 42px; border-radius: 50%; background: rgba(255, 255, 255, 0.18); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 20px; backdrop-filter: blur(2px); }
+.play-btn-c { width: 42px; height: 42px; border: 2px solid #fff; border-radius: 50%; background: transparent; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 20px; font-weight: 700; }
 /* Sermon video modal — large lightbox-style player triggered by clicking the sermon thumbnail */
 .video-modal-backdrop {
   position: fixed;
@@ -282,7 +282,7 @@ section { padding: 56px 0; }
 .video-archive-media::after { content: ''; position: absolute; inset: 0; background: rgba(7, 5, 16, 0.12); transition: background 0.15s; }
 .video-archive-media:hover::after { background: rgba(7, 5, 16, 0.04); }
 /* The thumbnail and centered play control remain sharp. */
-.video-archive-media .play-btn-c { position: absolute; z-index: 1; top: 50%; left: 50%; width: 32px; height: 32px; font-size: 15px; transform: translate(-50%, -50%); background: transparent; border: 1.5px solid rgba(255, 255, 255, 0.92); }
+.video-archive-media .play-btn-c { position: absolute; z-index: 1; top: 50%; left: 50%; width: 32px; height: 32px; font-size: 15px; transform: translate(-50%, -50%); background: transparent; border-width: 2px; border-color: #fff; }
 .video-archive-media--empty { color: var(--gld); cursor: default; background: var(--bg-alt); font-size: 34px; }
 .video-archive-media--empty::after { display: none; }
 .archive-pagination { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 36px; padding: 16px 0; background: var(--bg); transition: background 0.25s; }
@@ -484,25 +484,27 @@ footer { background: var(--bg-alt); border-top: 1px solid var(--bdr); padding: 3
 .dept-info-card h3 { margin: 0; color: var(--gld); font-size: 12px; font-weight: 700; letter-spacing: 0.04em; }
 .dept-info-card p { margin: 0; color: var(--t1); font-size: 14px; line-height: 1.8; white-space: pre-line; word-break: keep-all; }
 @media (max-width: 560px) { .dept-department-title { gap: 13px; } .dept-department-title .dept-detail-icon { width: 54px; height: 54px; font-size: 25px; } .dept-department-title .dept-detail-ko { font-size: 25px; } .dept-info-card { grid-template-columns: 1fr; gap: 6px; padding: 16px 0; } .dept-info-card--statement { padding: 22px 20px; } }
-.service-time-sections { display: flex; flex-direction: column; gap: 38px; }
-.service-time-section-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
-.service-time-section-head > i { display: flex; width: 32px; height: 32px; align-items: center; justify-content: center; border-radius: 50%; background: rgba(212, 169, 60, 0.12); color: var(--gld); font-size: 16px; }
-.service-time-section-head h2 { margin: 0; color: var(--t1); font-size: 18px; font-weight: 600; }
-.service-time-section-head p { margin: 2px 0 0; color: var(--t2); font-size: 11px; }
+.service-hour-sections { display: flex; flex-direction: column; gap: 38px; }
+.service-hour-section-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.service-hour-section-head > i { display: flex; width: 32px; height: 32px; align-items: center; justify-content: center; border-radius: 50%; background: rgba(212, 169, 60, 0.12); color: var(--gld); font-size: 16px; }
+.service-hour-section-head h2 { margin: 0; color: var(--t1); font-size: 18px; font-weight: 600; }
+.service-hour-section-head p { margin: 2px 0 0; color: var(--t2); font-size: 11px; }
 .service-times-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-.service-time-card { position: relative; display: flex; gap: 14px; min-width: 0; overflow: hidden; padding: 22px 20px; border: 1px solid var(--bdr); border-radius: 12px; background: var(--surf); transition: transform 0.2s, background 0.25s, border-color 0.25s; }
-.service-time-card::before { position: absolute; top: 0; right: 0; left: 0; height: 3px; background: linear-gradient(90deg, var(--gld), rgba(212, 169, 60, 0.12)); content: ''; }
-.service-time-card:hover { border-color: var(--bdr2); background: var(--bg-alt); transform: translateY(-2px); }
-.service-time-card-decor { position: absolute; right: -28px; bottom: -34px; width: 108px; height: 108px; border: 1px solid rgba(212, 169, 60, 0.16); border-radius: 50%; pointer-events: none; }
-.service-time-card-decor::after { position: absolute; top: 17px; left: 17px; width: 72px; height: 72px; border: 1px solid rgba(212, 169, 60, 0.1); border-radius: 50%; content: ''; }
-.service-time-index { position: absolute; top: 12px; right: 14px; color: var(--t3); font-size: 11px; font-weight: 600; letter-spacing: 0.08em; }
-.service-time-icon { display: flex; width: 38px; height: 38px; flex: 0 0 38px; align-items: center; justify-content: center; border-radius: 50%; background: rgba(212, 169, 60, 0.12); color: var(--gld); font-size: 18px; }
-.service-time-copy { position: relative; z-index: 1; min-width: 0; }
-.service-time-copy h3 { margin: 0; color: var(--t1); font-size: 16px; font-weight: 500; }
-.service-time-en { margin: 3px 0 0; color: var(--t2); font-size: 12px; }
-.service-time-value { margin: 12px 0 0; color: var(--gld); font-size: 14px; font-weight: 500; }
-.service-time-location { display: flex; align-items: center; gap: 4px; margin: 7px 0 0; color: var(--t2); font-size: 12px; }
+.service-hour-card { position: relative; display: flex; gap: 14px; min-width: 0; overflow: hidden; padding: 22px 20px; border: 1px solid var(--bdr); border-radius: 12px; background: var(--surf); transition: transform 0.2s, background 0.25s, border-color 0.25s; }
+.service-hour-card::before { position: absolute; top: 0; right: 0; left: 0; height: 3px; background: linear-gradient(90deg, var(--gld), rgba(212, 169, 60, 0.12)); content: ''; }
+.service-hour-card:hover { border-color: var(--bdr2); background: var(--bg-alt); transform: translateY(-2px); }
+.service-hour-card-decor { position: absolute; right: -28px; bottom: -34px; width: 108px; height: 108px; border: 1px solid rgba(212, 169, 60, 0.16); border-radius: 50%; pointer-events: none; }
+.service-hour-card-decor::after { position: absolute; top: 17px; left: 17px; width: 72px; height: 72px; border: 1px solid rgba(212, 169, 60, 0.1); border-radius: 50%; content: ''; }
+.service-hour-icon { display: flex; width: 38px; height: 38px; flex: 0 0 38px; align-items: center; justify-content: center; border-radius: 50%; background: rgba(212, 169, 60, 0.12); color: var(--gld); font-size: 18px; }
+.service-hour-copy { position: relative; z-index: 1; min-width: 0; }
+.service-hour-copy h3 { margin: 0; color: var(--t1); font-size: 16px; font-weight: 500; }
+.service-hour-en { margin: 3px 0 0; color: var(--t2); font-size: 12px; }
+.service-hour-value { margin: 12px 0 0; color: var(--gld); font-size: 14px; font-weight: 500; }
+.service-hour-location { display: flex; align-items: center; gap: 4px; margin: 7px 0 0; color: var(--t2); font-size: 12px; }
 @media (max-width: 580px) { .service-times-grid { grid-template-columns: 1fr; } }
+.offering-check-sample { max-width: 720px; margin: 30px auto 0; }
+.offering-check-sample img { display: block; width: 100%; height: auto; border: 1px solid var(--bdr); border-radius: 10px; background: #fff; }
+.offering-check-sample figcaption { margin-top: 8px; color: var(--t2); font-size: 12px; text-align: center; }
 .history-intro { max-width: 760px; margin-bottom: 34px; }
 .history-kicker { margin: 0 0 9px; color: var(--gld); font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
 .history-intro h2 { margin: 0; color: var(--t1); font-size: 28px; font-weight: 700; letter-spacing: 0; }
