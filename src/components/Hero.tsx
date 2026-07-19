@@ -1,10 +1,23 @@
 'use client'
 
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 
 // Rotate through these videos in order; the next one starts automatically
 // as soon as the current one finishes, looping back to the first after the last.
 const DEFAULT_VIDEO_IDS = ['EtKbsIubPJc', 'pIdrtSqxPF4', 'fS1t0rJbOYk']
+
+function shuffleVideoIds(videoIds: string[]) {
+  const shuffled = [...videoIds]
+
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const randomIndex = Math.floor(Math.random() * (index + 1))
+    const currentVideoId = shuffled[index]
+    shuffled[index] = shuffled[randomIndex]
+    shuffled[randomIndex] = currentVideoId
+  }
+
+  return shuffled
+}
 
 interface YouTubePlayer {
   getIframe: () => HTMLIFrameElement
@@ -87,14 +100,12 @@ export default function Hero({
   const containerRef = useRef<HTMLDivElement>(null)
   const playerRef = useRef<YouTubePlayer | null>(null)
   const indexRef = useRef(0)
-  const videoIds = useMemo(() => {
-    const configuredIds = backgroundVideoIds?.filter(Boolean) ?? []
-    return configuredIds.length ? configuredIds : DEFAULT_VIDEO_IDS
-  }, [backgroundVideoIds])
+  const playlistKey = backgroundVideoIds?.filter(Boolean).join('|') || DEFAULT_VIDEO_IDS.join('|')
 
   useEffect(() => {
     let cancelled = false
     indexRef.current = 0
+    const videoIds = shuffleVideoIds(playlistKey.split('|'))
 
     function playNext(player: YouTubePlayer) {
       indexRef.current = (indexRef.current + 1) % videoIds.length
@@ -151,7 +162,7 @@ export default function Hero({
       playerRef.current?.destroy()
       playerRef.current = null
     }
-  }, [videoIds])
+  }, [playlistKey])
 
   return (
     <div className="hero">
