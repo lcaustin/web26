@@ -31,7 +31,7 @@ export default async function VideoTypePage({ params, searchParams }: { params: 
     payload.find({ collection: 'videos', limit: 15, page, sort: '-publishedAt', where: { category: { equals: metadata.type } } }).catch(() => ({ docs: [], page: 1, totalPages: 1, totalDocs: 0 })),
   ])
   const videos = result.docs.map((video: any): SermonArchiveItem => ({
-    id: video.id, title: { ko: video.adminTitle, en: '' }, date: video.publishedAt,
+    id: video.id, title: { ko: video.adminTitle, en: video.titleEn }, date: video.publishedAt,
     videoUrl: video.videoUrl, thumbnailUrl: video.thumbnailUrl,
   }))
   const church = siteSettings?.church

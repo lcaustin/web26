@@ -18,6 +18,7 @@ function keywordWhere(keyword: string): Where | undefined {
   const or: Where[] = []
   for (const term of variants) {
     or.push({ adminTitle: { contains: term } })
+    or.push({ titleEn: { contains: term } })
     or.push({ tags: { contains: term } })
     or.push({ description: { contains: term } })
   }
@@ -78,7 +79,7 @@ export default async function VideosPage({ searchParams }: { searchParams: Promi
   const church = siteSettings?.church
   const videos = result.docs.map((video: any): SermonArchiveItem => ({
     id: video.id,
-    title: { ko: video.adminTitle, en: '' },
+    title: { ko: video.adminTitle, en: video.titleEn },
     date: video.publishedAt,
     videoUrl: video.videoUrl,
     thumbnailUrl: video.thumbnailUrl,

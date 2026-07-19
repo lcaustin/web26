@@ -132,7 +132,7 @@ export default async function HomePage() {
         sermon={
           sermons[0]
             ? {
-                title: { ko: sermons[0].adminTitle, en: '' },
+                title: { ko: sermons[0].adminTitle, en: sermons[0].titleEn ?? '' },
                 date: sermons[0].publishedAt,
                 videoUrl: sermons[0].videoUrl,
                 thumbnailUrl: sermons[0].thumbnailUrl,

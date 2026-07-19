@@ -10,6 +10,7 @@ function textWhere(keyword: string): Where {
   const terms = Array.from(new Set([keyword, compactKeyword].filter(Boolean)))
   return { or: terms.flatMap((term) => [
     { adminTitle: { contains: term } },
+    { titleEn: { contains: term } },
     { tags: { contains: term } },
     { description: { contains: term } },
   ]) as unknown as Where[] }
@@ -45,7 +46,7 @@ export async function GET(request: NextRequest) {
   return NextResponse.json({
     docs: result.docs.map((video: any) => ({
       id: video.id,
-      title: { ko: video.adminTitle, en: '' },
+      title: { ko: video.adminTitle, en: video.titleEn },
       date: video.publishedAt,
       videoUrl: video.videoUrl,
       thumbnailUrl: video.thumbnailUrl,

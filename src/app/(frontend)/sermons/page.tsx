@@ -23,7 +23,7 @@ export default async function SermonsPage({ searchParams }: { searchParams: Prom
   const church = siteSettings?.church
   const sermons = sermonsResult.docs.map((video: any): SermonArchiveItem => ({
     id: video.id,
-    title: { ko: video.adminTitle, en: '' },
+    title: { ko: video.adminTitle, en: video.titleEn },
     date: video.publishedAt,
     videoUrl: video.videoUrl,
     thumbnailUrl: video.thumbnailUrl,

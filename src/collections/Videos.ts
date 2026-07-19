@@ -7,13 +7,14 @@ export const Videos: CollectionConfig = {
   slug: 'videos',
   admin: {
     useAsTitle: 'adminTitle',
-    defaultColumns: ['adminTitle', 'category', 'publishedAt', 'source'],
+    defaultColumns: ['adminTitle', 'titleEn', 'category', 'publishedAt', 'source'],
   },
   access: {
     read: () => true,
   },
   fields: [
     { name: 'adminTitle', type: 'text', required: true, label: 'Title' },
+    { name: 'titleEn', type: 'text', label: 'English Title' },
     {
       name: 'category',
       type: 'select',

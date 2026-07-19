@@ -19,6 +19,9 @@ type LegacyVideo = {
   source?: 'youtube' | 'vimeo'
   tags?: string
   title?: string
+  title_en?: string
+  english_title?: string
+  titleEn?: string
   video_id: string
 }
 
@@ -63,6 +66,10 @@ function videoUrl(video: LegacyVideo) {
     : `https://www.youtube.com/watch?v=${video.video_id}`
 }
 
+function englishTitle(video: LegacyVideo) {
+  return video.title_en || video.english_title || video.titleEn || null
+}
+
 async function main() {
   const client = new Client({ connectionString: databaseUri })
   await client.connect()
@@ -79,19 +86,19 @@ async function main() {
     for (let start = 0; start < importable.length; start += 200) {
       const batch = importable.slice(start, start + 200)
       const values = batch.flatMap((video) => [
-        video.title || 'Untitled video', contentType(video), video.source, video.video_id, videoUrl(video),
+        video.title || 'Untitled video', englishTitle(video), contentType(video), video.source, video.video_id, videoUrl(video),
         video.img_large || video.img_small || null, video.description || null, video.tags || null,
         publishedAt(video), video.created_at?.$date || null, video.updated_at?.$date || null,
       ])
       const placeholders = batch.map((_, row) => {
-        const offset = row * 11
-        return `(${Array.from({ length: 9 }, (_, column) => `$${offset + column + 1}`).join(', ')}, COALESCE($${offset + 10}::timestamptz, now()), COALESCE($${offset + 11}::timestamptz, now()))`
+        const offset = row * 12
+        return `(${Array.from({ length: 10 }, (_, column) => `$${offset + column + 1}`).join(', ')}, COALESCE($${offset + 11}::timestamptz, now()), COALESCE($${offset + 12}::timestamptz, now()))`
       }).join(', ')
       await client.query(
-       `INSERT INTO videos (admin_title, category, source, video_id, video_url, thumbnail_url, description, tags, published_at, created_at, updated_at)
+       `INSERT INTO videos (admin_title, title_en, category, source, video_id, video_url, thumbnail_url, description, tags, published_at, created_at, updated_at)
        VALUES ${placeholders}
        ON CONFLICT (source, video_id) DO UPDATE SET
-         admin_title = EXCLUDED.admin_title, category = EXCLUDED.category, video_url = EXCLUDED.video_url,
+         admin_title = EXCLUDED.admin_title, title_en = EXCLUDED.title_en, category = EXCLUDED.category, video_url = EXCLUDED.video_url,
          thumbnail_url = EXCLUDED.thumbnail_url, description = EXCLUDED.description, tags = EXCLUDED.tags,
          published_at = EXCLUDED.published_at, updated_at = EXCLUDED.updated_at`,
       values,
