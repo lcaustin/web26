@@ -1,0 +1,134 @@
+import { Client } from 'pg'
+
+type Channel = {
+  channelId: string
+  tags: string
+}
+
+type YouTubeVideo = {
+  channelId: string
+  description: string
+  publishedAt: string
+  tags: string
+  title: string
+  videoId: string
+}
+
+// Matches the channels previously collected by lcaustin-api's batch job.
+const CHANNELS: Channel[] = [
+  { channelId: 'UC79yGTWIkhPZoxNf5dBRw0Q', tags: '' },
+  // { channelId: 'UCSKyUDuhQqTo10f2_LGv2Fw', tags: '교육부,영아부' },
+  // { channelId: 'UCOKua9Ejf0AfEV7hZIAKCjw', tags: '교육부,유아부' },
+  // { channelId: 'UC-9P27-tBR4o5lQP23w0CLg', tags: '교육부,초등부' },
+  { channelId: 'UCE_Drbj5M6-fcFfZ-Hmhm5Q', tags: '교육부,중고등부' },
+  { channelId: 'UCVo7eNU0fieOO_55pi387KA', tags: '교육부,대학부' },
+  // { channelId: 'UCeGoe3oCma2Sn_EPdRX-BBg', tags: '교육부,청년부' }, 
+  { channelId: 'UCw3bqxCOOay_VKM9T5Q6CCA', tags: '교육부,EM,EnglishMinistry' },
+]
+
+const decodeXml = (value: string) => value
+  .replace(/^<!\[CDATA\[([\s\S]*)\]\]>$/, '$1')
+  .replace(/&quot;/g, '"')
+  .replace(/&#39;/g, "'")
+  .replace(/&amp;/g, '&')
+  .replace(/&lt;/g, '<')
+  .replace(/&gt;/g, '>')
+
+function field(entry: string, tag: string) {
+  const match = entry.match(new RegExp(`<${tag}(?:\\s[^>]*)?>([\\s\\S]*?)<\\/${tag}>`))
+  return match ? decodeXml(match[1].trim()) : ''
+}
+
+function parseFeed(xml: string, channel: Channel): YouTubeVideo[] {
+  return Array.from(xml.matchAll(/<entry>([\s\S]*?)<\/entry>/g)).flatMap((match) => {
+    const entry = match[1]
+    const videoId = field(entry, 'yt:videoId')
+    const title = field(entry, 'title')
+    const publishedAt = field(entry, 'published')
+    if (!videoId || !title || !publishedAt) return []
+
+    return [{
+      channelId: channel.channelId,
+      description: field(entry, 'media:description'),
+      publishedAt,
+      tags: channel.tags,
+      title,
+      videoId,
+    }]
+  })
+}
+
+function category(video: YouTubeVideo) {
+  const text = `${video.tags} ${video.title} ${video.description}`
+  if (video.title.includes('매일말씀묵상') || /^daily\s*$/i.test(video.description.trim())) return 'daily-devotion'
+  if (video.title.includes('임마누엘찬양대') || text.includes('찬양대')) return 'choir'
+  if (video.title.includes('특송') || video.title.includes('헌금송')) return 'offering-song'
+  if (video.title.includes('예배실황') || video.title.includes('금요예배') || text.includes('경배와찬양')) return 'worship'
+  if (video.title.includes('설교')) return 'sermon'
+  if (text.includes('교육부') || text.includes('영아부') || text.includes('유아부') || text.includes('초등부') || text.includes('중고등부') || text.includes('대학부') || text.includes('청년부')) return 'ministry'
+  return 'other'
+}
+
+function englishTitle(video: YouTubeVideo) {
+  if (!video.title.includes('주일설교') || !video.description.includes('/')) return null
+  const translatedTitle = video.description.slice(video.description.lastIndexOf('/') + 1).trim()
+  return /[A-Za-z]/.test(translatedTitle) ? translatedTitle : null
+}
+
+async function fetchChannel(channel: Channel) {
+  const response = await fetch(`https://www.youtube.com/feeds/videos.xml?channel_id=${channel.channelId}`, {
+    headers: { 'user-agent': 'LordChurchAustin-VideoSync/1.0' },
+  })
+  if (!response.ok) throw new Error(`YouTube feed ${channel.channelId} returned ${response.status}`)
+  return parseFeed(await response.text(), channel)
+}
+
+export async function syncYouTubeChannels() {
+  const databaseUri = process.env.DATABASE_URI
+  if (!databaseUri) throw new Error('DATABASE_URI is required')
+
+  const results = await Promise.allSettled(CHANNELS.map(async (channel) => ({ channel, videos: await fetchChannel(channel) })))
+  const failures = results.flatMap((result) => result.status === 'rejected' ? [result.reason instanceof Error ? result.reason.message : String(result.reason)] : [])
+  const videos = results.flatMap((result) => result.status === 'fulfilled' ? result.value.videos : [])
+  const uniqueVideos = [...new Map(videos.map((video) => [video.videoId, video])).values()]
+
+  const client = new Client({ connectionString: databaseUri })
+  await client.connect()
+  try {
+    for (const video of uniqueVideos) {
+      await client.query(
+        `INSERT INTO videos (admin_title, title_en, category, source, video_id, video_url, thumbnail_url, description, tags, published_at, created_at, updated_at)
+         VALUES ($1, $2, $3, 'youtube', $4, $5, $6, $7, $8, $9::timestamptz, now(), now())
+         ON CONFLICT (source, video_id) DO UPDATE SET
+           admin_title = EXCLUDED.admin_title,
+           title_en = COALESCE(EXCLUDED.title_en, videos.title_en),
+           category = EXCLUDED.category,
+           video_url = EXCLUDED.video_url,
+           thumbnail_url = EXCLUDED.thumbnail_url,
+           description = EXCLUDED.description,
+           tags = EXCLUDED.tags,
+           published_at = EXCLUDED.published_at,
+           updated_at = now()`,
+        [
+          video.title,
+          englishTitle(video),
+          category(video),
+          video.videoId,
+          `https://www.youtube.com/watch?v=${video.videoId}`,
+          `https://i.ytimg.com/vi/${video.videoId}/hqdefault.jpg`,
+          video.description || null,
+          video.tags || null,
+          video.publishedAt,
+        ],
+      )
+    }
+  } finally {
+    await client.end()
+  }
+
+  return {
+    channels: CHANNELS.length,
+    failures,
+    synced: uniqueVideos.length,
+  }
+}

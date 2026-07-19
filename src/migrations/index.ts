@@ -19,6 +19,8 @@ import * as migration_20260714_014000_add_photo_gallery from './20260714_014000_
 import * as migration_20260716_000000_add_bulletin_news_source from './20260716_000000_add_bulletin_news_source';
 import * as migration_20260719_043825_add_hero_background_videos from './20260719_043825_add_hero_background_videos';
 import * as migration_20260719_060000_add_video_english_title from './20260719_060000_add_video_english_title';
+import * as migration_20260719_061000_backfill_sermon_english_titles from './20260719_061000_backfill_sermon_english_titles';
+import * as migration_20260719_062000_add_video_sync_unique_index from './20260719_062000_add_video_sync_unique_index';
 
 export const migrations = [
   {
@@ -125,5 +127,15 @@ export const migrations = [
     up: migration_20260719_060000_add_video_english_title.up,
     down: migration_20260719_060000_add_video_english_title.down,
     name: '20260719_060000_add_video_english_title',
+  },
+  {
+    up: migration_20260719_061000_backfill_sermon_english_titles.up,
+    down: migration_20260719_061000_backfill_sermon_english_titles.down,
+    name: '20260719_061000_backfill_sermon_english_titles',
+  },
+  {
+    up: migration_20260719_062000_add_video_sync_unique_index.up,
+    down: migration_20260719_062000_add_video_sync_unique_index.down,
+    name: '20260719_062000_add_video_sync_unique_index',
   },
 ];

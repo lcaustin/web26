@@ -6,6 +6,8 @@
 - [x] Landing page - 다음세대 부서별 페이지 (Next Generation Departments)
 - [x] Landing page - 소식, 상세 (News, Details)
 - [x] Landing page - 전체 (Overview / Whole page)
+- [X] Landing page - Hero section videos
+- [X] Landing page - Hero section links
 - [x] 교회안내 - 소개 (Church Guide - Introduction)
 - [x] 교회안내 - 주보 (Church Guide - Weekly Bulletin)
 - [x] 교회안내 - 예배안내 (Church Guide - Service Times/Guide)
@@ -22,7 +24,7 @@
 - [x] 훈련사역 - 선교지 (Training Ministry - Mission)
 - [x] 미디어 - 사진 (Media - Photos)
 - [x] 미디어 - 영상 (Media - Videos)
-- [ ] 미디어 - 뉴스 (Media - News)
+- [x] 미디어 - 뉴스 (Media - News)
 - [x] 소식 (News / Announcements)
 
 ## Mobile
@@ -31,9 +33,19 @@
 - [x] Sign up (Google login)
 - [x] Log in
 - [x] Setting (notification)
+- [ ] App build - iOS 
+- [ ] App build - Android
+- [ ] Dev account - iOS
+- [ ] Dev account - Android
+- [ ] App publish - iOS
+- [ ] App publish - Android
+
+## SEO
+- [ ] SEO friendly
+- [ ] Check server side rendering
 
 ## Batch
 
 - [ ] Photo - Google drive
-- [ ] Youtube
-- [ ] 주보 - 소식 (Weekly Bulletin - News)
+- [x] Youtube
+- [x] 주보 - 소식 (Weekly Bulletin - News)

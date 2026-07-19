@@ -10,6 +10,7 @@
     "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types --use-swc",
     "lint": "cross-env NODE_OPTIONS=--no-deprecation next lint",
     "generate-prs": "tsx scripts/generate-prs.ts",
+    "sync:youtube": "tsx scripts/sync-youtube-channels.ts",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start"
   },

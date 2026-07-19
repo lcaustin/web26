@@ -67,7 +67,14 @@ function videoUrl(video: LegacyVideo) {
 }
 
 function englishTitle(video: LegacyVideo) {
-  return video.title_en || video.english_title || video.titleEn || null
+  const explicitTitle = video.title_en || video.english_title || video.titleEn
+  if (explicitTitle) return explicitTitle
+
+  // Legacy Sunday-sermon descriptions contain the translated title after the
+  // final slash, for example: "영적 제사장적 아버지 / A Spiritual Priestly Father."
+  if (!video.title?.includes('주일설교') || !video.description?.includes('/')) return null
+  const translatedTitle = video.description.slice(video.description.lastIndexOf('/') + 1).trim()
+  return /[A-Za-z]/.test(translatedTitle) ? translatedTitle : null
 }
 
 async function main() {
