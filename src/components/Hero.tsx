@@ -1,10 +1,10 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 
 // Rotate through these videos in order; the next one starts automatically
 // as soon as the current one finishes, looping back to the first after the last.
-const VIDEO_IDS = ['EtKbsIubPJc', 'pIdrtSqxPF4', 'fS1t0rJbOYk']
+const DEFAULT_VIDEO_IDS = ['EtKbsIubPJc', 'pIdrtSqxPF4', 'fS1t0rJbOYk']
 
 interface YouTubePlayer {
   getIframe: () => HTMLIFrameElement
@@ -74,6 +74,7 @@ export default function Hero({
   sermonButtonEn,
   sermonButtonHref,
   directionsHref,
+  backgroundVideoIds,
 }: {
   taglineKo?: string | null
   taglineEn?: string | null
@@ -81,24 +82,30 @@ export default function Hero({
   sermonButtonEn?: string | null
   sermonButtonHref?: string | null
   directionsHref?: string | null
+  backgroundVideoIds?: string[] | null
 }) {
   const containerRef = useRef<HTMLDivElement>(null)
   const playerRef = useRef<YouTubePlayer | null>(null)
   const indexRef = useRef(0)
+  const videoIds = useMemo(() => {
+    const configuredIds = backgroundVideoIds?.filter(Boolean) ?? []
+    return configuredIds.length ? configuredIds : DEFAULT_VIDEO_IDS
+  }, [backgroundVideoIds])
 
   useEffect(() => {
     let cancelled = false
+    indexRef.current = 0
 
     function playNext(player: YouTubePlayer) {
-      indexRef.current = (indexRef.current + 1) % VIDEO_IDS.length
-      player.loadVideoById(VIDEO_IDS[indexRef.current])
+      indexRef.current = (indexRef.current + 1) % videoIds.length
+      player.loadVideoById(videoIds[indexRef.current])
     }
 
     function createPlayer() {
       if (cancelled || !containerRef.current || !window.YT) return
       const player = new window.YT.Player(containerRef.current, {
         host: 'https://www.youtube-nocookie.com',
-        videoId: VIDEO_IDS[0],
+        videoId: videoIds[0],
         playerVars: {
           autoplay: 1,
           mute: 1,
@@ -144,7 +151,7 @@ export default function Hero({
       playerRef.current?.destroy()
       playerRef.current = null
     }
-  }, [])
+  }, [videoIds])
 
   return (
     <div className="hero">

@@ -35,6 +35,22 @@ export const SiteSettings: GlobalConfig = {
           label: 'Sermon Button Link URL Override',
           admin: { description: 'Leave blank for the automatic Daily Devotion / Sunday Sermon link.' },
         },
+        {
+          name: 'backgroundVideos',
+          type: 'array',
+          label: 'Hero Background Videos',
+          labels: { singular: 'Video', plural: 'Videos' },
+          admin: { description: 'YouTube video IDs played in order behind the homepage hero.' },
+          fields: [
+            {
+              name: 'youtubeId',
+              type: 'text',
+              required: true,
+              label: 'YouTube Video ID',
+              admin: { description: 'For https://www.youtube.com/watch?v=EtKbsIubPJc, enter EtKbsIubPJc.' },
+            },
+          ],
+        },
       ],
     },
     {

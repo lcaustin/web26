@@ -105,6 +105,7 @@ export default async function HomePage() {
         sermonButtonEn={sermonButtonEn}
         sermonButtonHref={sermonButtonHref}
         directionsHref={directionsHref}
+        backgroundVideoIds={hero?.backgroundVideos?.map((video) => video.youtubeId).filter(Boolean) as string[] | undefined}
       />
 
       <SpecialEvent
