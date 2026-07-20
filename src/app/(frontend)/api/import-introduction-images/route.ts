@@ -2,6 +2,8 @@ import config from '@payload-config'
 import { getPayload } from 'payload'
 import { NextResponse } from 'next/server'
 
+const assetBaseUrl = (process.env.R2_PUBLIC_URL || 'https://pub-2f2b09ce26ca48ca9b726870a49512c2.r2.dev').replace(/\/$/, '')
+
 const IMAGES = [
   {
     key: 'hero',
@@ -11,19 +13,19 @@ const IMAGES = [
   },
   {
     key: 'photo1',
-    url: 'https://lcaustin.org/_next/static/images/intro-1-cd13a5d0332057dcd83201cde0e45033.jpg',
+    url: `${assetBaseUrl}/uploads/image/intro-1.jpg`,
     filename: 'intro-1.jpg',
     alt: '교회 사진 1',
   },
   {
     key: 'photo2',
-    url: 'https://lcaustin.org/_next/static/images/intro-2-692ed926dc83a76232beddcd698a2550.jpg',
+    url: `${assetBaseUrl}/uploads/image/intro-2.jpg`,
     filename: 'intro-2.jpg',
     alt: '교회 사진 2',
   },
   {
     key: 'photo3',
-    url: 'https://lcaustin.org/_next/static/images/intro-3-6c2cbf7c866bf10cf14c88ef2452aed2.jpg',
+    url: `${assetBaseUrl}/uploads/image/intro-3.jpg`,
     filename: 'intro-3.jpg',
     alt: '교회 사진 3',
   },

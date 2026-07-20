@@ -73,7 +73,9 @@ export default async function PageDetail({ params }: Props) {
 
   const church = siteSettings?.church
   const isTrainingPage = page.layout === 'training'
+  const isRegistrationPage = page.layout === 'registration'
   const isMissionPage = page.slug === 'mission'
+  const registration = page.registration ?? {}
   const training = page.training ?? {}
   const mission = page.mission ?? {}
 
@@ -208,6 +210,55 @@ export default async function PageDetail({ params }: Props) {
                 <SermonArchive sermons={trainingVideos} label={training.videoArchiveLabel || `${page.title?.ko} · VIDEO`} />
               </section>
             ) : null}
+          </div>
+        </section>
+      ) : isRegistrationPage ? (
+        <section className="dept-detail-body">
+          <div className="wrap registration-page">
+            {heroImageUrl ? (
+              <div className="registration-hero" style={{ backgroundImage: `url(${heroImageUrl})` }}>
+                {hasCallout && <div className="registration-hero-copy">
+                  {(page.callout.tagline?.ko || page.callout.tagline?.en) && (
+                    <p className="intro-tagline">{page.callout.tagline.ko || page.callout.tagline.en}</p>
+                  )}
+                  {(page.callout.message?.ko || page.callout.message?.en) && (
+                    <p className="intro-welcome">{page.callout.message.ko || page.callout.message.en}</p>
+                  )}
+                </div>}
+              </div>
+            ) : hasCallout ? (
+              <div className="intro-callout registration-welcome">
+                {(page.callout.tagline?.ko || page.callout.tagline?.en) && (
+                  <p className="intro-tagline">{page.callout.tagline.ko || page.callout.tagline.en}</p>
+                )}
+                {(page.callout.message?.ko || page.callout.message?.en) && (
+                  <p className="intro-welcome">{page.callout.message.ko || page.callout.message.en}</p>
+                )}
+              </div>
+            ) : null}
+            {(registration.notice?.ko || registration.notice?.en) && (
+              <p className="registration-notice">{registration.notice.ko || registration.notice.en}</p>
+            )}
+            {(registration.description?.ko || registration.description?.en) && (
+              <p className="registration-description">{registration.description.ko || registration.description.en}</p>
+            )}
+            {registration.steps?.length ? (
+              <ol className="registration-steps">
+                {registration.steps.map((step: any, index: number) => (
+                  <li key={step.id ?? index}>
+                    {step.imageUrl && <img src={normalizeAssetUrl(step.imageUrl) ?? undefined} alt="" />}
+                    <div>
+                      <h2>{index + 1}. {step.title?.ko || step.title?.en}</h2>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            ) : null}
+            {registration.formUrl && (
+              <a className="registration-form-link" href={registration.formUrl} target="_blank" rel="noopener noreferrer">
+                {registration.formLabel || '온라인 등록카드 작성'} <i className="ti ti-external-link" aria-hidden="true" />
+              </a>
+            )}
           </div>
         </section>
       ) : (

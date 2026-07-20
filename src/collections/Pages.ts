@@ -132,10 +132,61 @@ export const Pages: CollectionConfig = {
       options: [
         { label: 'Default', value: 'default' },
         { label: 'Training & Ministry', value: 'training' },
+        { label: 'New Family Registration', value: 'registration' },
       ],
       admin: {
         description: '훈련&사역 페이지는 Training & Ministry를 선택하세요.',
       },
+    },
+    {
+      name: 'registration',
+      type: 'group',
+      label: '새가족 등록 설정 (New Family Registration)',
+      admin: {
+        condition: (_, siblingData) => siblingData?.layout === 'registration',
+      },
+      fields: [
+        bilingualText('description', {
+          label: '등록 안내 문구',
+          required: false,
+          koLabel: '안내 문구 (Korean)',
+          enLabel: 'Description (English)',
+          multiline: true,
+        }),
+        bilingualText('notice', {
+          label: '강조 안내 문구',
+          required: false,
+          koLabel: '강조 안내 (Korean)',
+          enLabel: 'Notice (English)',
+          multiline: true,
+        }),
+        {
+          name: 'steps',
+          type: 'array',
+          label: '등록 절차',
+          labels: { singular: 'Step', plural: 'Steps' },
+          fields: [
+            { name: 'imageUrl', type: 'text', label: 'Illustration URL' },
+            bilingualText('title', {
+              label: '절차 제목',
+              required: true,
+              koLabel: '제목 (Korean)',
+              enLabel: 'Title (English)',
+            }),
+          ],
+        },
+        {
+          name: 'formUrl',
+          type: 'text',
+          label: 'Online Registration Form URL',
+        },
+        {
+          name: 'formLabel',
+          type: 'text',
+          label: 'Registration Form Button Label',
+          defaultValue: '온라인 등록카드 작성',
+        },
+      ],
     },
     {
       name: 'mission',

@@ -21,6 +21,9 @@ import * as migration_20260719_043825_add_hero_background_videos from './2026071
 import * as migration_20260719_060000_add_video_english_title from './20260719_060000_add_video_english_title';
 import * as migration_20260719_061000_backfill_sermon_english_titles from './20260719_061000_backfill_sermon_english_titles';
 import * as migration_20260719_062000_add_video_sync_unique_index from './20260719_062000_add_video_sync_unique_index';
+import * as migration_20260719_070000_add_registration_page from './20260719_070000_add_registration_page';
+import * as migration_20260719_071000_refine_registration_page from './20260719_071000_refine_registration_page';
+import * as migration_20260719_072000_use_r2_registration_images from './20260719_072000_use_r2_registration_images';
 
 export const migrations = [
   {
@@ -137,5 +140,20 @@ export const migrations = [
     up: migration_20260719_062000_add_video_sync_unique_index.up,
     down: migration_20260719_062000_add_video_sync_unique_index.down,
     name: '20260719_062000_add_video_sync_unique_index',
+  },
+  {
+    up: migration_20260719_070000_add_registration_page.up,
+    down: migration_20260719_070000_add_registration_page.down,
+    name: '20260719_070000_add_registration_page',
+  },
+  {
+    up: migration_20260719_071000_refine_registration_page.up,
+    down: migration_20260719_071000_refine_registration_page.down,
+    name: '20260719_071000_refine_registration_page',
+  },
+  {
+    up: migration_20260719_072000_use_r2_registration_images.up,
+    down: migration_20260719_072000_use_r2_registration_images.down,
+    name: '20260719_072000_use_r2_registration_images',
   },
 ];
