@@ -82,7 +82,6 @@ export default async function HomePage() {
   const banner = siteSettings?.welcomeBanner
   const hero = siteSettings?.hero
   const church = siteSettings?.church
-  const directionsHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(church?.address?.ko || '11900 Ranch Rd 620 N, Cedar Park, TX 78613')}`
   const hasTodayDailyDevotion = dailyDevotions.some((video: any) => video.publishedAt && churchDate(video.publishedAt) === todayInChurchTime)
   const automaticSermonButtonHref = hasTodayDailyDevotion ? '/videos/daily-devotion' : '/sermons'
   const automaticSermonButtonKo = weekdayInChurchTime ? '오늘의 매일말씀묵상' : '지난 주일설교'
@@ -104,7 +103,6 @@ export default async function HomePage() {
         sermonButtonKo={sermonButtonKo}
         sermonButtonEn={sermonButtonEn}
         sermonButtonHref={sermonButtonHref}
-        directionsHref={directionsHref}
         backgroundVideoIds={hero?.backgroundVideos?.map((video) => video.youtubeId).filter(Boolean) as string[] | undefined}
       />
 

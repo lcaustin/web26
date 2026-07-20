@@ -77,7 +77,6 @@ const HERO_DEFAULTS = {
   sermonButtonKo: '이번 주 말씀',
   sermonButtonEn: 'This Week’s Sermon',
   sermonButtonHref: '/sermons',
-  directionsHref: 'https://www.google.com/maps/search/?api=1&query=11900%20Ranch%20Rd%20620%20N%2C%20Cedar%20Park%2C%20TX%2078613',
 }
 
 export default function Hero({
@@ -86,7 +85,6 @@ export default function Hero({
   sermonButtonKo,
   sermonButtonEn,
   sermonButtonHref,
-  directionsHref,
   backgroundVideoIds,
 }: {
   taglineKo?: string | null
@@ -94,7 +92,6 @@ export default function Hero({
   sermonButtonKo?: string | null
   sermonButtonEn?: string | null
   sermonButtonHref?: string | null
-  directionsHref?: string | null
   backgroundVideoIds?: string[] | null
 }) {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -171,17 +168,12 @@ export default function Hero({
       </div>
       <div className="hero-overlay" />
       <div className="hero-content">
-        <div className="hero-eyebrow">Lord&apos;s Church of Austin · 어스틴 주님의교회</div>
         <div className="hero-title">{taglineKo || HERO_DEFAULTS.taglineKo}</div>
         <div className="hero-sub">{taglineEn || HERO_DEFAULTS.taglineEn}</div>
         <div className="hero-btns">
           <a href={sermonButtonHref || HERO_DEFAULTS.sermonButtonHref} className="btn-primary">
             <i className="ti ti-player-play" aria-hidden="true" />
             {sermonButtonKo || HERO_DEFAULTS.sermonButtonKo} · {sermonButtonEn || HERO_DEFAULTS.sermonButtonEn}
-          </a>
-          <a href={directionsHref || HERO_DEFAULTS.directionsHref} className="btn-outline" target="_blank" rel="noopener noreferrer">
-            <i className="ti ti-map-pin" aria-hidden="true" />
-            오시는 길 · Directions
           </a>
         </div>
       </div>
