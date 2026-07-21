@@ -26,6 +26,8 @@ const CHANNELS: Channel[] = [
   { channelId: 'UCw3bqxCOOay_VKM9T5Q6CCA', tags: '교육부,EM,EnglishMinistry' },
 ]
 
+const RECENT_VIDEOS_PER_CHANNEL = 10
+
 const decodeXml = (value: string) => value
   .replace(/^<!\[CDATA\[([\s\S]*)\]\]>$/, '$1')
   .replace(/&quot;/g, '"')
@@ -40,7 +42,7 @@ function field(entry: string, tag: string) {
 }
 
 function parseFeed(xml: string, channel: Channel): YouTubeVideo[] {
-  return Array.from(xml.matchAll(/<entry>([\s\S]*?)<\/entry>/g)).flatMap((match) => {
+  return Array.from(xml.matchAll(/<entry>([\s\S]*?)<\/entry>/g)).slice(0, RECENT_VIDEOS_PER_CHANNEL).flatMap((match) => {
     const entry = match[1]
     const videoId = field(entry, 'yt:videoId')
     const title = field(entry, 'title')
@@ -75,12 +77,12 @@ function englishTitle(video: YouTubeVideo) {
   return /[A-Za-z]/.test(translatedTitle) ? translatedTitle : null
 }
 
-// Sermons are often published to YouTube after Sunday. The date at the start
-// of their title is the service date visitors expect to see, while YouTube's
-// published timestamp is retained for videos without that date.
-function publishedAt(video: YouTubeVideo, videoCategory: string) {
-  const serviceDate = video.title.match(/^\s*(\d{4}-\d{2}-\d{2})\b/)?.[1]
-  return videoCategory === 'sermon' && serviceDate ? `${serviceDate}T12:00:00.000Z` : video.publishedAt
+// Videos are often published after the service. A leading ISO date in the
+// title is the air date visitors expect to see; retain YouTube's timestamp
+// only when the title does not provide a service date.
+function publishedAt(video: YouTubeVideo) {
+  const airDate = video.title.match(/^\s*(\d{4}-\d{2}-\d{2})\b/)?.[1]
+  return airDate ? `${airDate}T12:00:00.000Z` : video.publishedAt
 }
 
 async function fetchChannel(channel: Channel) {
@@ -127,7 +129,7 @@ export async function syncYouTubeChannels() {
           `https://i.ytimg.com/vi/${video.videoId}/hqdefault.jpg`,
           video.description || null,
           video.tags || null,
-          publishedAt(video, videoCategory),
+          publishedAt(video),
         ],
       )
     }

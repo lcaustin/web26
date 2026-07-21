@@ -16,12 +16,13 @@ const formatDate = (iso: string) => {
   return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`
 }
 
-export default function NewsList({ initialNews, initialPage, totalPages, totalDocs, query }: {
+export default function NewsList({ initialNews, initialPage, totalPages, totalDocs, query, category }: {
   initialNews: NewsListItem[]
   initialPage: number
   totalPages: number
   totalDocs: number
   query: string
+  category: string
 }) {
   const [news, setNews] = useState(initialNews)
   const [page, setPage] = useState(initialPage)
@@ -39,7 +40,7 @@ export default function NewsList({ initialNews, initialPage, totalPages, totalDo
   useEffect(() => {
     setNews(isMobile ? initialNews.slice(0, 10) : initialNews)
     setPage(initialPage)
-  }, [initialNews, initialPage, isMobile, query])
+  }, [initialNews, initialPage, isMobile, query, category])
 
   const effectiveTotalPages = isMobile ? Math.ceil(totalDocs / 10) : totalPages
   const loadMore = async () => {
@@ -48,6 +49,7 @@ export default function NewsList({ initialNews, initialPage, totalPages, totalDo
     try {
       const params = new URLSearchParams({ page: String(page + 1), limit: '10' })
       if (query) params.set('q', query)
+      if (category) params.set('category', category)
       const response = await fetch('/api/news?' + params.toString())
       if (!response.ok) throw new Error('Unable to load News')
       const result = await response.json() as { docs: NewsListItem[]; page: number }

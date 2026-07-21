@@ -1,6 +1,7 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { motion, useReducedMotion, type Variants } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
 
 // Rotate through these videos in order; the next one starts automatically
 // as soon as the current one finishes, looping back to the first after the last.
@@ -17,6 +18,77 @@ function shuffleVideoIds(videoIds: string[]) {
   }
 
   return shuffled
+}
+
+const titleContainerVariants: Variants = {
+  hidden: {},
+  visible: { transition: { delayChildren: 0.18, staggerChildren: 0.09 } },
+}
+
+const titleWordVariants: Variants = {
+  hidden: { opacity: 0, filter: 'blur(8px)', y: 14 },
+  visible: {
+    opacity: 1,
+    filter: 'blur(0px)',
+    y: 0,
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+  },
+}
+
+const AURORA_WORDS = new Set(['예배', '감격', '변화', '열방', '교회'])
+const AURORA_WORD_PATTERN = /(예배|감격|변화|열방|교회)/g
+const DEFAULT_AURORA_WORD_TONES: Record<string, string> = {
+  예배: 'worship',
+  감격: 'wonder',
+  변화: 'change',
+  열방: 'nations',
+  교회: 'church',
+}
+const AURORA_TONES = Object.values(DEFAULT_AURORA_WORD_TONES)
+
+function shuffledAuroraTones() {
+  const tones = [...AURORA_TONES]
+
+  for (let index = tones.length - 1; index > 0; index -= 1) {
+    const randomIndex = Math.floor(Math.random() * (index + 1))
+    const currentTone = tones[index]
+    tones[index] = tones[randomIndex]
+    tones[randomIndex] = currentTone
+  }
+
+  return Object.fromEntries([...AURORA_WORDS].map((word, index) => [word, tones[index]]))
+}
+
+function renderTitleWord(word: string, auroraWordTones: Record<string, string>) {
+  return word.split(AURORA_WORD_PATTERN).filter(Boolean).map((part, index) => (
+    AURORA_WORDS.has(part)
+      ? <span key={`${part}-${index}`} className={`hero-title-aurora hero-title-aurora--${auroraWordTones[part]}`}>{part}</span>
+      : part
+  ))
+}
+
+function HeroTitle({ value }: { value: string }) {
+  const reducedMotion = useReducedMotion()
+  const [auroraWordTones, setAuroraWordTones] = useState(DEFAULT_AURORA_WORD_TONES)
+  const lines = value.split('\n')
+
+  useEffect(() => {
+    setAuroraWordTones(shuffledAuroraTones())
+  }, [])
+
+  return (
+    <motion.h1
+      className="hero-title"
+      initial={reducedMotion ? false : 'hidden'}
+      animate={reducedMotion ? undefined : 'visible'}
+      variants={titleContainerVariants}
+    >
+      {lines.map((line, lineIndex) => <span key={`line-${lineIndex}`} className="hero-title-line">
+        {line.split(/\s+/).filter(Boolean).map((word, wordIndex) => <motion.span key={`${lineIndex}-${wordIndex}`} className="hero-title-word" variants={titleWordVariants}>{renderTitleWord(word, auroraWordTones)}</motion.span>)}
+        {lineIndex < lines.length - 1 && <br />}
+      </span>)}
+    </motion.h1>
+  )
 }
 
 interface YouTubePlayer {
@@ -168,7 +240,7 @@ export default function Hero({
       </div>
       <div className="hero-overlay" />
       <div className="hero-content">
-        <h1 className="hero-title">{taglineKo || HERO_DEFAULTS.taglineKo}</h1>
+        <HeroTitle value={taglineKo || HERO_DEFAULTS.taglineKo} />
         <p className="hero-sub">{taglineEn || HERO_DEFAULTS.taglineEn}</p>
         <div className="hero-btns">
           <a href={sermonButtonHref || HERO_DEFAULTS.sermonButtonHref} className="btn-primary">

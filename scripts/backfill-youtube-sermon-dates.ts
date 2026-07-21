@@ -1,9 +1,9 @@
 /**
- * Aligns YouTube sermon dates with the leading YYYY-MM-DD in their titles.
- * Sermons can be uploaded after Sunday, so YouTube's publish time is not
- * necessarily the actual service date.
+ * Aligns YouTube video dates with the leading YYYY-MM-DD in their titles.
+ * Videos can be uploaded after the service, so YouTube's publish time is not
+ * necessarily the actual air date.
  *
- * Usage: pnpm backfill:youtube-sermon-dates
+ * Usage: pnpm backfill:youtube-air-dates
  */
 import { existsSync, readFileSync } from 'node:fs'
 import path from 'node:path'
@@ -34,11 +34,10 @@ async function main() {
        SET published_at = (substring(admin_title FROM '^\\s*(\\d{4}-\\d{2}-\\d{2})') || 'T12:00:00.000Z')::timestamptz,
            updated_at = now()
        WHERE source = 'youtube'
-         AND category = 'sermon'
          AND admin_title ~ '^\\s*\\d{4}-\\d{2}-\\d{2}'
          AND published_at IS DISTINCT FROM (substring(admin_title FROM '^\\s*(\\d{4}-\\d{2}-\\d{2})') || 'T12:00:00.000Z')::timestamptz`,
     )
-    console.log(`Updated ${result.rowCount ?? 0} YouTube sermon dates.`)
+    console.log(`Updated ${result.rowCount ?? 0} YouTube air dates.`)
   } finally {
     await client.end()
   }

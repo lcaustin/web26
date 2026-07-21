@@ -10,6 +10,7 @@ import path from 'node:path'
 import { promisify } from 'node:util'
 import { Client } from 'pg'
 import { parseBulletinAnnouncements } from '../src/lib/bulletin-news.ts'
+import { categoryForNewsText } from '../src/lib/news-categories.ts'
 
 const run = promisify(execFile)
 const date = process.argv[2]
@@ -64,10 +65,10 @@ async function main() {
     await client.query('DELETE FROM news WHERE source_bulletin_id = $1', [bulletin.id])
     for (const [index, article] of articles.entries()) {
       await client.query(`
-        INSERT INTO news (admin_title, title_ko, title_en, content_ko, content_en, date, source_bulletin_id, extraction_key, slug, created_at, updated_at)
-        SELECT $1, $2, '', $3, $4, $5, $6, $7, $8, now(), now()
+        INSERT INTO news (admin_title, title_ko, title_en, content_ko, content_en, category, date, source_bulletin_id, extraction_key, slug, created_at, updated_at)
+        SELECT $1, $2, '', $3, $4, $5, $6, $7, $8, $9, now(), now()
         WHERE NOT EXISTS (SELECT 1 FROM news WHERE title_ko = $2)
-      `, [article.title, article.title, lexical(article.body), lexical(''), bulletin.issue_date, bulletin.id, `${bulletin.id}:${index + 1}`, `bulletin-${date}-${index + 1}`])
+      `, [article.title, article.title, lexical(article.body), lexical(''), categoryForNewsText(`${article.title}\n${article.body}`) ?? null, bulletin.issue_date, bulletin.id, `${bulletin.id}:${index + 1}`, `bulletin-${date}-${index + 1}`])
     }
     await client.query('COMMIT')
     console.log(`Imported ${articles.length} announcements from ${date}.`)

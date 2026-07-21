@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 import { bilingualText } from '../fields/bilingual.ts'
 import { bilingualRichText } from '../fields/richText.ts'
+import { NEWS_CATEGORIES } from '../lib/news-categories.ts'
 
 function toSlug(str: string): string {
   return str
@@ -65,6 +66,16 @@ export const News: CollectionConfig = {
       },
     },
     bilingualText('title', { label: 'Title', koLabel: '제목 (Korean)', enLabel: 'Title (English)' }),
+    {
+      name: 'category',
+      type: 'select',
+      label: 'Category',
+      options: NEWS_CATEGORIES.filter((category) => category.value).map((category) => ({
+        label: category.en ? `${category.ko} · ${category.en}` : category.ko,
+        value: category.value,
+      })),
+      admin: { position: 'sidebar', description: 'Optional ministry category used by the News filter.' },
+    },
     bilingualRichText('content', {
       label: 'Content',
       koLabel: '내용 (Korean)',
