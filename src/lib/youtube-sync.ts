@@ -28,30 +28,27 @@ const CHANNELS: Channel[] = [
 
 const RECENT_VIDEOS_PER_CHANNEL = 10
 
-const decodeXml = (value: string) => value
-  .replace(/^<!\[CDATA\[([\s\S]*)\]\]>$/, '$1')
-  .replace(/&quot;/g, '"')
-  .replace(/&#39;/g, "'")
-  .replace(/&amp;/g, '&')
-  .replace(/&lt;/g, '<')
-  .replace(/&gt;/g, '>')
-
-function field(entry: string, tag: string) {
-  const match = entry.match(new RegExp(`<${tag}(?:\\s[^>]*)?>([\\s\\S]*?)<\\/${tag}>`))
-  return match ? decodeXml(match[1].trim()) : ''
+type YouTubeSearchResponse = {
+  items?: Array<{
+    id?: { videoId?: string }
+    snippet?: {
+      description?: string
+      publishedAt?: string
+      title?: string
+    }
+  }>
 }
 
-function parseFeed(xml: string, channel: Channel): YouTubeVideo[] {
-  return Array.from(xml.matchAll(/<entry>([\s\S]*?)<\/entry>/g)).slice(0, RECENT_VIDEOS_PER_CHANNEL).flatMap((match) => {
-    const entry = match[1]
-    const videoId = field(entry, 'yt:videoId')
-    const title = field(entry, 'title')
-    const publishedAt = field(entry, 'published')
+function parseSearchResults(data: YouTubeSearchResponse, channel: Channel): YouTubeVideo[] {
+  return (data.items ?? []).flatMap((item) => {
+    const videoId = item.id?.videoId
+    const title = item.snippet?.title
+    const publishedAt = item.snippet?.publishedAt
     if (!videoId || !title || !publishedAt) return []
 
     return [{
       channelId: channel.channelId,
-      description: field(entry, 'media:description'),
+      description: item.snippet?.description ?? '',
       publishedAt,
       tags: channel.tags,
       title,
@@ -85,19 +82,27 @@ function publishedAt(video: YouTubeVideo) {
   return airDate ? `${airDate}T12:00:00.000Z` : video.publishedAt
 }
 
-async function fetchChannel(channel: Channel) {
-  const response = await fetch(`https://www.youtube.com/feeds/videos.xml?channel_id=${channel.channelId}`, {
-    headers: { 'user-agent': 'LordChurchAustin-VideoSync/1.0' },
+async function fetchChannel(channel: Channel, apiKey: string) {
+  const params = new URLSearchParams({
+    channelId: channel.channelId,
+    key: apiKey,
+    maxResults: String(RECENT_VIDEOS_PER_CHANNEL),
+    order: 'date',
+    part: 'snippet',
+    type: 'video',
   })
-  if (!response.ok) throw new Error(`YouTube feed ${channel.channelId} returned ${response.status}`)
-  return parseFeed(await response.text(), channel)
+  const response = await fetch(`https://www.googleapis.com/youtube/v3/search?${params}`)
+  if (!response.ok) throw new Error(`YouTube API channel ${channel.channelId} returned ${response.status}`)
+  return parseSearchResults(await response.json() as YouTubeSearchResponse, channel)
 }
 
 export async function syncYouTubeChannels() {
   const databaseUri = process.env.DATABASE_URI
   if (!databaseUri) throw new Error('DATABASE_URI is required')
+  const apiKey = process.env.YOUTUBE_API_KEY
+  if (!apiKey) throw new Error('YOUTUBE_API_KEY is required')
 
-  const results = await Promise.allSettled(CHANNELS.map(async (channel) => ({ channel, videos: await fetchChannel(channel) })))
+  const results = await Promise.allSettled(CHANNELS.map(async (channel) => ({ channel, videos: await fetchChannel(channel, apiKey) })))
   const failures = results.flatMap((result) => result.status === 'rejected' ? [result.reason instanceof Error ? result.reason.message : String(result.reason)] : [])
   const videos = results.flatMap((result) => result.status === 'fulfilled' ? result.value.videos : [])
   const uniqueVideos = [...new Map(videos.map((video) => [video.videoId, video])).values()]
