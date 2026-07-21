@@ -168,8 +168,8 @@ export default function Hero({
       </div>
       <div className="hero-overlay" />
       <div className="hero-content">
-        <div className="hero-title">{taglineKo || HERO_DEFAULTS.taglineKo}</div>
-        <div className="hero-sub">{taglineEn || HERO_DEFAULTS.taglineEn}</div>
+        <h1 className="hero-title">{taglineKo || HERO_DEFAULTS.taglineKo}</h1>
+        <p className="hero-sub">{taglineEn || HERO_DEFAULTS.taglineEn}</p>
         <div className="hero-btns">
           <a href={sermonButtonHref || HERO_DEFAULTS.sermonButtonHref} className="btn-primary">
             <i className="ti ti-player-play" aria-hidden="true" />

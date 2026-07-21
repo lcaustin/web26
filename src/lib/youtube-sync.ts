@@ -75,6 +75,14 @@ function englishTitle(video: YouTubeVideo) {
   return /[A-Za-z]/.test(translatedTitle) ? translatedTitle : null
 }
 
+// Sermons are often published to YouTube after Sunday. The date at the start
+// of their title is the service date visitors expect to see, while YouTube's
+// published timestamp is retained for videos without that date.
+function publishedAt(video: YouTubeVideo, videoCategory: string) {
+  const serviceDate = video.title.match(/^\s*(\d{4}-\d{2}-\d{2})\b/)?.[1]
+  return videoCategory === 'sermon' && serviceDate ? `${serviceDate}T12:00:00.000Z` : video.publishedAt
+}
+
 async function fetchChannel(channel: Channel) {
   const response = await fetch(`https://www.youtube.com/feeds/videos.xml?channel_id=${channel.channelId}`, {
     headers: { 'user-agent': 'LordChurchAustin-VideoSync/1.0' },
@@ -96,6 +104,7 @@ export async function syncYouTubeChannels() {
   await client.connect()
   try {
     for (const video of uniqueVideos) {
+      const videoCategory = category(video)
       await client.query(
         `INSERT INTO videos (admin_title, title_en, category, source, video_id, video_url, thumbnail_url, description, tags, published_at, created_at, updated_at)
          VALUES ($1, $2, $3, 'youtube', $4, $5, $6, $7, $8, $9::timestamptz, now(), now())
@@ -112,13 +121,13 @@ export async function syncYouTubeChannels() {
         [
           video.title,
           englishTitle(video),
-          category(video),
+          videoCategory,
           video.videoId,
           `https://www.youtube.com/watch?v=${video.videoId}`,
           `https://i.ytimg.com/vi/${video.videoId}/hqdefault.jpg`,
           video.description || null,
           video.tags || null,
-          video.publishedAt,
+          publishedAt(video, videoCategory),
         ],
       )
     }

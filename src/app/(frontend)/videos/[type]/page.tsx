@@ -20,9 +20,9 @@ const types: Record<string, { type: string; ko: string; en: string; icon: string
   other: { type: 'other', ko: '영상', en: 'Videos', icon: 'ti-video' },
 }
 
-export default async function VideoTypePage({ params, searchParams }: { params: Promise<{ type: string }>; searchParams: Promise<{ page?: string }> }) {
+export default async function VideoTypePage({ params, searchParams }: { params: Promise<{ type: string }>; searchParams: Promise<{ page?: string; play?: string }> }) {
   const { type: slug } = await params
-  const { page: pageParam } = await searchParams
+  const { page: pageParam, play: playParam } = await searchParams
   const page = Math.max(1, Number.parseInt(pageParam || '1', 10) || 1)
   const metadata = types[slug] || types.other
   const payload = await getPayload({ config })
@@ -37,7 +37,7 @@ export default async function VideoTypePage({ params, searchParams }: { params: 
   const church = siteSettings?.church
   return <div className="site" id="site"><Nav />
     <header className="dept-detail-head"><div className="wrap"><Link href="/" className="dept-back"><i className="ti ti-arrow-left" aria-hidden="true" />홈 · Home</Link><div className="dept-detail-icon"><i className={metadata.icon} aria-hidden="true" /></div><h1 className="dept-detail-ko">{metadata.ko}</h1><div className="dept-detail-en">{metadata.en}</div></div></header>
-    <section className="dept-detail-body"><div className="wrap">{videos.length ? <SermonArchive sermons={videos} label={`${metadata.ko} · ${metadata.en.toUpperCase()}`} category={metadata.type} initialPage={result.page ?? 1} totalPages={result.totalPages ?? 1} totalDocs={result.totalDocs ?? 0} /> : <p className="dept-empty">등록된 영상이 없습니다. · No videos have been added yet.</p>}<VideoPagination currentPage={result.page ?? 1} totalPages={result.totalPages ?? 1} mobileHidden /></div></section>
+    <section className="dept-detail-body"><div className="wrap">{videos.length ? <SermonArchive sermons={videos} label={`${metadata.ko} · ${metadata.en.toUpperCase()}`} category={metadata.type} initialPage={result.page ?? 1} totalPages={result.totalPages ?? 1} totalDocs={result.totalDocs ?? 0} initialSelectedId={playParam} /> : <p className="dept-empty">등록된 영상이 없습니다. · No videos have been added yet.</p>}<VideoPagination currentPage={result.page ?? 1} totalPages={result.totalPages ?? 1} mobileHidden /></div></section>
     <Footer nameKo={church?.name?.ko} nameEn={church?.name?.en} addressKo={church?.address?.ko} phone={church?.phone} email={church?.email} />
   </div>
 }

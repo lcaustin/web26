@@ -82,8 +82,9 @@ export default async function HomePage() {
   const banner = siteSettings?.welcomeBanner
   const hero = siteSettings?.hero
   const church = siteSettings?.church
-  const hasTodayDailyDevotion = dailyDevotions.some((video: any) => video.publishedAt && churchDate(video.publishedAt) === todayInChurchTime)
-  const automaticSermonButtonHref = hasTodayDailyDevotion ? '/videos/daily-devotion' : '/sermons'
+  const todayDailyDevotion = dailyDevotions.find((video: any) => video.publishedAt && churchDate(video.publishedAt) === todayInChurchTime)
+  const hasTodayDailyDevotion = Boolean(todayDailyDevotion)
+  const automaticSermonButtonHref = todayDailyDevotion ? `/videos/daily-devotion?play=${encodeURIComponent(String(todayDailyDevotion.id))}` : '/sermons'
   const automaticSermonButtonKo = weekdayInChurchTime ? '오늘의 매일말씀묵상' : '지난 주일설교'
   const automaticSermonButtonEn = weekdayInChurchTime ? "Today's daily devotion" : 'Sunday sermon'
   const sermonButtonHref = hero?.sermonButtonHref?.trim() || automaticSermonButtonHref

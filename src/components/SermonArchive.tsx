@@ -97,9 +97,10 @@ type Props = {
   initialPage?: number
   totalPages?: number
   totalDocs?: number
+  initialSelectedId?: number | string | null
 }
 
-export default function SermonArchive({ sermons, label = '주일 설교 · SUNDAY SERMON', category, loadMoreUrl, initialPage = 1, totalPages = 1, totalDocs = 0 }: Props) {
+export default function SermonArchive({ sermons, label = '주일 설교 · SUNDAY SERMON', category, loadMoreUrl, initialPage = 1, totalPages = 1, totalDocs = 0, initialSelectedId }: Props) {
   const [selected, setSelected] = useState<SermonArchiveItem | null>(null)
   const [items, setItems] = useState(sermons)
   const [page, setPage] = useState(initialPage)
@@ -121,9 +122,11 @@ export default function SermonArchive({ sermons, label = '주일 설교 · SUNDA
   useEffect(() => {
     setItems(isMobile ? sermons.slice(0, 10) : sermons)
     setPage(initialPage)
-    setSelected(null)
+    setSelected(initialSelectedId === undefined || initialSelectedId === null
+      ? null
+      : sermons.find((sermon) => String(sermon.id) === String(initialSelectedId)) ?? null)
     setLoadError(false)
-  }, [sermons, initialPage, isMobile])
+  }, [sermons, initialPage, isMobile, initialSelectedId])
 
   const effectiveTotalPages = isMobile && totalDocs ? Math.ceil(totalDocs / 10) : totalPages
 

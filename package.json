@@ -11,6 +11,7 @@
     "lint": "cross-env NODE_OPTIONS=--no-deprecation next lint",
     "generate-prs": "tsx scripts/generate-prs.ts",
     "sync:youtube": "tsx scripts/sync-youtube-channels.ts",
+    "backfill:youtube-sermon-dates": "tsx scripts/backfill-youtube-sermon-dates.ts",
     "sync:drive-photos": "tsx scripts/sync-drive-photos.ts",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start"
