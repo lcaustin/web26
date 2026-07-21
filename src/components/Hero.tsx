@@ -22,7 +22,7 @@ function shuffleVideoIds(videoIds: string[]) {
 
 const titleContainerVariants: Variants = {
   hidden: {},
-  visible: { transition: { delayChildren: 0.18, staggerChildren: 0.09 } },
+  visible: { transition: { delayChildren: 1.01, staggerChildren: 0.45 } },
 }
 
 const titleWordVariants: Variants = {
@@ -31,7 +31,7 @@ const titleWordVariants: Variants = {
     opacity: 1,
     filter: 'blur(0px)',
     y: 0,
-    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 2.35, ease: [0.22, 1, 0.36, 1] },
   },
 }
 
