@@ -28,6 +28,12 @@ const databaseURI = process.env.DATABASE_URI || env.DATABASE_URI
 const publicURL = (process.env.R2_PUBLIC_URL || env.R2_PUBLIC_URL || 'https://pub-2f2b09ce26ca48ca9b726870a49512c2.r2.dev').replace(/\/$/, '')
 if (!databaseURI) throw new Error('DATABASE_URI is required')
 
+function bulletinNewsDate(adminTitle: string | null | undefined, issueDate: string | Date) {
+  const titleDate = adminTitle?.match(/^\s*(\d{4}-\d{2}-\d{2})\b/)?.[1]
+  if (titleDate) return titleDate
+  return issueDate instanceof Date ? issueDate.toISOString().slice(0, 10) : issueDate.slice(0, 10)
+}
+
 const lexical = (text: string) => ({ root: { type: 'root', format: '', indent: 0, version: 1, direction: null, children: [{ type: 'paragraph', format: '', indent: 0, version: 1, direction: null, children: text.split(/(?<=\.)\s+/).flatMap((sentence, index, list) => [{ type: 'text', version: 1, detail: 0, format: 0, mode: 'normal', style: '', text: sentence }, ...(index < list.length - 1 ? [{ type: 'linebreak', version: 1 }] : [])]) }] } })
 
 async function ocrBulletin(url: string, workingDirectory: string) {
@@ -39,10 +45,26 @@ async function ocrBulletin(url: string, workingDirectory: string) {
   await writeFile(pdf, Buffer.from(await response.arrayBuffer()))
   await run('pdftoppm', ['-f', '1', '-l', '1', '-png', '-r', '144', pdf, imagePrefix])
   // Bulletin PDFs use a fixed three-column layout; this isolates the middle announcements column.
-  await run('sips', ['-c', '700', '600', '--cropOffset', '0', '620', `${imagePrefix}-1.png`, '--out', crop])
+  // macOS supplies sips, while WSL uses ImageMagick.
+  if (process.platform === 'darwin') {
+    await run('sips', ['-c', '700', '600', '--cropOffset', '0', '620', `${imagePrefix}-1.png`, '--out', crop])
+  } else {
+    const imageMagick = await commandAvailable('magick') ? 'magick' : await commandAvailable('convert') ? 'convert' : null
+    if (!imageMagick) throw new Error('ImageMagick is required on Linux. Install it with: sudo apt install imagemagick')
+    await run(imageMagick, [`${imagePrefix}-1.png`, '-crop', '600x700+620+0', '+repage', crop])
+  }
   const { stdout: croppedText } = await run('tesseract', [crop, 'stdout', '-l', 'kor+eng', '--psm', '6'])
   const { stdout: fullPageText } = await run('tesseract', [`${imagePrefix}-1.png`, 'stdout', '-l', 'kor+eng', '--psm', '6'])
   return { croppedText, fullPageText }
+}
+
+async function commandAvailable(command: string) {
+  try {
+    await run(command, ['-version'])
+    return true
+  } catch {
+    return false
+  }
 }
 
 async function main() {
@@ -50,7 +72,7 @@ async function main() {
   await client.connect()
   const workingDirectory = path.join(tmpdir(), `lcaustin-bulletin-${date}-${Date.now()}`)
   try {
-    const bulletinResult: any = await client.query('SELECT id, issue_date, filename, prefix FROM bulletins WHERE issue_date::date = $1 LIMIT 1', [date])
+    const bulletinResult: any = await client.query('SELECT id, admin_title, issue_date, filename, prefix FROM bulletins WHERE issue_date::date = $1 LIMIT 1', [date])
     const bulletin = bulletinResult.rows[0]
     if (!bulletin) throw new Error(`No bulletin found for ${date}`)
     const key = [bulletin.prefix, bulletin.filename].filter(Boolean).join('/')
@@ -60,6 +82,7 @@ async function main() {
     const articles = parseBulletinAnnouncements(croppedText)
     if (!articles.length) articles.push(...parseBulletinAnnouncements(fullPageText))
     if (!articles.length) throw new Error('No eligible announcements found. Check the bulletin layout or OCR output.')
+    const newsDate = bulletinNewsDate(bulletin.admin_title, bulletin.issue_date)
 
     await client.query('BEGIN')
     await client.query('DELETE FROM news WHERE source_bulletin_id = $1', [bulletin.id])
@@ -68,7 +91,7 @@ async function main() {
         INSERT INTO news (admin_title, title_ko, title_en, content_ko, content_en, category, date, source_bulletin_id, extraction_key, slug, created_at, updated_at)
         SELECT $1, $2, '', $3, $4, $5, $6, $7, $8, $9, now(), now()
         WHERE NOT EXISTS (SELECT 1 FROM news WHERE title_ko = $2)
-      `, [article.title, article.title, lexical(article.body), lexical(''), categoryForNewsText(`${article.title}\n${article.body}`) ?? null, bulletin.issue_date, bulletin.id, `${bulletin.id}:${index + 1}`, `bulletin-${date}-${index + 1}`])
+      `, [article.title, article.title, lexical(article.body), lexical(''), categoryForNewsText(`${article.title}\n${article.body}`) ?? null, newsDate, bulletin.id, `${bulletin.id}:${index + 1}`, `bulletin-${date}-${index + 1}`])
     }
     await client.query('COMMIT')
     console.log(`Imported ${articles.length} announcements from ${date}.`)

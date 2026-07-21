@@ -1,5 +1,5 @@
 /**
- * Imports every 2026 bulletin that does not already have News records linked
+ * Imports every bulletin that does not already have News records linked
  * through `source_bulletin_id`.
  *
  * Preview: pnpm tsx scripts/import-all-2026-bulletin-news.ts --dry-run
@@ -35,8 +35,7 @@ async function main() {
     const result: any = await client.query(`
       SELECT b.issue_date::date AS date
       FROM bulletins b
-      WHERE b.issue_date >= '2026-01-01' AND b.issue_date < '2027-01-01'
-        AND NOT EXISTS (
+      WHERE NOT EXISTS (
           SELECT 1 FROM news n WHERE n.source_bulletin_id = b.id
         )
       ORDER BY b.issue_date ASC
