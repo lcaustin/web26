@@ -35,6 +35,21 @@ const titleWordVariants: Variants = {
   },
 }
 
+const subtitleContainerVariants: Variants = {
+  hidden: {},
+  visible: { transition: { delayChildren: 1.7, staggerChildren: 0.14 } },
+}
+
+const subtitleWordVariants: Variants = {
+  hidden: { opacity: 0, filter: 'blur(5px)', y: 8 },
+  visible: {
+    opacity: 1,
+    filter: 'blur(0px)',
+    y: 0,
+    transition: { duration: 1.05, ease: [0.22, 1, 0.36, 1] },
+  },
+}
+
 const AURORA_WORDS = new Set(['예배', '감격', '변화', '열방', '교회'])
 const AURORA_WORD_PATTERN = /(예배|감격|변화|열방|교회)/g
 const DEFAULT_AURORA_WORD_TONES: Record<string, string> = {
@@ -77,17 +92,42 @@ function HeroTitle({ value }: { value: string }) {
   }, [])
 
   return (
-    <motion.h1
-      className="hero-title"
-      initial={reducedMotion ? false : 'hidden'}
-      animate={reducedMotion ? undefined : 'visible'}
-      variants={titleContainerVariants}
-    >
-      {lines.map((line, lineIndex) => <span key={`line-${lineIndex}`} className="hero-title-line">
-        {line.split(/\s+/).filter(Boolean).map((word, wordIndex) => <motion.span key={`${lineIndex}-${wordIndex}`} className="hero-title-word" variants={titleWordVariants}>{renderTitleWord(word, auroraWordTones)}</motion.span>)}
-        {lineIndex < lines.length - 1 && <br />}
-      </span>)}
-    </motion.h1>
+    <h1 className="hero-title">
+      <span className="sr-only">{value}</span>
+      <motion.span
+        aria-hidden="true"
+        initial={reducedMotion ? false : 'hidden'}
+        animate={reducedMotion ? undefined : 'visible'}
+        variants={titleContainerVariants}
+      >
+        {lines.map((line, lineIndex) => <span key={`line-${lineIndex}`} className="hero-title-line">
+          {line.split(/\s+/).filter(Boolean).map((word, wordIndex) => <motion.span key={`${lineIndex}-${wordIndex}`} className="hero-title-word" variants={titleWordVariants}>{renderTitleWord(word, auroraWordTones)}</motion.span>)}
+          {lineIndex < lines.length - 1 && <br />}
+        </span>)}
+      </motion.span>
+    </h1>
+  )
+}
+
+function HeroSubtitle({ value }: { value: string }) {
+  const reducedMotion = useReducedMotion()
+  const lines = value.split('\n')
+
+  return (
+    <p className="hero-sub">
+      <span className="sr-only">{value}</span>
+      <motion.span
+        aria-hidden="true"
+        initial={reducedMotion ? false : 'hidden'}
+        animate={reducedMotion ? undefined : 'visible'}
+        variants={subtitleContainerVariants}
+      >
+        {lines.map((line, lineIndex) => <span key={`subtitle-line-${lineIndex}`} className="hero-sub-line">
+          {line.split(/\s+/).filter(Boolean).map((word, wordIndex) => <motion.span key={`${lineIndex}-${wordIndex}`} className="hero-sub-word" variants={subtitleWordVariants}>{word}</motion.span>)}
+          {lineIndex < lines.length - 1 && <br />}
+        </span>)}
+      </motion.span>
+    </p>
   )
 }
 
@@ -241,7 +281,7 @@ export default function Hero({
       <div className="hero-overlay" />
       <div className="hero-content">
         <HeroTitle value={taglineKo || HERO_DEFAULTS.taglineKo} />
-        <p className="hero-sub">{taglineEn || HERO_DEFAULTS.taglineEn}</p>
+        <HeroSubtitle value={taglineEn || HERO_DEFAULTS.taglineEn} />
         <div className="hero-btns">
           <a href={sermonButtonHref || HERO_DEFAULTS.sermonButtonHref} className="btn-primary">
             <i className="ti ti-player-play" aria-hidden="true" />

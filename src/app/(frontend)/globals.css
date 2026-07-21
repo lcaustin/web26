@@ -160,7 +160,10 @@ nav {
 .hero-title-aurora--nations { background-image: linear-gradient(108deg, #fff 5%, #a8c8f6 34%, #7e90e5 60%, #fff 92%); }
 .hero-title-aurora--church { background-image: linear-gradient(108deg, #fff 5%, #e7bb7d 34%, #d59a67 60%, #fff 92%); }
 .hero-title-word:last-child { margin-right: 0; }
-.hero-sub { max-width: 600px; margin: 0 0 32px; font-size: 13px; font-weight: 400; color: rgba(255, 255, 255, 0.76); line-height: 1.7; letter-spacing: 0.08em; text-wrap: balance; text-shadow: 0 2px 16px rgba(0, 0, 0, 0.3); white-space: pre-line; animation: hero-reveal 0.7s 0.31s both; }
+.hero-sub { max-width: 600px; margin: 0 0 32px; font-size: 13px; font-weight: 400; color: rgba(255, 255, 255, 0.76); line-height: 1.7; letter-spacing: 0.08em; text-wrap: balance; text-shadow: 0 2px 16px rgba(0, 0, 0, 0.3); white-space: pre-line; }
+.hero-sub-line { display: inline; }
+.hero-sub-word { display: inline-block; margin-right: 0.32em; will-change: opacity, filter, transform; }
+.hero-sub-word:last-child { margin-right: 0; }
 .hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; animation: hero-reveal 0.7s 0.44s both; }
 .hero-btns .btn-primary { background: transparent; border: 1px solid rgba(255, 255, 255, 0.72); border-radius: 999px; padding: 11px 22px; transition: background 0.18s, border-color 0.18s, transform 0.18s; }
 .hero-btns .btn-primary:hover { opacity: 1; background: transparent; border-color: #d4a93c; color: #fff; transform: translateY(-1px); }
