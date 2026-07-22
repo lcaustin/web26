@@ -1,6 +1,7 @@
 /**
  * OCR and import announcements from one scanned bulletin.
- * Usage: pnpm tsx scripts/import-bulletin-news.ts 2026-07-13
+ * Usage: pnpm tsx scripts/import-bulletin-news.ts [YYYY-MM-DD]
+ * Without a date, imports the bulletin for the next Sunday.
  */
 import { execFile } from 'node:child_process'
 import { existsSync, readFileSync } from 'node:fs'
@@ -13,8 +14,17 @@ import { parseBulletinAnnouncements } from '../src/lib/bulletin-news.ts'
 import { categoryForNewsText } from '../src/lib/news-categories.ts'
 
 const run = promisify(execFile)
-const date = process.argv[2]
-if (!/^\d{4}-\d{2}-\d{2}$/.test(date || '')) throw new Error('Usage: pnpm tsx scripts/import-bulletin-news.ts YYYY-MM-DD')
+function nextSundayISO(today = new Date()) {
+  const nextSunday = new Date(today)
+  nextSunday.setDate(today.getDate() + 7 - today.getDay())
+  const year = nextSunday.getFullYear()
+  const month = String(nextSunday.getMonth() + 1).padStart(2, '0')
+  const day = String(nextSunday.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
+const date = process.argv[2] || nextSundayISO()
+if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) throw new Error('Usage: pnpm tsx scripts/import-bulletin-news.ts [YYYY-MM-DD]')
 
 const env = Object.fromEntries(['.env', '.env.local'].flatMap((name) => {
   const file = path.resolve(process.cwd(), name)
