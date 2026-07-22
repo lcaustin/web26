@@ -35,7 +35,7 @@ export default function BulletinViewer({ initialBulletins, initialPage, totalPag
     if (loading || page >= totalPages) return
     setLoading(true)
     try {
-      const response = await fetch(`/api/bulletins?page=${page + 1}`)
+      const response = await fetch(`/api/bulletin-archive?page=${page + 1}`)
       if (!response.ok) throw new Error('Unable to load bulletins')
       const result = await response.json() as { docs: BulletinViewerItem[]; page: number }
       setBulletins((current) => [...current, ...result.docs])

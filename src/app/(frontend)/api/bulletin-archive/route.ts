@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export const dynamic = 'force-dynamic'
 
-/** Provides five bulletin PDFs at a time for the mobile archive's append action. */
+/** Provides five bulletin PDFs at a time for the public archive's append action. */
 export async function GET(request: NextRequest) {
   const requestedPage = Number.parseInt(request.nextUrl.searchParams.get('page') || '1', 10)
   const page = Number.isFinite(requestedPage) ? Math.max(1, requestedPage) : 1
