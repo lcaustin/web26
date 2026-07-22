@@ -1,8 +1,12 @@
-type ExtractedAnnouncement = { title: string; body: string }
+type ExtractedAnnouncement = { title: string; titleEn: string; body: string }
 
 const normalize = (value: string) => value.replace(/\r/g, '').replace(/[ \t]+/g, ' ').trim()
 const omittedTitles = new Set(['교인동정', '환영', '감사'])
 const shouldImport = (title: string) => !omittedTitles.has(normalize(title).split('/')[0].trim())
+const splitBilingualTitle = (title: string) => {
+  const [koreanTitle, englishTitle] = title.split(/\s*\/\s*/, 2).map(normalize)
+  return { title: koreanTitle, titleEn: englishTitle || '' }
+}
 /** Extract the numbered announcements under the bulletin's Church News section. */
 export function parseBulletinAnnouncements(text: string): ExtractedAnnouncement[] {
   const lines = text.split('\n').map(normalize).filter(Boolean)
@@ -28,7 +32,7 @@ export function parseBulletinAnnouncements(text: string): ExtractedAnnouncement[
       const [first, ...rest] = body.split('\n')
       const [possibleTitle, remainder] = first.split(/\s*[:：]\s*/, 2)
       const title = normalize(remainder ? possibleTitle : first).slice(0, 140)
-      return { title, body: normalize(remainder ? [remainder, ...rest].join('\n') : body) }
+      return { ...splitBilingualTitle(title), body: normalize(remainder ? [remainder, ...rest].join('\n') : body) }
     })
     .filter((item) => item.title.length > 1 && item.body.length > 2 && shouldImport(item.title))
     .slice(0, 30)

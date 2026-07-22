@@ -99,9 +99,9 @@ async function main() {
     for (const [index, article] of articles.entries()) {
       await client.query(`
         INSERT INTO news (admin_title, title_ko, title_en, content_ko, content_en, category, date, source_bulletin_id, extraction_key, slug, created_at, updated_at)
-        SELECT $1, $2, '', $3, $4, $5, $6, $7, $8, $9, now(), now()
-        WHERE NOT EXISTS (SELECT 1 FROM news WHERE title_ko = $10)
-      `, [article.title, article.title, lexical(article.body), lexical(''), categoryForNewsText(`${article.title}\n${article.body}`) ?? null, newsDate, bulletin.id, `${bulletin.id}:${index + 1}`, `bulletin-${date}-${index + 1}`, article.title])
+        SELECT $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, now(), now()
+        WHERE NOT EXISTS (SELECT 1 FROM news WHERE title_ko = $11)
+      `, [article.title, article.title, article.titleEn, lexical(article.body), lexical(''), categoryForNewsText(`${article.title}\n${article.titleEn}\n${article.body}`) ?? null, newsDate, bulletin.id, `${bulletin.id}:${index + 1}`, `bulletin-${date}-${index + 1}`, article.title])
     }
     await client.query('COMMIT')
     console.log(`Imported ${articles.length} announcements from ${date}.`)
