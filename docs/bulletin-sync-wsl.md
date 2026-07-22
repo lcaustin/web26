@@ -1,6 +1,6 @@
 # Weekly bulletin News sync (WSL)
 
-The public bulletin PDF is uploaded through Payload Admin. This job then downloads every bulletin that has no linked News records, OCRs its announcements column, and imports the announcements into News.
+The public bulletin PDF is uploaded through Payload Admin. This job then downloads every 2026-and-newer bulletin that has no linked News records, OCRs its announcements column, and imports the announcements into News.
 
 It is intentionally run outside Vercel: OCR requires local binaries.
 
