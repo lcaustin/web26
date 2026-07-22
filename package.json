@@ -12,6 +12,8 @@
     "generate-prs": "tsx scripts/generate-prs.ts",
     "sync:youtube": "tsx scripts/sync-youtube-channels.ts",
     "sync:bulletin-news": "tsx scripts/import-all-2026-bulletin-news.ts",
+    "backfill:news-categories": "tsx scripts/backfill-news-categories.ts",
+    "backfill:news-titles": "tsx scripts/backfill-news-bilingual-titles.ts",
     "backfill:youtube-air-dates": "tsx scripts/backfill-youtube-sermon-dates.ts",
     "sync:drive-photos": "tsx scripts/sync-drive-photos.ts",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",

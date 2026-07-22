@@ -17,6 +17,7 @@ type NewsDoc = {
   slug?: string | null
   title?: { ko?: string | null; en?: string | null } | null
   date: string
+  category?: string | null
   link?: string | null
 }
 

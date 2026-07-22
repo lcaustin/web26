@@ -20,5 +20,5 @@ export async function GET(request: NextRequest) {
   const where: Where | undefined = filters.length > 1 ? { and: filters } : filters[0]
   const payload = await getPayload({ config })
   const result = await payload.find({ collection: 'news', limit, page, sort: '-date', ...(where ? { where } : {}) })
-  return NextResponse.json({ docs: result.docs.map((item: any) => ({ id: item.id, slug: item.slug, title: item.title, date: item.date, link: item.link })), page: result.page, totalPages: result.totalPages, totalDocs: result.totalDocs })
+  return NextResponse.json({ docs: result.docs.map((item: any) => ({ id: item.id, slug: item.slug, title: item.title, date: item.date, category: item.category, link: item.link })), page: result.page, totalPages: result.totalPages, totalDocs: result.totalDocs })
 }

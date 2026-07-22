@@ -1,12 +1,14 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { newsCategoryLabel } from '@/lib/news-categories'
 
 export type NewsListItem = {
   id: string | number
   slug?: string | null
   title?: { ko?: string | null; en?: string | null } | null
   date: string
+  category?: string | null
   link?: string | null
 }
 
@@ -65,9 +67,10 @@ export default function NewsList({ initialNews, initialPage, totalPages, totalDo
       {news.map((item) => {
         const href = item.link ?? (item.slug ? `/news/${item.slug}` : `/news/${item.id}`)
         const isExternal = Boolean(item.link)
-        return <a key={item.id} href={href} {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})} className="news-item news-item--linked" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center', gap: 12 }}>
+        const categoryLabel = newsCategoryLabel(item.category)
+        return <a key={item.id} href={href} {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})} className={`news-item news-item--linked${categoryLabel ? ' news-item--has-category' : ''}`} style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center', gap: 12 }}>
           <div className="news-accent" />
-          <div className="news-info"><div className="news-title">{item.title?.ko}{item.title?.en && <><br /><span style={{ fontWeight: 400, color: 'var(--t2)', fontSize: 11 }}>{item.title.en}</span></>}</div><div className="news-date">{formatDate(item.date)}</div></div>
+          <div className="news-info"><div className="news-title">{item.title?.ko}{item.title?.en && <><br /><span style={{ fontWeight: 400, color: 'var(--t2)', fontSize: 11 }}>{item.title.en}</span></>}</div><div className="news-date">{categoryLabel && <span className="news-category-label">{categoryLabel}</span>}{formatDate(item.date)}</div></div>
           {isExternal && <i className="ti ti-external-link" style={{ color: 'var(--t3)', fontSize: 14, flexShrink: 0 }} aria-hidden="true" />}
         </a>
       })}

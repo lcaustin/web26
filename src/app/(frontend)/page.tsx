@@ -138,7 +138,7 @@ export default async function HomePage() {
               }
             : null
         }
-        news={news.map((item) => ({ id: item.id, slug: item.slug, link: item.link, title: item.title, date: item.date }))}
+        news={news.map((item) => ({ id: item.id, slug: item.slug, link: item.link, title: item.title, date: item.date, category: item.category }))}
       />
 
       <QuickLinks

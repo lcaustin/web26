@@ -3,7 +3,7 @@ type ExtractedAnnouncement = { title: string; titleEn: string; body: string }
 const normalize = (value: string) => value.replace(/\r/g, '').replace(/[ \t]+/g, ' ').trim()
 const omittedTitles = new Set(['교인동정', '환영', '감사'])
 const shouldImport = (title: string) => !omittedTitles.has(normalize(title).split('/')[0].trim())
-const splitBilingualTitle = (title: string) => {
+export const splitBilingualTitle = (title: string) => {
   const [koreanTitle, englishTitle] = title.split(/\s*\/\s*/, 2).map(normalize)
   return { title: koreanTitle, titleEn: englishTitle || '' }
 }

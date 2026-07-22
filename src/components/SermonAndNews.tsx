@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { newsCategoryLabel } from '@/lib/news-categories'
 
 // Featured sermon video shown on the landing page's sermon card.
 // Update this when a new sermon recording should be featured.
@@ -95,6 +96,7 @@ type NewsItem = {
   link?: string | null
   title: { ko: string; en: string }
   date: string
+  category?: string | null
 }
 
 type Props = {
@@ -202,8 +204,9 @@ export default function SermonAndNews({ sermon, news }: Props) {
                 {news.map((item) => {
                   const href = item.link || (item.slug ? `/news/${item.slug}` : `/news/${item.id}`)
                   const isExternal = Boolean(item.link)
+                  const categoryLabel = newsCategoryLabel(item.category)
                   return (
-                    <div className="news-item news-item--linked" key={item.id}>
+                    <div className={`news-item news-item--linked${categoryLabel ? ' news-item--has-category' : ''}`} key={item.id}>
                       <a className="news-item-link" href={href} {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
                         <div className="news-accent" />
                         <div className="news-info">
@@ -214,7 +217,7 @@ export default function SermonAndNews({ sermon, news }: Props) {
                               {item.title.en}
                             </span>
                           </div>
-                          <div className="news-date">{formatDate(item.date)}</div>
+                          <div className="news-date">{categoryLabel && <span className="news-category-label">{categoryLabel}</span>}{formatDate(item.date)}</div>
                         </div>
                         {isExternal && <i className="ti ti-external-link" style={{ color: 'var(--t3)', fontSize: 14, marginLeft: 'auto' }} aria-hidden="true" />}
                       </a>
