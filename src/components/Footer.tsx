@@ -11,7 +11,7 @@ const DEFAULTS = {
   nameEn: "Lord's Church of Austin",
   addressKo: '11900 Ranch Rd 620 N, Cedar Park, TX 78613',
   phone: '(512) 465-9191',
-  email: 'webmaster@lcaustin.org',
+  // email: 'webmaster@lcaustin.org',
 }
 
 export default function Footer({ nameKo, nameEn, addressKo, phone, email }: Props) {
@@ -38,12 +38,13 @@ export default function Footer({ nameKo, nameEn, addressKo, phone, email }: Prop
               </a>
             </div>
             <div>
-              ✉ {email || DEFAULTS.email} · 📞 {phone || DEFAULTS.phone}
+              {/* ✉ {email || DEFAULTS.email} ·  */}
+              📞 {phone || DEFAULTS.phone}
             </div>
           </div>
         </div>
         <div className="footer-copy">
-          © {new Date().getFullYear()} Lord&apos;s Church of Austin · 어스틴 주님의교회. All rights
+          © {new Date().getFullYear()} &nbsp; Lord&apos;s Church of Austin · 어스틴 주님의교회. All rights
           reserved.
         </div>
       </div>
