@@ -29,13 +29,22 @@ function isChurchWeekday(now: Date) {
   return ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'].includes(weekday)
 }
 
+function isDailyDevotionWindow(now: Date) {
+  const hour = Number(new Intl.DateTimeFormat('en-US', {
+    timeZone: CHURCH_TIME_ZONE,
+    hour: '2-digit',
+    hourCycle: 'h23',
+  }).format(now))
+  return isChurchWeekday(now) && hour >= 5 && hour < 14
+}
+
 export default async function HomePage() {
   const payload = await getPayload({ config })
 
   const now = new Date()
   const today = now.toISOString()
   const todayInChurchTime = churchDate(now)
-  const weekdayInChurchTime = isChurchWeekday(now)
+  const dailyDevotionWindow = isDailyDevotionWindow(now)
 
   const [siteSettings, sermons, dailyDevotions, news, events, quickLinks, departments] = await Promise.all([
     payload.findGlobal({ slug: 'site-settings' }).catch(() => null),
@@ -43,7 +52,7 @@ export default async function HomePage() {
       .find({ collection: 'videos', limit: 1, sort: '-publishedAt', where: { category: { equals: 'sermon' } } })
       .then((r) => r.docs)
       .catch(() => []),
-    weekdayInChurchTime
+    dailyDevotionWindow
       ? payload
         .find({ collection: 'videos', limit: 15, sort: '-publishedAt', where: { category: { equals: 'daily-devotion' } } })
         .then((r) => r.docs)
@@ -84,9 +93,10 @@ export default async function HomePage() {
   const church = siteSettings?.church
   const todayDailyDevotion = dailyDevotions.find((video: any) => video.publishedAt && churchDate(video.publishedAt) === todayInChurchTime)
   const hasTodayDailyDevotion = Boolean(todayDailyDevotion)
-  const automaticSermonButtonHref = todayDailyDevotion ? `/videos/daily-devotion?play=${encodeURIComponent(String(todayDailyDevotion.id))}` : '/sermons'
-  const automaticSermonButtonKo = hasTodayDailyDevotion ? '오늘의 매일말씀묵상' : '지난 주일설교'
-  const automaticSermonButtonEn = hasTodayDailyDevotion ? "Today's daily devotion" : 'Sunday sermon'
+  const useTodayDailyDevotion = dailyDevotionWindow && hasTodayDailyDevotion
+  const automaticSermonButtonHref = useTodayDailyDevotion ? `/videos/daily-devotion?play=${encodeURIComponent(String(todayDailyDevotion?.id))}` : '/sermons'
+  const automaticSermonButtonKo = useTodayDailyDevotion ? '오늘의 매일말씀묵상' : '지난주 주일설교'
+  const automaticSermonButtonEn = useTodayDailyDevotion ? "Today's daily devotion" : 'Last Sunday sermon'
   const sermonButtonHref = hero?.sermonButtonHref?.trim() || automaticSermonButtonHref
   const sermonButtonKo = hero?.sermonButtonLabel?.ko?.trim() || automaticSermonButtonKo
   const sermonButtonEn = hero?.sermonButtonLabel?.en?.trim() || automaticSermonButtonEn
