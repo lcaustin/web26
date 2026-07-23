@@ -41,8 +41,8 @@
 - [ ] App publish - Android
 
 ## SEO
-- [ ] SEO friendly
-- [ ] Check server side rendering
+- [X] SEO friendly
+- [X] Check server side rendering
 
 ## Batch
 
