@@ -58,12 +58,16 @@ function parseSearchResults(data: YouTubeSearchResponse, channel: Channel): YouT
 }
 
 function category(video: YouTubeVideo) {
-  const text = `${video.tags} ${video.title} ${video.description}`
-  if (video.title.includes('매일말씀묵상') || /^daily\s*$/i.test(video.description.trim())) return 'daily-devotion'
-  if (video.title.includes('임마누엘찬양대') || text.includes('찬양대')) return 'choir'
-  if (video.title.includes('특송') || video.title.includes('헌금송')) return 'offering-song'
-  if (video.title.includes('예배실황') || video.title.includes('금요예배') || text.includes('경배와찬양')) return 'worship'
-  if (video.title.includes('설교')) return 'sermon'
+  // Some YouTube titles use decomposed Hangul (NFD), which does not match
+  // ordinary Korean search strings until it is converted to NFC.
+  const title = video.title.normalize('NFC')
+  const description = video.description.normalize('NFC')
+  const text = `${video.tags} ${title} ${description}`.normalize('NFC')
+  if (title.includes('매일말씀묵상') || /^daily\s*$/i.test(description.trim())) return 'daily-devotion'
+  if (title.includes('임마누엘찬양대') || text.includes('찬양대')) return 'choir'
+  if (title.includes('특송') || title.includes('헌금송')) return 'offering-song'
+  if (title.includes('예배실황') || title.includes('금요예배') || text.includes('경배와찬양')) return 'worship'
+  if (title.includes('설교')) return 'sermon'
   if (text.includes('교육부') || text.includes('영아부') || text.includes('유아부') || text.includes('초등부') || text.includes('중고등부') || text.includes('대학부') || text.includes('청년부')) return 'ministry'
   return 'other'
 }
