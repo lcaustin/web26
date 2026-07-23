@@ -85,8 +85,8 @@ export default async function HomePage() {
   const todayDailyDevotion = dailyDevotions.find((video: any) => video.publishedAt && churchDate(video.publishedAt) === todayInChurchTime)
   const hasTodayDailyDevotion = Boolean(todayDailyDevotion)
   const automaticSermonButtonHref = todayDailyDevotion ? `/videos/daily-devotion?play=${encodeURIComponent(String(todayDailyDevotion.id))}` : '/sermons'
-  const automaticSermonButtonKo = weekdayInChurchTime ? '오늘의 매일말씀묵상' : '지난 주일설교'
-  const automaticSermonButtonEn = weekdayInChurchTime ? "Today's daily devotion" : 'Sunday sermon'
+  const automaticSermonButtonKo = hasTodayDailyDevotion ? '오늘의 매일말씀묵상' : '지난 주일설교'
+  const automaticSermonButtonEn = hasTodayDailyDevotion ? "Today's daily devotion" : 'Sunday sermon'
   const sermonButtonHref = hero?.sermonButtonHref?.trim() || automaticSermonButtonHref
   const sermonButtonKo = hero?.sermonButtonLabel?.ko?.trim() || automaticSermonButtonKo
   const sermonButtonEn = hero?.sermonButtonLabel?.en?.trim() || automaticSermonButtonEn

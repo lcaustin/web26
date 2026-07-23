@@ -112,31 +112,39 @@ export async function syncYouTubeChannels() {
   try {
     for (const video of uniqueVideos) {
       const videoCategory = category(video)
-      await client.query(
-        `INSERT INTO videos (admin_title, title_en, category, source, video_id, video_url, thumbnail_url, description, tags, published_at, created_at, updated_at)
-         VALUES ($1, $2, $3, 'youtube', $4, $5, $6, $7, $8, $9::timestamptz, now(), now())
-         ON CONFLICT (source, video_id) DO UPDATE SET
-           admin_title = EXCLUDED.admin_title,
-           title_en = COALESCE(EXCLUDED.title_en, videos.title_en),
-           category = EXCLUDED.category,
-           video_url = EXCLUDED.video_url,
-           thumbnail_url = EXCLUDED.thumbnail_url,
-           description = EXCLUDED.description,
-           tags = EXCLUDED.tags,
-           published_at = EXCLUDED.published_at,
-           updated_at = now()`,
-        [
-          video.title,
-          englishTitle(video),
-          videoCategory,
-          video.videoId,
-          `https://www.youtube.com/watch?v=${video.videoId}`,
-          `https://i.ytimg.com/vi/${video.videoId}/hqdefault.jpg`,
-          video.description || null,
-          video.tags || null,
-          publishedAt(video),
-        ],
-      )
+      const values = [
+        video.title,
+        englishTitle(video),
+        videoCategory,
+        video.videoId,
+        `https://www.youtube.com/watch?v=${video.videoId}`,
+        `https://i.ytimg.com/vi/${video.videoId}/hqdefault.jpg`,
+        video.description || null,
+        video.tags || null,
+        publishedAt(video),
+      ]
+      const updated = await client.query(
+        `UPDATE videos SET
+           admin_title = $1,
+           title_en = COALESCE($2, title_en),
+           category = $3,
+           video_url = $5,
+           thumbnail_url = $6,
+           description = $7,
+           tags = $8,
+           published_at = $9::timestamptz,
+           updated_at = now()
+         WHERE source = 'youtube' AND video_id = $4`,
+        values,
+      ) as { rowCount: number | null }
+
+      if (updated.rowCount === 0) {
+        await client.query(
+          `INSERT INTO videos (admin_title, title_en, category, source, video_id, video_url, thumbnail_url, description, tags, published_at, created_at, updated_at)
+           VALUES ($1, $2, $3, 'youtube', $4, $5, $6, $7, $8, $9::timestamptz, now(), now())`,
+          values,
+        )
+      }
     }
   } finally {
     await client.end()
