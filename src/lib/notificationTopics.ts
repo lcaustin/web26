@@ -1,5 +1,5 @@
 // The 7 ministry notification topic keys. Must stay in sync with:
-// - the `notificationPreferences` group fields on src/collections/Users.ts
+// - the `notificationPreferences` array on src/collections/Users.ts
 // - mobile/src/config.ts NOTIFICATION_CATEGORIES
 export const NOTIFICATION_TOPICS = [
   'adult',

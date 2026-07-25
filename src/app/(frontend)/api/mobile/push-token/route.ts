@@ -5,15 +5,15 @@ import config from '@/payload.config'
 import { getMobileUser } from '@/lib/mobileAuth'
 import { subscribeToTopic, unsubscribeFromTopic } from '@/lib/firebaseAdmin'
 import { handleOptions, withCors } from '@/lib/cors'
+import { NOTIFICATION_TOPICS, type NotificationTopic } from '@/lib/notificationTopics'
 
 export function OPTIONS(request: Request) {
   return handleOptions(request)
 }
 
-// Called by the mobile app right after push permission is granted (sign-in,
-// sign-up, or any time notification preferences change). Upserts a
-// device-tokens doc for this token and reconciles FCM topic subscriptions to
-// match the `topics` list the app sent.
+// Called after native push permission is granted and whenever a user changes
+// notification preferences. Device records hold only delivery tokens; all
+// tokens for a user follow the user's single notification-preferences array.
 export async function POST(request: Request) {
   try {
     const payload = await getPayload({ config })
@@ -23,15 +23,12 @@ export async function POST(request: Request) {
       return withCors(request, NextResponse.json({ message: 'Unauthorized' }, { status: 401 }))
     }
 
-    const { token, platform, topics } = await request.json().catch(() => ({}))
+    const { token, platform } = await request.json().catch(() => ({}))
 
-    if (!token || !platform || !Array.isArray(topics)) {
+    if (!token || !platform) {
       return withCors(
         request,
-        NextResponse.json(
-          { message: 'token, platform, and topics[] are required' },
-          { status: 400 },
-        ),
+        NextResponse.json({ message: 'token and platform are required' }, { status: 400 }),
       )
     }
 
@@ -41,34 +38,35 @@ export async function POST(request: Request) {
       limit: 1,
     })
 
-    const previousTopics: string[] = existing.docs[0]?.topics ?? []
-
-    const toSubscribe = topics.filter((t: string) => !previousTopics.includes(t))
-    const toUnsubscribe = previousTopics.filter((t) => !topics.includes(t))
-
-    await Promise.all([
-      ...toSubscribe.map((t: string) => subscribeToTopic(token, t)),
-      ...toUnsubscribe.map((t: string) => unsubscribeFromTopic(token, t)),
-    ])
-
     if (existing.docs[0]) {
       await payload.update({
         collection: 'device-tokens',
         id: existing.docs[0].id,
-        data: { user: user.id, platform, topics },
+        data: { user: user.id, platform },
       })
     } else {
       await payload.create({
         collection: 'device-tokens',
-        data: { user: user.id, token, platform, topics },
+        data: { user: user.id, token, platform },
       })
     }
 
+    const preferences = Array.isArray(user.notificationPreferences)
+      ? user.notificationPreferences.filter((topic): topic is NotificationTopic => NOTIFICATION_TOPICS.includes(topic as NotificationTopic))
+      : []
+    const userDevices = await payload.find({
+      collection: 'device-tokens',
+      where: { user: { equals: user.id } },
+      limit: 100,
+    })
+
+    await Promise.all(userDevices.docs.flatMap((device) => [
+      ...NOTIFICATION_TOPICS.filter((topic) => !preferences.includes(topic)).map((topic) => unsubscribeFromTopic(device.token, topic)),
+      ...preferences.map((topic) => subscribeToTopic(device.token, topic)),
+    ]))
+
     return withCors(request, NextResponse.json({ ok: true }))
   } catch (err: any) {
-    // See google-auth/route.ts for why this catch matters: an uncaught
-    // error here would skip every withCors(...) response and surface to the
-    // app as a misleading CORS failure instead of the real 500.
     console.error('push-token error:', err)
     return withCors(
       request,

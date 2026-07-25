@@ -95,16 +95,28 @@ async function main() {
     const newsDate = bulletinNewsDate(bulletin.admin_title, bulletin.issue_date)
 
     await client.query('BEGIN')
-    await client.query('DELETE FROM news WHERE source_bulletin_id = $1', [bulletin.id])
+    const currentBulletinRows = await client.query('DELETE FROM news WHERE source_bulletin_id = $1', [bulletin.id]) as { rowCount: number | null }
+    let replacedDuplicateRows = currentBulletinRows.rowCount ?? 0
     for (const [index, article] of articles.entries()) {
+      // Keep an announcement fresh when it is repeated in a recent bulletin.
+      // Only automatically imported bulletin news is replaced; manually created
+      // News entries and matching announcements older than four weeks remain.
+      const priorDuplicates = await client.query(
+        `DELETE FROM news
+         WHERE title_ko = $1
+           AND source_bulletin_id IS NOT NULL
+           AND date >= ($2::date - INTERVAL '28 days')
+           AND date < $2::date`,
+        [article.title, newsDate],
+      ) as { rowCount: number | null }
+      replacedDuplicateRows += priorDuplicates.rowCount ?? 0
       await client.query(`
         INSERT INTO news (admin_title, title_ko, title_en, content_ko, content_en, category, date, source_bulletin_id, extraction_key, slug, created_at, updated_at)
-        SELECT $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, now(), now()
-        WHERE NOT EXISTS (SELECT 1 FROM news WHERE title_ko = $11)
-      `, [article.title, article.title, article.titleEn, lexical(article.body), lexical(''), categoryForNewsText(`${article.title}\n${article.titleEn}\n${article.body}`) ?? null, newsDate, bulletin.id, `${bulletin.id}:${index + 1}`, `bulletin-${date}-${index + 1}`, article.title])
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, now(), now())
+      `, [article.title, article.title, article.titleEn, lexical(article.body), lexical(''), categoryForNewsText(`${article.title}\n${article.titleEn}\n${article.body}`) ?? null, newsDate, bulletin.id, `${bulletin.id}:${index + 1}`, `bulletin-${date}-${index + 1}`])
     }
     await client.query('COMMIT')
-    console.log(`Imported ${articles.length} announcements from ${date}.`)
+    console.log(`Imported ${articles.length} announcements from ${date}; replaced ${replacedDuplicateRows} recent bulletin record(s).`)
   } catch (error) {
     await client.query('ROLLBACK').catch(() => undefined)
     throw error

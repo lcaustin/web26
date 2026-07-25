@@ -29,6 +29,7 @@ const NAV_LINKS: NavLink[] = [
   {
     ko: '훈련&사역', en: 'Training & Ministry', href: '#',
     children: [
+      { ko: '성경공부 신청', en: 'Bible Study Signup', href: '/bible-studies' },
       { ko: '커피브레이크', en: 'Coffee Break', href: '/coffeebreak' },
       { ko: '신구약 맥잡기', en: 'Bible Panorama', href: '/biblepanorama' },
       { ko: '크라운 재정교실', en: 'Crown Finance', href: '/crown-finance' },

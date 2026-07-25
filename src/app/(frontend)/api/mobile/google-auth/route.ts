@@ -90,6 +90,7 @@ export async function POST(request: Request) {
             email,
             name: ticket?.name || '',
             googleId,
+            isAdmin: false,
             // Random password: this account only ever authenticates via Google,
             // but Payload's `auth: true` collections require a password field.
             password: crypto.randomUUID() + crypto.randomUUID(),

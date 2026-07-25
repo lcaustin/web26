@@ -1,23 +1,40 @@
 import type { CollectionConfig } from 'payload'
+import { NOTIFICATION_TOPICS } from '../lib/notificationTopics.ts'
 
-// The 7 ministry notification categories surfaced in the mobile app's settings
-// menu. `name` here must match `NOTIFICATION_CATEGORIES[].key` in
-// mobile/src/config.ts and the FCM topic name used in
-// src/app/(frontend)/api/mobile/send-notification/route.ts.
-const notificationCategoryFields = [
-  { name: 'adult', label: '장년부 / Adult' },
-  { name: 'youth', label: '중고등부 / Youth' },
-  { name: 'elementary', label: '초등부 / Elementary' },
-  { name: 'collegeYoungAdult', label: '대학청년부 / College-Young Adult' },
-  { name: 'preschool', label: '유아부 / Preschool' },
-  { name: 'nursery', label: '영아부 / Nursery' },
-  { name: 'englishMinistry', label: 'English Ministry' },
-] as const
+type UserWithAdminFlag = { isAdmin?: boolean } | null | undefined
+
+const isAdmin = (user: UserWithAdminFlag) => user?.isAdmin === true
+
+function normalizeNotificationPreferences(value: unknown) {
+  if (Array.isArray(value)) return value.filter((topic): topic is string => typeof topic === 'string' && NOTIFICATION_TOPICS.includes(topic as typeof NOTIFICATION_TOPICS[number]))
+  if (value && typeof value === 'object') {
+    return Object.entries(value).flatMap(([topic, enabled]) => enabled && NOTIFICATION_TOPICS.includes(topic as typeof NOTIFICATION_TOPICS[number]) ? [topic] : [])
+  }
+  return []
+}
 
 export const Users: CollectionConfig = {
   slug: 'users',
   admin: {
     useAsTitle: 'email',
+  },
+  access: {
+    // Only designated staff accounts may enter Payload Admin. Google/mobile
+    // members remain authenticated users, but cannot manage CMS content.
+    admin: ({ req }) => isAdmin(req.user as UserWithAdminFlag),
+    // Members can register through the mobile app's public email/password
+    // endpoint. The beforeChange hook below prevents such accounts from ever
+    // choosing their own admin flag.
+    create: () => true,
+    read: ({ req }) => {
+      if (isAdmin(req.user as UserWithAdminFlag)) return true
+      return req.user ? { id: { equals: req.user.id } } : false
+    },
+    update: ({ req }) => {
+      if (isAdmin(req.user as UserWithAdminFlag)) return true
+      return req.user ? { id: { equals: req.user.id } } : false
+    },
+    delete: ({ req }) => isAdmin(req.user as UserWithAdminFlag),
   },
   // Default tokenExpiration is 2 hours, which logged mobile users out on
   // every app restart even though the JWT itself is persisted to disk
@@ -57,7 +74,28 @@ export const Users: CollectionConfig = {
       generateEmailSubject: () => Promise.resolve('Reset your LC Austin password'),
     },
   },
+  hooks: {
+    beforeChange: [({ data, operation, req }) => {
+      // A user created through the authenticated Payload Admin is an admin.
+      // Mobile Google sign-up has no authenticated Payload admin request, so
+      // it is always created as a regular member.
+      if (operation === 'create') data.isAdmin = isAdmin(req.user as UserWithAdminFlag)
+      if (operation === 'update' && !isAdmin(req.user as UserWithAdminFlag)) delete data.isAdmin
+      if ('notificationPreferences' in data) data.notificationPreferences = normalizeNotificationPreferences(data.notificationPreferences)
+      return data
+    }],
+  },
   fields: [
+    {
+      name: 'isAdmin',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+        description: 'Granted automatically to users created from Payload Admin.',
+      },
+    },
     {
       name: 'name',
       type: 'text',
@@ -77,16 +115,11 @@ export const Users: CollectionConfig = {
     },
     {
       name: 'notificationPreferences',
-      type: 'group',
+      type: 'json',
       admin: {
-        description: 'Which ministry announcements this user wants push notifications for.',
+        description: 'Notification topic keys for this user, for example ["adult", "youth"]. All of the user’s devices follow this one list.',
       },
-      fields: notificationCategoryFields.map((cat) => ({
-        name: cat.name,
-        type: 'checkbox' as const,
-        defaultValue: false,
-        label: cat.label,
-      })),
+      defaultValue: [],
     },
   ],
 }

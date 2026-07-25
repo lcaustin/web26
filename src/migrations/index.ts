@@ -26,6 +26,8 @@ import * as migration_20260719_071000_refine_registration_page from './20260719_
 import * as migration_20260719_072000_use_r2_registration_images from './20260719_072000_use_r2_registration_images';
 import * as migration_20260720_000000_add_news_categories from './20260720_000000_add_news_categories';
 import * as migration_20260720_001000_restore_video_sync_unique_index from './20260720_001000_restore_video_sync_unique_index';
+import * as migration_20260723_000000_add_user_admin_flag from './20260723_000000_add_user_admin_flag';
+import * as migration_20260723_001000_consolidate_notification_preferences from './20260723_001000_consolidate_notification_preferences';
 
 export const migrations = [
   {
@@ -167,5 +169,15 @@ export const migrations = [
     up: migration_20260720_001000_restore_video_sync_unique_index.up,
     down: migration_20260720_001000_restore_video_sync_unique_index.down,
     name: '20260720_001000_restore_video_sync_unique_index',
+  },
+  {
+    up: migration_20260723_000000_add_user_admin_flag.up,
+    down: migration_20260723_000000_add_user_admin_flag.down,
+    name: '20260723_000000_add_user_admin_flag',
+  },
+  {
+    up: migration_20260723_001000_consolidate_notification_preferences.up,
+    down: migration_20260723_001000_consolidate_notification_preferences.down,
+    name: '20260723_001000_consolidate_notification_preferences',
   },
 ];

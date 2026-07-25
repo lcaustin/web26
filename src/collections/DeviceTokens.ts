@@ -2,18 +2,15 @@ import type { CollectionConfig } from 'payload'
 
 /**
  * One document per mobile device registration. A user can have multiple
- * devices (phone + tablet); each gets its own FCM/APNs token and topic list.
- * Written by the mobile app via POST /api/mobile/push-token (see
- * src/app/(frontend)/api/mobile/push-token/route.ts), read by the push-send
- * job to know which topics exist for a given user. Topics themselves are
- * managed via FCM topic subscriptions, but we mirror them here so the admin
- * can see who's subscribed to what without calling out to Firebase.
+ * devices (phone + tablet); each gets its own FCM/APNs token. Notification
+ * preferences live on the user record, so every device follows the same topic
+ * list when the mobile API reconciles its FCM subscriptions.
  */
 export const DeviceTokens: CollectionConfig = {
   slug: 'device-tokens',
   admin: {
     useAsTitle: 'token',
-    defaultColumns: ['user', 'platform', 'topics', 'updatedAt'],
+    defaultColumns: ['user', 'platform', 'updatedAt'],
   },
   access: {
     // Only readable/writable through the authenticated mobile API routes
@@ -43,15 +40,6 @@ export const DeviceTokens: CollectionConfig = {
       type: 'select',
       options: ['ios', 'android'],
       required: true,
-    },
-    {
-      name: 'topics',
-      type: 'text',
-      hasMany: true,
-      defaultValue: [],
-      admin: {
-        description: 'Ministry notification topic keys this device is subscribed to.',
-      },
     },
   ],
 }
