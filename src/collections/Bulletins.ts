@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import path from 'path'
 
 /**
  * Weekly church bulletins. Each document is the uploaded PDF itself, with an
@@ -58,7 +59,7 @@ export const Bulletins: CollectionConfig = {
   upload: {
     // Disabled automatically by the S3 adapter when the R2 environment
     // variables are set; retained for local development without R2 access.
-    staticDir: '../media/bulletins',
+    staticDir: path.resolve(process.cwd(), 'media', 'bulletins'),
     mimeTypes: ['application/pdf'],
   },
 }

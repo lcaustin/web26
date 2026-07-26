@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!study) return { title: '성경공부 신청 · Bible Study Signup' }
   return {
-    title: `${study.title.ko} 신청 · Bible Study Signup`,
+    title: `${study.title.ko}${study.subject ? ` · ${study.subject}` : ''} 신청 · Bible Study Signup`,
     description: `${study.title.ko} 온라인 신청 페이지입니다.`,
   }
 }
@@ -39,7 +39,7 @@ export default async function BibleStudySignupPage({ params }: Props) {
     id,
   }).catch(() => null)
 
-  if (!study || study.status !== 'active') {
+  if (!study || study.status !== 'open') {
     notFound()
   }
 
@@ -49,12 +49,12 @@ export default async function BibleStudySignupPage({ params }: Props) {
     where: {
       and: [
         { bibleStudy: { equals: id } },
-        { status: { not_in: ['cancelled'] } },
       ],
     },
   }).catch(() => ({ totalDocs: 0 }))
 
   const isFull = study.limit && countResult.totalDocs >= study.limit
+  const canSignUp = study.status === 'open' && !isFull
   const startDateStr = study.startDate ? new Date(study.startDate).toLocaleDateString('ko-KR', {
     year: 'numeric',
     month: 'long',
@@ -79,7 +79,7 @@ export default async function BibleStudySignupPage({ params }: Props) {
             <div className="news-page-title">
               <div className="dept-detail-icon"><i className="ti ti-edit" aria-hidden="true" /></div>
               <div>
-                <h1 className="dept-detail-ko">{study.title.ko}</h1>
+                <h1 className="dept-detail-ko">{study.title.ko}{study.subject ? ` · ${study.subject}` : ''}</h1>
                 {study.title.en && study.title.en !== study.title.ko && (
                   <div className="dept-detail-en">{study.title.en}</div>
                 )}
@@ -109,23 +109,25 @@ export default async function BibleStudySignupPage({ params }: Props) {
                   <strong>강사 · Instructor:</strong> {study.instructor.ko} {study.instructor.en && `(${study.instructor.en})`}
                 </div>
               )}
-              {study.limit && (
+              {/* {study.limit && (
                 <div>
                   <strong>정원 · Capacity:</strong> {countResult.totalDocs} / {study.limit}
                 </div>
-              )}
+              )} */}
             </div>
           </div>
 
-          {isFull ? (
+          {!canSignUp ? (
             <div className="p-8 rounded-2xl border text-center bg-red-500/10 border-red-500/20 text-red-500 font-bold my-8">
-              이 과정은 정원이 가득 차서 신청할 수 없습니다. · This course is fully booked.
+              {isFull
+                ? '이 과정은 정원이 가득 차서 신청할 수 없습니다. · This course is fully booked.'
+                : '아직 신청이 열리지 않았습니다. · Signup is not open yet.'}
             </div>
           ) : (
-            <SignupForm 
-              studyId={study.id} 
-              studyTitleKo={study.title.ko} 
-              studyTitleEn={study.title.en} 
+            <SignupForm
+              studyId={study.id}
+              studyTitleKo={study.title.ko}
+              studyTitleEn={study.title.en}
             />
           )}
         </div>

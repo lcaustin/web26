@@ -28,6 +28,12 @@ import * as migration_20260720_000000_add_news_categories from './20260720_00000
 import * as migration_20260720_001000_restore_video_sync_unique_index from './20260720_001000_restore_video_sync_unique_index';
 import * as migration_20260723_000000_add_user_admin_flag from './20260723_000000_add_user_admin_flag';
 import * as migration_20260723_001000_consolidate_notification_preferences from './20260723_001000_consolidate_notification_preferences';
+import * as migration_20260725_000000_add_bible_study_signup_enabled from './20260725_000000_add_bible_study_signup_enabled';
+import * as migration_20260725_010000_use_bible_study_statuses from './20260725_010000_use_bible_study_statuses';
+import * as migration_20260725_220000_add_bible_study_semesters_safe from './20260725_220000_add_bible_study_semesters_safe';
+import * as migration_20260725_230000_remove_legacy_bible_study_semesters from './20260725_230000_remove_legacy_bible_study_semesters';
+import * as migration_20260725_231000_remove_bible_study_signup_status from './20260725_231000_remove_bible_study_signup_status';
+import * as migration_20260725_232000_add_bible_study_subject from './20260725_232000_add_bible_study_subject';
 
 export const migrations = [
   {
@@ -128,7 +134,7 @@ export const migrations = [
   {
     up: migration_20260719_043825_add_hero_background_videos.up,
     down: migration_20260719_043825_add_hero_background_videos.down,
-    name: '20260719_043825_add_hero_background_videos'
+    name: '20260719_043825_add_hero_background_videos',
   },
   {
     up: migration_20260719_060000_add_video_english_title.up,
@@ -179,5 +185,35 @@ export const migrations = [
     up: migration_20260723_001000_consolidate_notification_preferences.up,
     down: migration_20260723_001000_consolidate_notification_preferences.down,
     name: '20260723_001000_consolidate_notification_preferences',
+  },
+  {
+    up: migration_20260725_000000_add_bible_study_signup_enabled.up,
+    down: migration_20260725_000000_add_bible_study_signup_enabled.down,
+    name: '20260725_000000_add_bible_study_signup_enabled',
+  },
+  {
+    up: migration_20260725_010000_use_bible_study_statuses.up,
+    down: migration_20260725_010000_use_bible_study_statuses.down,
+    name: '20260725_010000_use_bible_study_statuses',
+  },
+  {
+    up: migration_20260725_220000_add_bible_study_semesters_safe.up,
+    down: migration_20260725_220000_add_bible_study_semesters_safe.down,
+    name: '20260725_220000_add_bible_study_semesters_safe',
+  },
+  {
+    up: migration_20260725_230000_remove_legacy_bible_study_semesters.up,
+    down: migration_20260725_230000_remove_legacy_bible_study_semesters.down,
+    name: '20260725_230000_remove_legacy_bible_study_semesters',
+  },
+  {
+    up: migration_20260725_231000_remove_bible_study_signup_status.up,
+    down: migration_20260725_231000_remove_bible_study_signup_status.down,
+    name: '20260725_231000_remove_bible_study_signup_status',
+  },
+  {
+    up: migration_20260725_232000_add_bible_study_subject.up,
+    down: migration_20260725_232000_add_bible_study_subject.down,
+    name: '20260725_232000_add_bible_study_subject',
   },
 ];

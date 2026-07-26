@@ -136,7 +136,6 @@ export async function GET() {
 
     const data = {
       courseType: 'coffee-break',
-      semester: { ko: semesterKo, en: semesterEn },
       title: { ko: titleKo, en: titleEn },
       targetGroup: group.targetGroup,
       startDate: new Date('2026-09-07').toISOString(),
@@ -144,7 +143,7 @@ export async function GET() {
       location: group.location,
       instructor: group.instructor,
       limit: group.limit,
-      status: 'active',
+      status: 'open',
     }
 
     await payload.create({
@@ -188,7 +187,6 @@ export async function GET() {
         collection: 'bible-studies',
         data: {
           courseType: 'panorama',
-          semester: { ko: '2026 상반기', en: '2026 Spring' },
           title: { ko: '신구약 맥잡기', en: 'Bible Panorama' },
           targetGroup: group.targetGroup,
           startDate: new Date('2026-09-05').toISOString(),
@@ -196,7 +194,7 @@ export async function GET() {
           location: group.location,
           instructor: group.instructor,
           limit: 30,
-          status: 'active',
+          status: 'open',
         } as any,
       })
       created += 1
@@ -217,7 +215,6 @@ export async function GET() {
       collection: 'bible-studies',
       data: {
         courseType: 'crown',
-        semester: { ko: '2026 상반기', en: '2026 Spring' },
         title: { ko: '크라운 재정교실', en: 'Crown Financial Class' },
         targetGroup: { ko: '일반반', en: 'General Class' },
         startDate: new Date('2026-10-04').toISOString(),
@@ -225,7 +222,7 @@ export async function GET() {
         location: { ko: '302호 세미나실', en: 'Room 302 Seminar Room' },
         instructor: { ko: '박재민 집사', en: 'Deacon Jaemin Park' },
         limit: 15,
-        status: 'active',
+        status: 'open',
       } as any,
     })
     created += 1

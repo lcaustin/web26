@@ -7,12 +7,12 @@ import type { Field } from 'payload'
  */
 export const bilingualText = (
   name: string,
-  opts?: { label?: string; required?: boolean; koLabel?: string; enLabel?: string; multiline?: boolean },
+  opts?: { label?: string; required?: boolean; koRequired?: boolean; enRequired?: boolean; koLabel?: string; enLabel?: string; multiline?: boolean },
 ): Field => {
   const input = (fieldName: 'ko' | 'en', label: string): Field => (
     opts?.multiline
-      ? { name: fieldName, type: 'textarea', label, required: opts?.required ?? true }
-      : { name: fieldName, type: 'text', label, required: opts?.required ?? true }
+      ? { name: fieldName, type: 'textarea', label, required: fieldName === 'ko' ? (opts?.koRequired ?? opts?.required ?? true) : (opts?.enRequired ?? opts?.required ?? true) }
+      : { name: fieldName, type: 'text', label, required: fieldName === 'ko' ? (opts?.koRequired ?? opts?.required ?? true) : (opts?.enRequired ?? opts?.required ?? true) }
   )
 
   return {

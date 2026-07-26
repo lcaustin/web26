@@ -27,6 +27,7 @@ import { PhotoAlbums } from './collections/PhotoAlbums.ts'
 import { PhotoItems } from './collections/PhotoItems.ts'
 import { BibleStudies } from './collections/BibleStudies.ts'
 import { BibleStudySignups } from './collections/BibleStudySignups.ts'
+import { BibleStudySemesters } from './collections/BibleStudySemesters.ts'
 import { SiteSettings } from './globals/SiteSettings.ts'
 
 const filename = fileURLToPath(import.meta.url)
@@ -107,6 +108,7 @@ export default buildConfig({
     DeviceTokens,
     BibleStudies,
     BibleStudySignups,
+    BibleStudySemesters,
   ],
   globals: [SiteSettings],
   // Cloudflare R2 is S3-compatible. Keep this conditional so local development
@@ -115,6 +117,14 @@ export default buildConfig({
     s3Storage({
       enabled: hasR2Storage,
       collections: {
+        media: {
+          prefix: 'uploads/image',
+          disablePayloadAccessControl: true,
+          generateFileURL: ({ filename, prefix }) => {
+            const key = prefix ? `${prefix}/${filename}` : filename
+            return `${R2_PUBLIC_URL}/${key}`
+          },
+        },
         bulletins: {
           prefix: 'bulletins',
           disablePayloadAccessControl: true,

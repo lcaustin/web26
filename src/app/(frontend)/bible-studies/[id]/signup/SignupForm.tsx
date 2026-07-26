@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import Script from 'next/script'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 
 type SignupFormProps = {
@@ -9,18 +10,78 @@ type SignupFormProps = {
   studyTitleEn?: string
 }
 
+declare global {
+  interface Window {
+    turnstile?: {
+      render: (
+        container: HTMLElement,
+        options: {
+          sitekey: string
+          action: string
+          callback: (token: string) => void
+          'expired-callback': () => void
+          'error-callback': () => void
+        },
+      ) => string
+      reset: (widgetId: string) => void
+    }
+  }
+}
+
 export default function SignupForm({ studyId, studyTitleKo, studyTitleEn }: SignupFormProps) {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
   const [notes, setNotes] = useState('')
-  
+  const [turnstileToken, setTurnstileToken] = useState('')
+  const turnstileRef = useRef<HTMLDivElement | null>(null)
+  const turnstileWidgetId = useRef<string | null>(null)
+
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
+
+  const formatPhone = (value: string) => {
+    const digits = value.replace(/\D/g, '').slice(0, 10)
+    if (digits.length <= 3) return digits
+    if (digits.length <= 6) return `${digits.slice(0, 3)}-${digits.slice(3)}`
+    return `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6)}`
+  }
+
+  const renderTurnstile = () => {
+    if (!siteKey || !turnstileRef.current || turnstileWidgetId.current || !window.turnstile) {
+      return
+    }
+
+    turnstileWidgetId.current = window.turnstile.render(turnstileRef.current, {
+      sitekey: siteKey,
+      action: 'bible-study-signup',
+      callback: (token: string) => setTurnstileToken(token),
+      'expired-callback': () => setTurnstileToken(''),
+      'error-callback': () => setTurnstileToken(''),
+    })
+  }
+
+  const resetTurnstile = () => {
+    setTurnstileToken('')
+    if (turnstileWidgetId.current && window.turnstile) {
+      window.turnstile.reset(turnstileWidgetId.current)
+    }
+  }
+
+  useEffect(() => {
+    renderTurnstile()
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    if (!turnstileToken) {
+      setErrorMessage('스팸 방지 확인을 완료해 주세요. · Please complete the spam protection check.')
+      return
+    }
+
     setIsSubmitting(true)
     setErrorMessage(null)
     setSuccessMessage(null)
@@ -37,6 +98,7 @@ export default function SignupForm({ studyId, studyTitleKo, studyTitleEn }: Sign
           email,
           phone,
           notes,
+          turnstileToken,
         }),
       })
 
@@ -51,12 +113,16 @@ export default function SignupForm({ studyId, studyTitleKo, studyTitleEn }: Sign
       setEmail('')
       setPhone('')
       setNotes('')
+      resetTurnstile()
     } catch (err: any) {
       setErrorMessage(
-        err.message === 'Registration is full for this bible study class'
-          ? '해당 강좌의 정원이 모두 찼습니다. · This bible study class is full.'
-          : '신청 중 오류가 발생했습니다. 다시 시도해 주세요. · An error occurred. Please try again.'
+        err.message === 'Spam protection failed'
+          ? '스팸 방지 확인에 실패했습니다. 다시 시도해 주세요. · Spam protection failed. Please try again.'
+          : err.message === 'Registration is full for this bible study class'
+            ? '해당 강좌의 정원이 모두 찼습니다. · This bible study class is full.'
+            : '신청 중 오류가 발생했습니다. 다시 시도해 주세요. · An error occurred. Please try again.'
       )
+      resetTurnstile()
     } finally {
       setIsSubmitting(false)
     }
@@ -64,7 +130,7 @@ export default function SignupForm({ studyId, studyTitleKo, studyTitleEn }: Sign
 
   if (successMessage) {
     return (
-      <div 
+      <div
         className="p-8 rounded-2xl border text-center my-8"
         style={{
           background: 'var(--surf)',
@@ -76,7 +142,7 @@ export default function SignupForm({ studyId, studyTitleKo, studyTitleEn }: Sign
         </div>
         <h3 className="text-xl font-bold mb-4 text-[var(--t1)]">등록 완료 · Registration Successful</h3>
         <p className="text-[var(--t2)] mb-8 max-w-md mx-auto leading-relaxed">{successMessage}</p>
-        <Link 
+        <Link
           href="/bible-studies"
           className="inline-block px-8 py-3 rounded-full font-bold transition-colors"
           style={{
@@ -91,7 +157,7 @@ export default function SignupForm({ studyId, studyTitleKo, studyTitleEn }: Sign
   }
 
   return (
-    <form 
+    <form
       onSubmit={handleSubmit}
       className="p-8 rounded-2xl border space-y-6 my-8"
       style={{
@@ -137,8 +203,8 @@ export default function SignupForm({ studyId, studyTitleKo, studyTitleEn }: Sign
           type="tel"
           required
           value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          placeholder="010-0000-0000 / 512-000-0000"
+          onChange={(e) => setPhone(formatPhone(e.target.value))}
+          placeholder="000-000-0000"
           className="w-full px-4 py-3 rounded-xl border bg-transparent focus:outline-none transition-colors"
           style={{
             borderColor: 'var(--bdr2)',
@@ -184,15 +250,32 @@ export default function SignupForm({ studyId, studyTitleKo, studyTitleEn }: Sign
         />
       </div>
 
+      <div>
+        {siteKey ? (
+          <>
+            <Script
+              src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
+              strategy="afterInteractive"
+              onLoad={renderTurnstile}
+            />
+            <div ref={turnstileRef} />
+          </>
+        ) : (
+          <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 text-sm">
+            Spam protection is not configured. Set NEXT_PUBLIC_TURNSTILE_SITE_KEY.
+          </div>
+        )}
+      </div>
+
       <div className="pt-4">
         <button
           type="submit"
-          disabled={isSubmitting}
+          disabled={isSubmitting || !turnstileToken}
           className="w-full py-4 rounded-full font-bold transition-all text-center flex items-center justify-center gap-2"
           style={{
             background: 'var(--gld)',
             color: 'var(--surf)',
-            opacity: isSubmitting ? 0.7 : 1,
+            opacity: isSubmitting || !turnstileToken ? 0.7 : 1,
           }}
         >
           {isSubmitting ? (

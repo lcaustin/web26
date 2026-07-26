@@ -7,9 +7,14 @@ export const BibleStudySignups: CollectionConfig = {
   slug: 'bible-study-signups',
   admin: {
     useAsTitle: 'adminTitle',
-    defaultColumns: ['name', 'phone', 'email', 'bibleStudy', 'status'],
+    defaultColumns: ['name', 'phone', 'email', 'bibleStudy'],
     description: 'Registrations for seasonal Bible studies',
+    pagination: { defaultLimit: 100 },
+    components: {
+      beforeList: ['/components/admin/BibleStudySignupExportButton#default'],
+    },
   },
+  defaultSort: '-bibleStudy.targetGroup.ko,createdAt',
   access: {
     // Admins can read all; logged-in users can read their own signups.
     read: ({ req }) => {
@@ -53,6 +58,13 @@ export const BibleStudySignups: CollectionConfig = {
       index: true,
     },
     {
+      name: 'semesterRef',
+      type: 'relationship',
+      relationTo: 'bible-study-semesters',
+      label: 'Managed Semester · 학기',
+      admin: { description: 'Semester selected for the related group.' },
+    },
+    {
       name: 'name',
       type: 'text',
       required: true,
@@ -75,17 +87,6 @@ export const BibleStudySignups: CollectionConfig = {
       admin: {
         description: 'Optional link to a registered user account',
       },
-    },
-    {
-      name: 'status',
-      type: 'select',
-      required: true,
-      defaultValue: 'pending',
-      options: [
-        { label: 'Pending', value: 'pending' },
-        { label: 'Approved', value: 'approved' },
-        { label: 'Cancelled', value: 'cancelled' },
-      ],
     },
     {
       name: 'notes',

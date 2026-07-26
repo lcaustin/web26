@@ -21,7 +21,7 @@ export default async function BibleStudiesPage() {
   const studiesResult = await payload.find({
     collection: 'bible-studies',
     where: {
-      status: { equals: 'active' },
+      status: { not_equals: 'closed' },
     },
     sort: 'startDate',
     limit: 100,
@@ -37,7 +37,6 @@ export default async function BibleStudiesPage() {
         where: {
           and: [
             { bibleStudy: { equals: study.id } },
-            { status: { not_in: ['cancelled'] } },
           ],
         },
       }).catch(() => ({ totalDocs: 0 }))
@@ -53,7 +52,7 @@ export default async function BibleStudiesPage() {
   // Group by Course Type
   const groups = {
     'coffee-break': {
-      titleKo: '1. 커피브레이크 (소그룹 모임)',
+      titleKo: '1. 커피브레이크 (성경공부)',
       titleEn: 'Coffee Break Small Groups',
       items: studies.filter(s => s.courseType === 'coffee-break'),
     },
@@ -67,11 +66,18 @@ export default async function BibleStudiesPage() {
       titleEn: 'Crown Financial Class',
       items: studies.filter(s => s.courseType === 'crown'),
     },
+    'first-steps': {
+      titleKo: '4. 신앙의 첫걸음',
+      titleEn: 'First Steps of Faith',
+      items: studies.filter(s => s.courseType === 'first-steps'),
+    },
   }
 
   const renderStudyCard = (study: any) => {
     const count = countsMap.get(study.id) || 0
     const isFull = study.limit && count >= study.limit
+    const effectiveStatus = isFull ? 'closed' : study.status
+    const canSignUp = effectiveStatus === 'open'
     const startDateStr = study.startDate ? new Date(study.startDate).toLocaleDateString('ko-KR', {
       year: 'numeric',
       month: 'long',
@@ -91,29 +97,30 @@ export default async function BibleStudiesPage() {
           {/* Status Header */}
           <div className="flex items-center justify-between gap-4 mb-4">
             <span
-              className={`text-xs px-3 py-1 rounded-full font-bold ${
-                isFull
-                  ? 'bg-red-500/10 text-red-500'
+              className={`text-xs px-3 py-1 rounded-full font-bold ${isFull
+                ? 'bg-red-500/10 text-red-500'
+                : effectiveStatus === 'before'
+                  ? 'bg-yellow-500/10 text-yellow-600'
                   : 'bg-green-500/10 text-green-500'
-              }`}
+                }`}
             >
-              {isFull ? '마감 · Full' : '신청 가능 · Open'}
+              {effectiveStatus === 'closed' ? '마감 · Full' : effectiveStatus === 'open' ? '신청 가능 · Open' : '신청 준비중 · Not Open'}
             </span>
-            {study.limit && (
+            {/* {study.limit && (
               <span className="text-xs text-[var(--t2)] font-medium">
                 정원 · Capacity: {count}/{study.limit}
               </span>
-            )}
+            )} */}
           </div>
 
           {/* Group / Class Title */}
           <h3 className="text-lg font-bold mb-2">
-            <span className="block text-[var(--t1)]">
-              {study.semester.ko} · {study.targetGroup.ko}
+          <span className="block text-[var(--t1)]">
+              {study.semesterRef?.name ? `${study.semesterRef.name} · ` : ''}{study.title?.ko}{study.subject ? ` · ${study.subject}` : ''} · {study.targetGroup.ko}
             </span>
             {study.targetGroup.en && study.targetGroup.en !== study.targetGroup.ko && (
               <span className="block text-xs font-medium text-[var(--t2)] mt-1">
-                {study.semester.en} · {study.targetGroup.en}
+                {study.semesterRef?.name ? `${study.semesterRef.name} · ` : ''}{study.title?.en || study.title?.ko}{study.subject ? ` · ${study.subject}` : ''} · {study.targetGroup.en}
               </span>
             )}
           </h3>
@@ -147,9 +154,9 @@ export default async function BibleStudiesPage() {
         </div>
 
         <div className="mt-6 pt-4">
-          {isFull ? (
+          {!canSignUp ? (
             <span className="block w-full text-center py-2.5 bg-[var(--bdr)] text-[var(--t3)] rounded-full font-bold cursor-not-allowed text-sm">
-              마감되었습니다 · Full
+              {effectiveStatus === 'closed' ? '마감되었습니다 · Full' : '신청 준비중 · Not Open Yet'}
             </span>
           ) : (
             <Link
