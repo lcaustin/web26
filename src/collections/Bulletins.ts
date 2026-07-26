@@ -60,6 +60,7 @@ export const Bulletins: CollectionConfig = {
     // Disabled automatically by the S3 adapter when the R2 environment
     // variables are set; retained for local development without R2 access.
     staticDir: path.resolve(process.cwd(), 'media', 'bulletins'),
+    disableLocalStorage: Boolean(process.env.R2_BUCKET && process.env.R2_ACCESS_KEY_ID && process.env.R2_SECRET_ACCESS_KEY && process.env.R2_ENDPOINT),
     mimeTypes: ['application/pdf'],
   },
 }
