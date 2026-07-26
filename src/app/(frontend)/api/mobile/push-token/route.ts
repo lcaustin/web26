@@ -51,9 +51,13 @@ export async function POST(request: Request) {
       })
     }
 
-    const preferences = Array.isArray(user.notificationPreferences)
-      ? user.notificationPreferences.filter((topic): topic is NotificationTopic => NOTIFICATION_TOPICS.includes(topic as NotificationTopic))
+    const rawPreferences: unknown[] = Array.isArray(user.notificationPreferences)
+      ? user.notificationPreferences
       : []
+    const preferences = rawPreferences.filter(
+      (topic: unknown): topic is NotificationTopic =>
+        NOTIFICATION_TOPICS.includes(topic as NotificationTopic),
+    )
     const userDevices = await payload.find({
       collection: 'device-tokens',
       where: { user: { equals: user.id } },
