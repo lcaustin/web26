@@ -21,7 +21,14 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
       CASE WHEN "notification_preferences_preschool" THEN 'preschool' END,
       CASE WHEN "notification_preferences_nursery" THEN 'nursery' END,
       CASE WHEN "notification_preferences_english_ministry" THEN 'englishMinistry' END
-    ]::text[], NULL));
+    ]::text[], NULL))
+    WHERE COALESCE("notification_preferences_adult", false)
+      OR COALESCE("notification_preferences_youth", false)
+      OR COALESCE("notification_preferences_elementary", false)
+      OR COALESCE("notification_preferences_college_young_adult", false)
+      OR COALESCE("notification_preferences_preschool", false)
+      OR COALESCE("notification_preferences_nursery", false)
+      OR COALESCE("notification_preferences_english_ministry", false);
 
     ALTER TABLE "users" DROP COLUMN IF EXISTS "notification_preferences_adult";
     ALTER TABLE "users" DROP COLUMN IF EXISTS "notification_preferences_youth";

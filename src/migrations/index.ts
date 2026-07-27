@@ -35,6 +35,7 @@ import * as migration_20260725_230000_remove_legacy_bible_study_semesters from '
 import * as migration_20260725_231000_remove_bible_study_signup_status from './20260725_231000_remove_bible_study_signup_status';
 import * as migration_20260725_232000_add_bible_study_subject from './20260725_232000_add_bible_study_subject';
 import * as migration_20260726_010000_add_media_prefix from './20260726_010000_add_media_prefix';
+import * as migration_20260726_020000_add_photo_upload_fields from './20260726_020000_add_photo_upload_fields';
 
 export const migrations = [
   {
@@ -221,5 +222,10 @@ export const migrations = [
     up: migration_20260726_010000_add_media_prefix.up,
     down: migration_20260726_010000_add_media_prefix.down,
     name: '20260726_010000_add_media_prefix',
+  },
+  {
+    up: migration_20260726_020000_add_photo_upload_fields.up,
+    down: migration_20260726_020000_add_photo_upload_fields.down,
+    name: '20260726_020000_add_photo_upload_fields',
   },
 ];
