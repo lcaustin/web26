@@ -24,8 +24,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!study) return { title: '성경공부 신청 · Bible Study Signup' }
   return {
-    title: `${study.title.ko}${study.subject ? ` · ${study.subject}` : ''} 신청 · Bible Study Signup`,
-    description: `${study.title.ko} 온라인 신청 페이지입니다.`,
+    title: `${study.title?.ko || 'Bible Study'}${study.subject ? ` · ${study.subject}` : ''} 신청 · Bible Study Signup`,
+    description: `${study.title?.ko || 'Bible Study'} 온라인 신청 페이지입니다.`,
   }
 }
 

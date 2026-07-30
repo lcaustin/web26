@@ -28,6 +28,7 @@ import { PhotoItems } from './collections/PhotoItems.ts'
 import { BibleStudies } from './collections/BibleStudies.ts'
 import { BibleStudySignups } from './collections/BibleStudySignups.ts'
 import { BibleStudySemesters } from './collections/BibleStudySemesters.ts'
+import { BibleStudyCourseTypes } from './collections/BibleStudyCourseTypes.ts'
 import { SiteSettings } from './globals/SiteSettings.ts'
 
 const filename = fileURLToPath(import.meta.url)
@@ -109,6 +110,7 @@ export default buildConfig({
     BibleStudies,
     BibleStudySignups,
     BibleStudySemesters,
+    BibleStudyCourseTypes,
   ],
   globals: [SiteSettings],
   // Cloudflare R2 is S3-compatible. Keep this conditional so local development

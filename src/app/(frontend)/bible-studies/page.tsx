@@ -28,6 +28,12 @@ export default async function BibleStudiesPage() {
   }).catch(() => ({ docs: [] }))
 
   const studies = studiesResult.docs as any[]
+  const courseTypesResult = await payload.find({
+    collection: 'bible-study-course-types',
+    sort: 'order',
+    limit: 100,
+  }).catch(() => ({ docs: [] }))
+  const managedCourseTypes = courseTypesResult.docs as any[]
 
   // Fetch count of approved/pending signups for each active study
   const signupsCounts = await Promise.all(
@@ -50,28 +56,22 @@ export default async function BibleStudiesPage() {
   const church = siteSettings?.church
 
   // Group by Course Type
-  const groups = {
-    'coffee-break': {
-      titleKo: '1. 커피브레이크 (성경공부)',
-      titleEn: 'Coffee Break Small Groups',
-      items: studies.filter(s => s.courseType === 'coffee-break'),
-    },
-    'panorama': {
-      titleKo: '2. 신구약 맥잡기',
-      titleEn: 'Bible Panorama',
-      items: studies.filter(s => s.courseType === 'panorama'),
-    },
-    'crown': {
-      titleKo: '3. 크라운 재정교실',
-      titleEn: 'Crown Financial Class',
-      items: studies.filter(s => s.courseType === 'crown'),
-    },
-    'first-steps': {
-      titleKo: '4. 신앙의 첫걸음',
-      titleEn: 'First Steps of Faith',
-      items: studies.filter(s => s.courseType === 'first-steps'),
-    },
-  }
+  const managedSlugs = new Set(managedCourseTypes.map((type) => type.slug))
+  const unlistedTypes = Array.from(new Set(studies.map((study) => study.courseType).filter((slug) => slug && !managedSlugs.has(slug))))
+  const groups = [
+    ...managedCourseTypes.map((type) => ({
+    key: type.slug,
+    titleKo: type.name?.ko || type.name?.en || type.slug,
+    titleEn: type.name?.en || type.name?.ko || type.slug,
+    items: studies.filter((study) => study.courseTypeRef?.id === type.id || study.courseTypeRef === type.id || study.courseType === type.slug),
+    })),
+    ...unlistedTypes.map((slug) => ({
+      key: slug,
+      titleKo: slug,
+      titleEn: slug,
+      items: studies.filter((study) => study.courseType === slug),
+    })),
+  ]
 
   const renderStudyCard = (study: any) => {
     const count = countsMap.get(study.id) || 0
@@ -83,6 +83,10 @@ export default async function BibleStudiesPage() {
       month: 'long',
       day: 'numeric',
     }) : ''
+    const managedCourseNameKo = study.courseTypeRef?.name?.ko || study.courseTypeRef?.name || ''
+    const managedCourseNameEn = study.courseTypeRef?.name?.en || managedCourseNameKo
+    const titlePartsKo = [study.semesterRef?.name, study.title?.ko || managedCourseNameKo, study.subject, study.targetGroup?.ko].filter(Boolean)
+    const titlePartsEn = [study.semesterRef?.name, study.title?.en || managedCourseNameEn, study.subject, study.targetGroup?.en].filter(Boolean)
 
     return (
       <div
@@ -116,11 +120,11 @@ export default async function BibleStudiesPage() {
           {/* Group / Class Title */}
           <h3 className="text-lg font-bold mb-2">
           <span className="block text-[var(--t1)]">
-              {study.semesterRef?.name ? `${study.semesterRef.name} · ` : ''}{study.title?.ko}{study.subject ? ` · ${study.subject}` : ''} · {study.targetGroup.ko}
+              {titlePartsKo.join(' · ')}
             </span>
             {study.targetGroup.en && study.targetGroup.en !== study.targetGroup.ko && (
               <span className="block text-xs font-medium text-[var(--t2)] mt-1">
-                {study.semesterRef?.name ? `${study.semesterRef.name} · ` : ''}{study.title?.en || study.title?.ko}{study.subject ? ` · ${study.subject}` : ''} · {study.targetGroup.en}
+                {titlePartsEn.join(' · ')}
               </span>
             )}
           </h3>
@@ -206,11 +210,11 @@ export default async function BibleStudiesPage() {
               현재 신청 가능한 성경공부가 없습니다. · No active bible studies open for signup at this time.
             </p>
           ) : (
-            Object.entries(groups).map(([key, group]) => {
+            groups.map((group) => {
               if (group.items.length === 0) return null
 
               return (
-                <div key={key} className="space-y-6">
+                <div key={group.key} className="space-y-6">
                   <div className="border-b border-[var(--bdr)] pb-3">
                     <h2 className="text-2xl font-bold text-[var(--t1)]">
                       {group.titleKo}

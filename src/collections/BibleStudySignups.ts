@@ -54,7 +54,7 @@ export const BibleStudySignups: CollectionConfig = {
       name: 'bibleStudy',
       type: 'relationship',
       relationTo: 'bible-studies',
-      required: true,
+      required: false,
       index: true,
     },
     {

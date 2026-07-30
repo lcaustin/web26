@@ -36,6 +36,10 @@ import * as migration_20260725_231000_remove_bible_study_signup_status from './2
 import * as migration_20260725_232000_add_bible_study_subject from './20260725_232000_add_bible_study_subject';
 import * as migration_20260726_010000_add_media_prefix from './20260726_010000_add_media_prefix';
 import * as migration_20260726_020000_add_photo_upload_fields from './20260726_020000_add_photo_upload_fields';
+import * as migration_20260729_010000_allow_signup_orphan_on_study_delete from './20260729_010000_allow_signup_orphan_on_study_delete';
+import * as migration_20260729_020000_add_bible_study_course_types from './20260729_020000_add_bible_study_course_types';
+import * as migration_20260729_030000_optional_bible_study_fields from './20260729_030000_optional_bible_study_fields';
+import * as migration_20260729_040000_use_dynamic_course_type_slugs from './20260729_040000_use_dynamic_course_type_slugs';
 
 export const migrations = [
   {
@@ -227,5 +231,25 @@ export const migrations = [
     up: migration_20260726_020000_add_photo_upload_fields.up,
     down: migration_20260726_020000_add_photo_upload_fields.down,
     name: '20260726_020000_add_photo_upload_fields',
+  },
+  {
+    up: migration_20260729_010000_allow_signup_orphan_on_study_delete.up,
+    down: migration_20260729_010000_allow_signup_orphan_on_study_delete.down,
+    name: '20260729_010000_allow_signup_orphan_on_study_delete',
+  },
+  {
+    up: migration_20260729_020000_add_bible_study_course_types.up,
+    down: migration_20260729_020000_add_bible_study_course_types.down,
+    name: '20260729_020000_add_bible_study_course_types',
+  },
+  {
+    up: migration_20260729_030000_optional_bible_study_fields.up,
+    down: migration_20260729_030000_optional_bible_study_fields.down,
+    name: '20260729_030000_optional_bible_study_fields',
+  },
+  {
+    up: migration_20260729_040000_use_dynamic_course_type_slugs.up,
+    down: migration_20260729_040000_use_dynamic_course_type_slugs.down,
+    name: '20260729_040000_use_dynamic_course_type_slugs',
   },
 ];
