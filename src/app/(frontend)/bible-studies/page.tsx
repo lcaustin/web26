@@ -110,11 +110,11 @@ export default async function BibleStudiesPage() {
             >
               {effectiveStatus === 'closed' ? '마감 · Full' : effectiveStatus === 'open' ? '신청 가능 · Open' : '신청 준비중 · Not Open'}
             </span>
-            {/* {study.limit && (
+            {study.limit ? (
               <span className="text-xs text-[var(--t2)] font-medium">
-                정원 · Capacity: {count}/{study.limit}
+                {study.limit}
               </span>
-            )} */}
+            ) : null}
           </div>
 
           {/* Group / Class Title */}
@@ -210,7 +210,39 @@ export default async function BibleStudiesPage() {
               현재 신청 가능한 성경공부가 없습니다. · No active bible studies open for signup at this time.
             </p>
           ) : (
-            groups.map((group) => {
+            <>
+              <div className="w-full overflow-hidden rounded-2xl border border-[var(--bdr)] bg-[var(--surf)]">
+                <table className="w-full table-auto text-sm">
+                  <caption className="sr-only">Bible study signup summary</caption>
+                  <thead className="border-b border-[var(--bdr)] bg-[var(--bg-alt)] text-left text-xs uppercase tracking-wide text-[var(--t2)]">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold hidden sm:table-cell">Semester</th>
+                      <th className="px-4 py-3 font-semibold">Course · Subject · Group</th>
+                      <th className="px-4 py-3 font-semibold">Schedule</th>
+                      <th className="px-4 py-3 font-semibold">Leader</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[var(--bdr)]">
+                    {studies.map((study) => {
+                      const count = countsMap.get(study.id) || 0
+                      const isFull = study.limit && count >= study.limit
+                      const effectiveStatus = isFull ? 'closed' : study.status
+                      const canSignUp = effectiveStatus === 'open'
+                      const courseName = study.title?.ko || study.courseTypeRef?.name?.ko || study.courseTypeRef?.name || study.courseType
+                      return (
+                        <tr key={study.id} className="text-[var(--t1)]">
+                          <td className="px-4 py-3 align-top whitespace-nowrap font-semibold hidden sm:table-cell">{study.semesterRef?.name || '—'}</td>
+                          <td className="px-4 py-3 align-top font-semibold whitespace-normal break-words">{[courseName, study.subject, study.targetGroup?.ko].filter(Boolean).join(' · ') || '—'}</td>
+                          <td className="px-4 py-3 align-top whitespace-normal break-words">{study.timeDescription?.ko || '—'}</td>
+                          <td className="px-4 py-3 align-top whitespace-normal break-words">{study.instructor?.ko || '—'}</td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              </div>
+              <div className="space-y-12">
+            {groups.map((group) => {
               if (group.items.length === 0) return null
 
               return (
@@ -228,7 +260,9 @@ export default async function BibleStudiesPage() {
                   </div>
                 </div>
               )
-            })
+            })}
+              </div>
+            </>
           )}
         </div>
       </section>
