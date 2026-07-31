@@ -112,7 +112,7 @@ export default async function BibleStudiesPage() {
             </span>
             {study.limit ? (
               <span className="text-xs text-[var(--t2)] font-medium">
-                {study.limit}
+                정원 · Capacity: {study.limit}
               </span>
             ) : null}
           </div>
@@ -145,7 +145,7 @@ export default async function BibleStudiesPage() {
             <div className="flex items-start gap-2">
               <i className="ti ti-map-pin text-base mt-0.5" />
               <div>
-                <strong>장소 · Location:</strong> {study.location.ko} {study.location.en && `(${study.location.en})`}
+                <strong>장소 · Location:</strong> {study.location?.ko ? `${study.location.ko}${study.location.en ? ` (${study.location.en})` : ''}` : '줌미팅 · Zoom'}
               </div>
             </div>
             <div className="flex items-start gap-2">

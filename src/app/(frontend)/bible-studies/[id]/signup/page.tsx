@@ -99,7 +99,7 @@ export default async function BibleStudySignupPage({ params }: Props) {
                 <strong>개강일 · Start Date:</strong> {startDateStr}
               </div>
               <div>
-                <strong>장소 · Location:</strong> {study.location.ko} {study.location.en && `(${study.location.en})`}
+                <strong>장소 · Location:</strong> {study.location?.ko ? `${study.location.ko}${study.location.en ? ` (${study.location.en})` : ''}` : '줌미팅 · Zoom'}
               </div>
               <div>
                 <strong>시간 · Time:</strong> {study.timeDescription.ko} {study.timeDescription.en && `(${study.timeDescription.en})`}

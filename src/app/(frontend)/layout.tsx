@@ -36,7 +36,8 @@ const themeInitScript = `
 (function () {
   try {
     var stored = localStorage.getItem('lc-theme');
-    var theme = stored === 'light' || stored === 'dark' ? stored : 'light';
+    var hour = new Date().getHours();
+    var theme = stored === 'light' || stored === 'dark' ? stored : (hour >= 8 && hour < 20 ? 'light' : 'dark');
     document.documentElement.setAttribute('data-theme', theme);
   } catch (e) {
     document.documentElement.setAttribute('data-theme', 'light');

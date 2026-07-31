@@ -90,3 +90,13 @@ This file summarizes the project requests made before prompt-by-prompt logging b
 - Reported that reservation deletion still failed after the initial deleted-document guard.
 - Found that reservation deletion returned HTTP 405 because the public `/api/room-reservations` route shadowed Payload's collection DELETE endpoint.
 - Reported malformed SMTP sender formatting showing `LC Austin>` instead of a properly bracketed display name.
+- Requested the Bible Study card to show `줌미팅 · Zoom` when location is empty.
+- Requested showing Bible Study capacity in the card’s top-right corner as `정원 · Capacity: 10`.
+- Requested reducing mobile page side margins to 16px on each side.
+- Requested a weekly view option alongside the monthly booking calendar.
+- Requested automatic light/dark theme switching based on sunset and sunrise.
+- Clarified that automatic theme switching must use the visitor's local browser time.
+- Requested the automatic light-mode window be 8:00 AM through 8:00 PM local time.
+- Requested larger previous/next navigation buttons in the monthly and weekly booking calendar.
+- Requested replacing the browser confirmation prompt with a better styled reservation confirmation modal.
+- Requested changing reservation Purpose from textarea to a required input with placeholder `예) 행복구역 구역모임`.
