@@ -60,3 +60,33 @@ This file summarizes the project requests made before prompt-by-prompt logging b
 - Requested Korean-only status text in the table.
 - Requested hiding the status column.
 - Requested automatic table cell widths based on text content.
+- Requested semester status changes to propagate to all linked Bible Study groups.
+- Requested an Active/Inactive semester flag to control public visibility, with current semesters active.
+- Asked whether any existing Bible Study record has a Custom Course Title value.
+- Reported that the Active flag was not visible in the admin.
+- Added a TODO item for a Room booking system and calendar, with an initial list of church rooms and spaces.
+- Confirmed the room booking workflow: one-time date selection, one open request per requester, admin email/approval/rejection, requester notifications, and status-filtered admin list.
+- Requested time-picker controls for room booking on the frontend and admin, and a Room Booking entry in Quick Links.
+- Requested that the public booking calendar show only approved reservations and display only each reservation's purpose to visitors.
+- Requested changing the Korean room booking label from 공간 예약 to 장소 예약.
+- Requested sample room reservation data for July 2026.
+- Reported that the Room Booking page was not styled correctly.
+- Requested a monthly calendar view with approved booking purposes shown on each day, while keeping repeatable reservations admin-only.
+- Requested Cloudflare Turnstile protection for the public room reservation form to prevent spam submissions.
+- Clarified that the existing Turnstile configuration used by Bible Study signup should be reused for room reservations.
+- Requested clear success/failure feedback when a room reservation overlaps an existing reservation on the same day and room.
+- Requested calendar events to show purpose, start–end time, and room label.
+- Reported that identical Korean and English room labels displayed as duplicates, such as Room 101 · Room 101.
+- Asked whether SMTP is already used and requested that the reservation notification email be changeable.
+- Requested a recipient email field with Save control at the top of the admin room reservations list.
+- Clarified that the reservation recipient email should remain configurable only in Site Settings, not on the reservation list page.
+- Reported a build failure from a stale Payload admin import-map reference to the removed ReservationEmailControl component.
+- Repeatedly reported Payload rejecting the selected Room relationship as invalid even though the admin field is a dropdown.
+- Reported a successful reservation submission causing a React null currentTarget error when resetting the form asynchronously.
+- Requested showing the reservation purpose in the admin reservation list.
+- Requested approval emails with a no-login approval link, standardized Date/Time formatting, and a confirmation summary modal before reservation submission.
+- Clarified that a requester may submit another reservation once their existing reservation date has passed.
+- Reported reservation deletion failing with an undefined document ID error from the post-change email hook.
+- Reported that reservation deletion still failed after the initial deleted-document guard.
+- Found that reservation deletion returned HTTP 405 because the public `/api/room-reservations` route shadowed Payload's collection DELETE endpoint.
+- Reported malformed SMTP sender formatting showing `LC Austin>` instead of a properly bracketed display name.

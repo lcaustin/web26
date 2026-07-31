@@ -10,7 +10,7 @@ async function main() {
   })
   const semester = existingSemester.docs[0] ?? await payload.create({
     collection: 'bible-study-semesters',
-    data: { name: '2026 Spring', order: 2026 },
+    data: { name: '2026 Spring', order: 2026, status: 'before', active: true },
   })
 
   const groups = await payload.find({

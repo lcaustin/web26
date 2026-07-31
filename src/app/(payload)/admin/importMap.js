@@ -26,6 +26,7 @@ import { default as default_7934b112433a8a6ed3b2854329eb42ad } from '@/component
 import { default as default_e338b0c315e93b2ccc0da8ffa8c9ed88 } from '../../../components/admin/BibleStudyExportButton'
 import { default as default_ff8554a21d24abd8160dec14e58f8203 } from '../../../components/admin/BibleStudySignupExportButton'
 import { default as default_55b1f94f0022b60f45ab7a73ad27d866 } from '../../../components/admin/DuplicateSemesterButton'
+import { default as default_aee11c7403bceb4ec618466b171ffa52 } from '../../../components/admin/TimeField'
 import { S3ClientUploadHandler as S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24 } from '@payloadcms/storage-s3/client'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
@@ -59,6 +60,7 @@ export const importMap = {
   "/components/admin/BibleStudyExportButton#default": default_e338b0c315e93b2ccc0da8ffa8c9ed88,
   "/components/admin/BibleStudySignupExportButton#default": default_ff8554a21d24abd8160dec14e58f8203,
   "/components/admin/DuplicateSemesterButton#default": default_55b1f94f0022b60f45ab7a73ad27d866,
+  "/components/admin/TimeField#default": default_aee11c7403bceb4ec618466b171ffa52,
   "@payloadcms/storage-s3/client#S3ClientUploadHandler": S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }

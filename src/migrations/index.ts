@@ -40,6 +40,14 @@ import * as migration_20260729_010000_allow_signup_orphan_on_study_delete from '
 import * as migration_20260729_020000_add_bible_study_course_types from './20260729_020000_add_bible_study_course_types';
 import * as migration_20260729_030000_optional_bible_study_fields from './20260729_030000_optional_bible_study_fields';
 import * as migration_20260729_040000_use_dynamic_course_type_slugs from './20260729_040000_use_dynamic_course_type_slugs';
+import * as migration_20260730_030000_add_bible_study_active from './20260730_030000_add_bible_study_active';
+import * as migration_20260730_040000_add_room_booking from './20260730_040000_add_room_booking';
+import * as migration_20260730_050000_rename_room_booking_label from './20260730_050000_rename_room_booking_label';
+import * as migration_20260730_060000_add_room_reservation_recurrence from './20260730_060000_add_room_reservation_recurrence';
+import * as migration_20260731_010000_add_reservation_admin_email from './20260731_010000_add_reservation_admin_email';
+import * as migration_20260731_020000_add_reservation_approval_token from './20260731_020000_add_reservation_approval_token';
+import * as migration_20260730_010000_add_bible_study_semester_status from './20260730_010000_add_bible_study_semester_status';
+import * as migration_20260730_020000_add_bible_study_semester_active from './20260730_020000_add_bible_study_semester_active';
 
 export const migrations = [
   {
@@ -251,5 +259,45 @@ export const migrations = [
     up: migration_20260729_040000_use_dynamic_course_type_slugs.up,
     down: migration_20260729_040000_use_dynamic_course_type_slugs.down,
     name: '20260729_040000_use_dynamic_course_type_slugs',
+  },
+  {
+    up: migration_20260730_010000_add_bible_study_semester_status.up,
+    down: migration_20260730_010000_add_bible_study_semester_status.down,
+    name: '20260730_010000_add_bible_study_semester_status',
+  },
+  {
+    up: migration_20260730_020000_add_bible_study_semester_active.up,
+    down: migration_20260730_020000_add_bible_study_semester_active.down,
+    name: '20260730_020000_add_bible_study_semester_active',
+  },
+  {
+    up: migration_20260730_030000_add_bible_study_active.up,
+    down: migration_20260730_030000_add_bible_study_active.down,
+    name: '20260730_030000_add_bible_study_active',
+  },
+  {
+    up: migration_20260730_040000_add_room_booking.up,
+    down: migration_20260730_040000_add_room_booking.down,
+    name: '20260730_040000_add_room_booking',
+  },
+  {
+    up: migration_20260730_050000_rename_room_booking_label.up,
+    down: migration_20260730_050000_rename_room_booking_label.down,
+    name: '20260730_050000_rename_room_booking_label',
+  },
+  {
+    up: migration_20260730_060000_add_room_reservation_recurrence.up,
+    down: migration_20260730_060000_add_room_reservation_recurrence.down,
+    name: '20260730_060000_add_room_reservation_recurrence',
+  },
+  {
+    up: migration_20260731_010000_add_reservation_admin_email.up,
+    down: migration_20260731_010000_add_reservation_admin_email.down,
+    name: '20260731_010000_add_reservation_admin_email',
+  },
+  {
+    up: migration_20260731_020000_add_reservation_approval_token.up,
+    down: migration_20260731_020000_add_reservation_approval_token.down,
+    name: '20260731_020000_add_reservation_approval_token',
   },
 ];

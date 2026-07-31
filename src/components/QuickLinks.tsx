@@ -8,7 +8,8 @@ type QuickLink = {
 const FALLBACK: QuickLink[] = [
   { id: 'f1', name: { ko: '매일말씀묵상', en: 'Daily QT' }, icon: 'ti-bible', href: '/videos/daily-devotion' },
   { id: 'f2', name: { ko: '온라인 헌금안내', en: 'Online Giving' }, icon: 'ti-heart', href: '/offering' },
-  { id: 'f3', name: { ko: '예배시간 안내', en: 'Service Times' }, icon: 'ti-clock', href: '/service-hours' },
+  // { id: 'f3', name: { ko: '예배시간 안내', en: 'Service Times' }, icon: 'ti-clock', href: '/service-hours' },
+  { id: 'f5', name: { ko: '장소 예약', en: 'Room Booking' }, icon: 'ti-calendar-event', href: '/room-booking' },
   { id: 'f4', name: { ko: '토요 골방기도', en: 'Saturday Closet Prayer' }, icon: 'ti-candle', href: 'https://us02web.zoom.us/j/82452797203?pwd=JyAdMxHYUSvEpeMU4ExXnuCdVZgI0w.1' },
 ]
 

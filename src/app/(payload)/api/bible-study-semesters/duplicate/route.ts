@@ -12,7 +12,7 @@ export async function POST(request: Request) {
   if (existing.docs.length) return Response.json({ error: 'That semester already exists' }, { status: 409 })
   const source = await payload.findByID({ collection: 'bible-study-semesters', id: sourceSemesterId }).catch(() => null)
   if (!source) return Response.json({ error: 'Source semester not found' }, { status: 404 })
-  const createdSemester = await payload.create({ collection: 'bible-study-semesters', data: { name: newName.trim(), order: source.order } })
+  const createdSemester = await payload.create({ collection: 'bible-study-semesters', data: { name: newName.trim(), order: source.order, status: 'before' } })
   const groups = await payload.find({ collection: 'bible-studies', where: { semesterRef: { equals: sourceSemesterId } }, limit: 1000 })
   for (const group of groups.docs as any[]) {
     const { id, createdAt, updatedAt, adminTitle, semesterRef, semesterOption, semester, status, ...copy } = group

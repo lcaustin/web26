@@ -29,6 +29,8 @@ import { BibleStudies } from './collections/BibleStudies.ts'
 import { BibleStudySignups } from './collections/BibleStudySignups.ts'
 import { BibleStudySemesters } from './collections/BibleStudySemesters.ts'
 import { BibleStudyCourseTypes } from './collections/BibleStudyCourseTypes.ts'
+import { Rooms } from './collections/Rooms.ts'
+import { RoomReservations } from './collections/RoomReservations.ts'
 import { SiteSettings } from './globals/SiteSettings.ts'
 
 const filename = fileURLToPath(import.meta.url)
@@ -44,6 +46,10 @@ const hasR2Storage = Boolean(
     R2_PUBLIC_URL,
 )
 const hasEmailCredentials = Boolean(process.env.EMAIL_USER && process.env.EMAIL_PASSWORD)
+const configuredFrom = process.env.EMAIL_FROM || 'noreply@lcaustin.org'
+const fromMatch = configuredFrom.match(/^\s*(.*?)\s*<\s*([^>\s]+@[^>\s]+)\s*>\s*$/)
+const emailFromAddress = fromMatch?.[2] || configuredFrom.replace(/[<>]/g, '').trim()
+const emailFromName = (fromMatch?.[1] || 'LC Austin').replace(/[<>]/g, '').trim() || 'LC Austin'
 
 export default buildConfig({
   serverURL: SERVER_URL,
@@ -61,8 +67,8 @@ export default buildConfig({
   ...(hasEmailCredentials
     ? {
         email: nodemailerAdapter({
-          defaultFromAddress: process.env.EMAIL_FROM || 'noreply@lcaustin.org',
-          defaultFromName: 'LC Austin',
+          defaultFromAddress: emailFromAddress,
+          defaultFromName: emailFromName,
           transportOptions: {
             host: 'smtp.gmail.com',
             port: 465,
@@ -111,6 +117,8 @@ export default buildConfig({
     BibleStudySignups,
     BibleStudySemesters,
     BibleStudyCourseTypes,
+    Rooms,
+    RoomReservations,
   ],
   globals: [SiteSettings],
   // Cloudflare R2 is S3-compatible. Keep this conditional so local development

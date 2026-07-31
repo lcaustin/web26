@@ -27,7 +27,7 @@ export default async function BibleStudiesPage() {
     limit: 100,
   }).catch(() => ({ docs: [] }))
 
-  const studies = studiesResult.docs as any[]
+  const studies = (studiesResult.docs as any[]).filter((study) => study.active !== false && study.semesterRef?.active !== false)
   const courseTypesResult = await payload.find({
     collection: 'bible-study-course-types',
     sort: 'order',

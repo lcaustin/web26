@@ -185,5 +185,15 @@ export const BibleStudies: CollectionConfig = {
         position: 'sidebar',
       },
     },
+    {
+      name: 'active',
+      type: 'checkbox',
+      defaultValue: true,
+      label: 'Active · 홈페이지 표시',
+      admin: {
+        position: 'sidebar',
+        description: 'Inactive groups are hidden from the public Bible Studies page.',
+      },
+    },
   ],
 }

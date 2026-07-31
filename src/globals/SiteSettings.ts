@@ -113,5 +113,13 @@ export const SiteSettings: GlobalConfig = {
         },
       ],
     },
+    {
+      type: 'group',
+      name: 'reservations',
+      label: 'Room Reservations',
+      fields: [
+        { name: 'adminEmail', type: 'email', label: 'Notification Email', admin: { description: 'Reservation requests and status notifications are sent to this address.' } },
+      ],
+    },
   ],
 }
