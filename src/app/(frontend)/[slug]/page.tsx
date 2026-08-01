@@ -19,7 +19,7 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const payload = await getPayload({ config })
-  const result = await payload.find({ collection: 'pages', where: { slug: { equals: slug } }, limit: 1 }).catch(() => ({ docs: [] }))
+  const result = await payload.find({ collection: 'pages', where: { slug: { equals: slug } }, limit: 1, depth: 0 }).catch(() => ({ docs: [] }))
   const page: any = result.docs[0]
   if (!page) return { title: '어스틴 주님의교회', robots: { index: false, follow: false } }
   const title = page.title?.ko || page.title?.en || '어스틴 주님의교회'
@@ -64,7 +64,7 @@ export default async function PageDetail({ params }: Props) {
   const [siteSettings, result] = await Promise.all([
     payload.findGlobal({ slug: 'site-settings' }).catch(() => null),
     payload
-      .find({ collection: 'pages', where: { slug: { equals: slug } }, limit: 1 })
+      .find({ collection: 'pages', where: { slug: { equals: slug } }, limit: 1, depth: 0 })
       .catch(() => ({ docs: [] })),
   ])
 

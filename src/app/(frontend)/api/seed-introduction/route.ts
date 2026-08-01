@@ -46,6 +46,7 @@ export async function GET() {
       collection: 'pages',
       where: { slug: { equals: 'introduction' } },
       limit: 1,
+      depth: 0,
     })
 
     if (existing.docs.length > 0) {
