@@ -119,7 +119,7 @@ export const Pages: CollectionConfig = {
       type: 'text',
       label: 'YouTube 임베드 URL',
       admin: {
-        description: 'Paste the YouTube embed URL, e.g. https://www.youtube.com/embed/6lzTX1ze7aQ',
+        description: 'Paste the YouTube embed URL, e.g. https://www.youtube.com/embed/id8zSShJPl0',
         placeholder: 'https://www.youtube.com/embed/...',
       },
     },

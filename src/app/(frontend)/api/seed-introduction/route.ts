@@ -70,7 +70,7 @@ export async function GET() {
           },
         },
         heroImageUrl: 'https://static.lcaustin.org/uploads/image/697696034057671c8ba0d91d.jpeg',
-        youtubeUrl: 'https://www.youtube.com/embed/6lzTX1ze7aQ',
+        youtubeUrl: 'https://www.youtube.com/embed/id8zSShJPl0',
         sections: [
           {
             blockType: 'richtext',
