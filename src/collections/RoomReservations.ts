@@ -17,9 +17,6 @@ export const RoomReservations: CollectionConfig = {
       if (!data) return data
       if (operation === 'create') {
         data.approvalToken = crypto.randomBytes(32).toString('hex')
-        const today = new Date(); today.setUTCHours(0, 0, 0, 0)
-        const existing = await req.payload.find({ collection: 'room-reservations', where: { and: [{ email: { equals: data.email } }, { status: { in: activeStatuses } }, { date: { greater_than_equal: today.toISOString() } }] }, limit: 1 })
-        if (existing.totalDocs) throw new Error('This requester already has an open reservation.')
         const roomId = typeof data.room === 'object' ? data.room.id : data.room
         const dayStart = new Date(`${String(data.date).slice(0, 10)}T00:00:00.000Z`).toISOString()
         const dayEnd = new Date(`${String(data.date).slice(0, 10)}T23:59:59.999Z`).toISOString()
