@@ -107,3 +107,32 @@ This file summarizes the project requests made before prompt-by-prompt logging b
 - Requested that photos under `<year>/NO_ALBUM` use each filename as the visible photo title instead of displaying `NO_ALBUM` as an album name.
 - Approved using option #1: five-minute Next.js ISR caching for the landing page on Vercel.
 - Approved implementing caching option #7: homepage-focused database indexes.
+- Requested alternating background colors for Next Generation landing-page tiles.
+- Requested creation of 2026 Fall Bible Study groups from the supplied leader, schedule, course, and target-group list.
+- Requested that active Bible Study cards remain visible even when registration status is closed.
+- Requested identical card/table visibility rules: Bible Study active status true and semester active status true.
+- Requested sort-order editing support on the Bible Study Semesters admin page.
+- Requested drag-and-drop semester ordering in the Bible Study Semesters admin page.
+- Clarified that sorting should apply to individual Bible Study records, not semester records.
+- Requested a semester dropdown for Bible Study ordering, defaulting to the latest semester.
+- Clarified that Bible Study ordering belongs on each Semester detail page, such as `/admin/collections/bible-study-semesters/3`.
+- Requested the semester Bible Study ordering control use a list layout and save changes only on the Save button.
+- Requested the Bible Study ordering list appear at the bottom of the Semester detail page.
+- Requested removal of the semester-level order field; ordering is only needed for groups within each semester.
+- Requested a semester dropdown filter on the main Bible Studies admin list page.
+- Requested the Bible Studies admin semester filter default to the latest semester.
+- Requested proper padding and spacing for the Bible Study sort control.
+- Requested the `학기 · Semester` dropdown be placed and styled properly on the Bible Studies admin list.
+- Clarified that the semester dropdown should sit directly above `.search-bar`.
+- Corrected placement: the semester dropdown should sit directly below `.search-bar`.
+- Requested CSV export respect the selected semester dropdown filter.
+- Requested reorder-control padding match the other Payload admin containers.
+- Clarified that the reorder panel should use the same horizontal admin gutter space.
+- Requested using Payload’s `.gutter` class to match the admin spacing precisely.
+- Reported zero order numbers and missing gutter after the `.gutter` change; requested both be corrected.
+- Requested the Save Order button move to the top-right of the reorder section.
+- Clarified that displayed order numbers must remain fixed while dragging and update only after Save.
+- Requested new Bible Study records receive and preserve an order within their selected semester for later Save Order sorting.
+- Requested displayed Bible Study order numbers remain unchanged until the Save button is pressed.
+- Reported that the public Bible Studies page was not respecting saved group order.
+- Clarified that the summary list above the cards must use the same within-group order as the cards.

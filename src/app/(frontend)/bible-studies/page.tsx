@@ -20,14 +20,11 @@ export default async function BibleStudiesPage() {
   // Fetch active bible studies
   const studiesResult = await payload.find({
     collection: 'bible-studies',
-    where: {
-      status: { not_equals: 'closed' },
-    },
-    sort: 'startDate',
+    sort: 'order,startDate',
     limit: 100,
   }).catch(() => ({ docs: [] }))
 
-  const studies = (studiesResult.docs as any[]).filter((study) => study.active !== false && study.semesterRef?.active !== false)
+  const studies = (studiesResult.docs as any[]).filter((study) => study.active === true && study.semesterRef?.active === true)
   const courseTypesResult = await payload.find({
     collection: 'bible-study-course-types',
     sort: 'order',
@@ -63,15 +60,16 @@ export default async function BibleStudiesPage() {
     key: type.slug,
     titleKo: type.name?.ko || type.name?.en || type.slug,
     titleEn: type.name?.en || type.name?.ko || type.slug,
-    items: studies.filter((study) => study.courseTypeRef?.id === type.id || study.courseTypeRef === type.id || study.courseType === type.slug),
+    items: studies.filter((study) => study.courseTypeRef?.id === type.id || study.courseTypeRef === type.id || study.courseType === type.slug).sort((a, b) => (a.order || 0) - (b.order || 0)),
     })),
     ...unlistedTypes.map((slug) => ({
       key: slug,
       titleKo: slug,
       titleEn: slug,
-      items: studies.filter((study) => study.courseType === slug),
+      items: studies.filter((study) => study.courseType === slug).sort((a, b) => (a.order || 0) - (b.order || 0)),
     })),
   ]
+  const orderedStudies = groups.flatMap((group) => group.items)
 
   const renderStudyCard = (study: any) => {
     const count = countsMap.get(study.id) || 0
@@ -223,7 +221,7 @@ export default async function BibleStudiesPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[var(--bdr)]">
-                    {studies.map((study) => {
+                    {orderedStudies.map((study) => {
                       const count = countsMap.get(study.id) || 0
                       const isFull = study.limit && count >= study.limit
                       const effectiveStatus = isFull ? 'closed' : study.status

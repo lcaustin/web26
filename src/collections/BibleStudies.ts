@@ -9,18 +9,21 @@ export const BibleStudies: CollectionConfig = {
   slug: 'bible-studies',
   admin: {
     useAsTitle: 'adminTitle',
-    defaultColumns: ['adminTitle', 'startDate', 'status', 'limit'],
+    defaultColumns: ['adminTitle', 'order', 'startDate', 'status', 'limit'],
     description: 'Seasonal Bible Studies and small groups available for registration',
     pagination: { defaultLimit: 30 },
     components: {
-      beforeList: ['/components/admin/BibleStudyExportButton#default'],
+      beforeList: [
+        '/components/admin/BibleStudyExportButton#default',
+        '/components/admin/BibleStudySemesterFilter#default',
+      ],
     },
   },
   access: {
     read: () => true,
     delete: ({ req }) => Boolean(req.user),
   },
-  defaultSort: '-startDate',
+  defaultSort: 'order,-startDate',
   hooks: {
     beforeValidate: [
       async ({ data, req }) => {
@@ -34,8 +37,18 @@ export const BibleStudies: CollectionConfig = {
       },
     ],
     beforeChange: [
-      async ({ data, req }) => {
+      async ({ data, req, operation }) => {
         if (data) {
+          if (operation === 'create' && data.semesterRef && (!data.order || data.order < 1)) {
+            const latest = await req.payload.find({
+              collection: 'bible-studies',
+              where: { semesterRef: { equals: typeof data.semesterRef === 'object' ? data.semesterRef.id : data.semesterRef } },
+              sort: '-order',
+              limit: 1,
+              depth: 0,
+            })
+            data.order = Number(latest.docs[0]?.order || 0) + 1
+          }
           let semester = ''
           if (data.semesterRef && typeof data.semesterRef === 'object') semester = data.semesterRef.name || ''
           else if (data.semesterRef) {
@@ -74,6 +87,13 @@ export const BibleStudies: CollectionConfig = {
       name: 'adminTitle',
       type: 'text',
       admin: { hidden: true },
+    },
+    {
+      name: 'order',
+      type: 'number',
+      defaultValue: 0,
+      label: 'Sort Order · 정렬 순서',
+      admin: { position: 'sidebar', description: 'Lower numbers appear first within the Bible Studies list.' },
     },
     {
       name: 'courseType',

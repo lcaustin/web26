@@ -24,12 +24,16 @@ export default function BibleStudyExportButton() {
       })
       .filter(Boolean)
 
-    if (checked.length === 0) {
-      window.alert('내보낼 그룹을 먼저 선택해 주세요. · Select at least one group.')
+    const semesterId = new URLSearchParams(window.location.search).get('where[semesterRef][equals]')
+    if (checked.length === 0 && !semesterId) {
+      window.alert('학기를 선택하거나 내보낼 그룹을 먼저 선택해 주세요. · Select a semester or at least one group.')
       return
     }
 
-    window.location.href = `/api/bible-studies/export?ids=${encodeURIComponent(checked.join(','))}`
+    const params = new URLSearchParams()
+    if (checked.length) params.set('ids', checked.join(','))
+    if (semesterId) params.set('semesterId', semesterId)
+    window.location.href = `/api/bible-studies/export?${params.toString()}`
   }
 
   const button = (
@@ -39,7 +43,7 @@ export default function BibleStudyExportButton() {
       className="btn btn--style-secondary"
       style={{ padding: '0 10px', marginInlineStart: '0.75rem' }}
     >
-      CSV 내보내기 · Export selected
+      CSV 내보내기 · Export
     </button>
   )
 
