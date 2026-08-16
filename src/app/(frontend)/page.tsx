@@ -9,7 +9,9 @@ import QuickLinks from '@/components/QuickLinks'
 import SermonAndNews from '@/components/SermonAndNews'
 import SpecialEvent from '@/components/SpecialEvent'
 
-export const dynamic = 'force-dynamic'
+// Cache the landing page at Vercel's edge and regenerate it at most every
+// five minutes. This keeps the page fast while allowing timely content updates.
+export const revalidate = 300
 
 const CHURCH_TIME_ZONE = 'America/Chicago'
 

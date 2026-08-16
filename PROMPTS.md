@@ -103,3 +103,6 @@ This file summarizes the project requests made before prompt-by-prompt logging b
 - Production Introduction seeding was blocked by a stale missing media relation; changed page lookups to depth 0 so missing media cannot cause a 404.
 - Requested a slight font-size increase in the `.senior-pastor` container.
 - Requested removing the one-open-reservation-per-requester restriction so users can submit multiple reservations.
+- Confirmed the Bible Study signup system and Room Booking system are complete; continue with Photo · Google Drive.
+- Requested that photos under `<year>/NO_ALBUM` use each filename as the visible photo title instead of displaying `NO_ALBUM` as an album name.
+- Approved using option #1: five-minute Next.js ISR caching for the landing page on Vercel.
