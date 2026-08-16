@@ -46,6 +46,7 @@ import * as migration_20260730_050000_rename_room_booking_label from './20260730
 import * as migration_20260730_060000_add_room_reservation_recurrence from './20260730_060000_add_room_reservation_recurrence';
 import * as migration_20260731_010000_add_reservation_admin_email from './20260731_010000_add_reservation_admin_email';
 import * as migration_20260731_020000_add_reservation_approval_token from './20260731_020000_add_reservation_approval_token';
+import * as migration_20260816_010000_add_homepage_indexes from './20260816_010000_add_homepage_indexes';
 import * as migration_20260730_010000_add_bible_study_semester_status from './20260730_010000_add_bible_study_semester_status';
 import * as migration_20260730_020000_add_bible_study_semester_active from './20260730_020000_add_bible_study_semester_active';
 
@@ -299,5 +300,10 @@ export const migrations = [
     up: migration_20260731_020000_add_reservation_approval_token.up,
     down: migration_20260731_020000_add_reservation_approval_token.down,
     name: '20260731_020000_add_reservation_approval_token',
+  },
+  {
+    up: migration_20260816_010000_add_homepage_indexes.up,
+    down: migration_20260816_010000_add_homepage_indexes.down,
+    name: '20260816_010000_add_homepage_indexes',
   },
 ];

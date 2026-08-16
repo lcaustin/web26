@@ -106,3 +106,4 @@ This file summarizes the project requests made before prompt-by-prompt logging b
 - Confirmed the Bible Study signup system and Room Booking system are complete; continue with Photo · Google Drive.
 - Requested that photos under `<year>/NO_ALBUM` use each filename as the visible photo title instead of displaying `NO_ALBUM` as an album name.
 - Approved using option #1: five-minute Next.js ISR caching for the landing page on Vercel.
+- Approved implementing caching option #7: homepage-focused database indexes.
