@@ -249,6 +249,9 @@ export default async function BibleStudiesPage() {
                     <h2 className="text-2xl font-bold text-[var(--t1)]">
                       {group.titleKo}
                     </h2>
+
+
+
                     <p className="text-sm text-[var(--t2)] mt-1">
                       {group.titleEn}
                     </p>

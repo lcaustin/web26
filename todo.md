@@ -27,8 +27,8 @@
 - [x] 미디어 - 뉴스 (Media - News)
 - [x] 소식 (News / Announcements)
 
-- [ ] Bible study signup system
-- [ ] Room booking system & calendar
+- [x] Bible study signup system
+- [x] Room booking system & calendar
 
 ## Mobile
 

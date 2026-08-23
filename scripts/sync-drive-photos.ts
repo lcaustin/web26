@@ -144,9 +144,13 @@ function photoLocation(relativeSource: string): PhotoLocation {
   if (!filename || !category || !yearFolder || !/^\d{4}$/.test(yearFolder)) {
     throw new Error(`Place photos in UPLOAD/<category>/<year>/<album>/... (for example, UPLOAD/교육부/2026/VBS/image.jpg): ${relativeSource}`)
   }
+  const isNoAlbum = parts.length === 1 && parts[0].toUpperCase() === 'NO_ALBUM'
   const relativeOutput = path.join(category, yearFolder, ...parts, `${path.basename(filename, path.extname(filename))}.webp`)
-  const albumTitle = parts.length ? [yearFolder, ...parts].join(' ') : `${yearFolder} ${category}`
-  const albumKey = `drive:${[category, yearFolder, ...parts].join('/')}`
+  // Files in NO_ALBUM become one-photo albums so the filename is visible as
+  // the photo title on the gallery page instead of showing "NO_ALBUM".
+  const filenameTitle = path.basename(filename, path.extname(filename))
+  const albumTitle = isNoAlbum ? filenameTitle : (parts.length ? [yearFolder, ...parts].join(' ') : `${yearFolder} ${category}`)
+  const albumKey = `drive:${isNoAlbum ? [category, yearFolder, filename].join('/') : [category, yearFolder, ...parts].join('/')}`
   return { category, year: Number(yearFolder), albumKey, albumTitle, itemKey: `drive:${hash(relativeOutput)}`, relativeOutput }
 }
 
