@@ -363,7 +363,7 @@ section { padding: 56px 0; }
 .dept-section { padding: 56px 0; }
 .dept-row { display: grid; gap: 10px; grid-template-columns: repeat(4, 1fr); }
 .dept-row + .dept-row { margin-top: 10px; }
-@media (max-width: 640px) {
+@media (max-width: 860px) {
   .dept-row { grid-template-columns: repeat(2, 1fr); }
 }
 .dept-tile { background: var(--surf); border: 1px solid var(--bdr); border-radius: 10px; padding: 16px 10px; text-align: center; cursor: pointer; transition: background 0.15s, border-color 0.25s; }
