@@ -363,6 +363,8 @@ section { padding: 56px 0; }
 
 .dept-section { padding: 56px 0; }
 .room-directory-image { margin: 3rem auto 2.5rem; max-width: 960px; text-align: center; }
+.room-directory-image a { display: block; }
+.room-directory-anchor { display: inline-block; margin-top: 1rem; color: var(--link); text-decoration: underline; text-underline-offset: 3px; }
 .room-directory-image img { display: block; width: 100%; height: auto; border: 1px solid var(--bdr); border-radius: 8px; }
 .room-directory-image figcaption { margin-top: 0.6rem; color: var(--t2); font-size: 0.85rem; }
 .dept-row { display: grid; gap: 10px; grid-template-columns: repeat(4, 1fr); }

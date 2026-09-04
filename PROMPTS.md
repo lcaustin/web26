@@ -162,3 +162,5 @@ This file summarizes the project requests made before prompt-by-prompt logging b
 - Clarified that Rooms should sort by `room_number` ascending only.
 - Requested room number be used as the primary key; clarified that Payload IDs must remain primary keys, so room number is enforced as a unique key.
 - Reported that the Android time picker’s Save button is not sufficiently visible.
+- Requested the lc-directory anchor be placed below the reservation calendar.
+- Clarified that the lc-directory anchor should scroll to the actual directory image.
