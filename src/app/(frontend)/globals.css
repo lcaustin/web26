@@ -218,6 +218,7 @@ nav {
 .welcome-divider { width: 36px; height: 2px; background: rgba(212, 169, 60, 0.6); border-radius: 1px; margin: 2px 0; }
 .welcome-link { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 12px; font-weight: 500; color: #d4a93c; text-decoration: none; border: 1px solid rgba(212, 169, 60, 0.4); border-radius: 999px; padding: 7px 16px; transition: background 0.15s, color 0.15s; }
 .welcome-link:hover { background: rgba(212, 169, 60, 0.12); }
+@media (max-width: 600px) { .welcome-ko { max-width: 11em; margin-inline: auto; } }
 
 section { padding: 56px 0; }
 .sec-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 24px; }
@@ -683,6 +684,7 @@ footer { background: var(--bg-alt); border-top: 1px solid var(--bdr); padding: 3
 .form-grid { display: grid; gap: 16px; margin-top: 28px; }
 .form-grid label { display: grid; gap: 7px; color: var(--t1); font-size: 14px; font-weight: 600; }
 .form-grid input, .form-grid select, .form-grid textarea { box-sizing: border-box; width: 100%; border: 1px solid var(--bdr2); border-radius: 8px; padding: 11px 12px; background: var(--bg); color: var(--t1); font: inherit; font-weight: 400; }
+.form-grid input[type="time"] { min-height: 48px; min-width: 0; font-size: 16px; line-height: 1.25; -webkit-appearance: auto; appearance: auto; color-scheme: light dark; touch-action: manipulation; }
 .form-grid input:focus, .form-grid select:focus, .form-grid textarea:focus { outline: 2px solid color-mix(in srgb, var(--gld) 45%, transparent); outline-offset: 1px; border-color: var(--gld); }
 .form-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 .form-grid button { justify-self: start; border: 1px solid var(--gld); border-radius: 8px; padding: 11px 18px; background: var(--gld); color: #17130a; font: inherit; font-weight: 700; cursor: pointer; }
@@ -699,6 +701,7 @@ footer { background: var(--bg-alt); border-top: 1px solid var(--bdr); padding: 3
 .booking-confirm-actions button { border: 1px solid var(--bdr2); border-radius: 8px; padding: 10px 14px; background: transparent; color: var(--t1); font: inherit; cursor: pointer; }
 .booking-confirm-actions button:last-child { border-color: var(--gld); background: var(--gld); color: var(--surf); font-weight: 700; }
 @media (max-width: 600px) { .page-shell { width: min(100% - 24px, 1120px); padding-top: 48px; } .form-row { grid-template-columns: 1fr; } .page-header h1 span { display: block; margin: 7px 0 0; font-size: .55em; } }
+@media (max-width: 600px) { .room-booking-page { padding-bottom: calc(32px + env(safe-area-inset-bottom)); } }
 .staff-email:hover { color: var(--link); }
 @media (max-width: 900px) { .staff-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 820px) { .training-card-grid { grid-template-columns: 1fr; } .training-panel { padding: 24px 18px; } .training-feature-image { width: 100%; } .training-wide-banner { margin-bottom: 24px; } .training-hero p { font-size: 15px; letter-spacing: 0.32em; text-indent: 0.32em; } .training-hero h2 { font-size: 23px; } }

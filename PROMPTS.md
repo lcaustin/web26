@@ -145,6 +145,12 @@ This file summarizes the project requests made before prompt-by-prompt logging b
 - Requested room numbers appear in reservation request and approval emails.
 - Requested the building directory image link appear at the bottom of reservation emails.
 - Entered `1111`.
+- Requested clickable calendar dates that populate the reservation date field and asked about a better time selector.
+- Reported that native time input did not enforce 15-minute intervals.
+- Requested the minutes control display only 15-minute interval options.
+- Clarified that a clock-style native time picker is preferred over a long dropdown.
+- Requested the Korean welcome message wrap to two lines on mobile-sized screens.
+- Specified the exact welcome line break: `어스틴 주님의 교회에` followed by `오신 것을 환영합니다`.
 - Requested labeled detail fields in reservation emails for room, date, time, requester, phone, email, and purpose.
 - Asked whether the booking calendar shows only approved reservations and reported missing room numbers in calendar entries.
 - Requested adding `lc-directory.jpg` to the reservation page.
@@ -155,3 +161,4 @@ This file summarizes the project requests made before prompt-by-prompt logging b
 - Requested the Rooms admin list use ascending order.
 - Clarified that Rooms should sort by `room_number` ascending only.
 - Requested room number be used as the primary key; clarified that Payload IDs must remain primary keys, so room number is enforced as a unique key.
+- Reported that the Android time picker’s Save button is not sufficiently visible.
