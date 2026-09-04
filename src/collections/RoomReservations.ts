@@ -31,7 +31,10 @@ export const RoomReservations: CollectionConfig = {
       if (operation === 'create' || (operation === 'update' && previousDoc?.status !== doc.status)) {
         const room = typeof doc.room === 'object' ? doc.room : await req.payload.findByID({ collection: 'rooms', id: doc.room })
         const date = String(doc.date).slice(0, 10)
-        const body = `<p>${room?.nameKo || ''} (${room?.nameEn || ''})</p><p>Date: ${date}<br>Time: ${doc.startTime} ~ ${doc.endTime}</p><p>${doc.name}<br>${doc.email}<br>${doc.phone}</p><p>${doc.purpose || ''}</p>${operation === 'create' && doc.approvalToken ? `<p><a href="${process.env.NEXT_PUBLIC_SERVER_URL || 'https://2026.lcaustin.org'}/api/room-reservations/approve?token=${encodeURIComponent(doc.approvalToken)}">Approve reservation</a></p>` : ''}`
+        const roomNumber = room?.roomNumber ? `${room.roomNumber} ` : ''
+        const roomName = `${roomNumber}${room?.nameKo || ''}${room?.nameEn && room.nameEn !== room.nameKo ? ` · ${room.nameEn}` : ''}`
+        const directoryUrl = `${(process.env.R2_PUBLIC_URL || 'https://pub-2f2b09ce26ca48ca9b726870a49512c2.r2.dev').replace(/\/$/, '')}/uploads/image/lc-directory.jpg`
+        const body = `<p>${roomName}</p><p>Date: ${date}<br>Time: ${doc.startTime} ~ ${doc.endTime}</p><p>${doc.name}<br>${doc.email}<br>${doc.phone}</p><p>${doc.purpose || ''}</p>${operation === 'create' && doc.approvalToken ? `<p><a href="${process.env.NEXT_PUBLIC_SERVER_URL || 'https://2026.lcaustin.org'}/api/room-reservations/approve?token=${encodeURIComponent(doc.approvalToken)}">Approve reservation</a></p>` : ''}<p><a href="${directoryUrl}">View building directory · 교회 건물 안내</a></p>`
         const settings = await req.payload.findGlobal({ slug: 'site-settings' }).catch(() => null)
         const configuredEmails = String(settings?.reservations?.adminEmail || process.env.RESERVATION_ADMIN_EMAIL || DEFAULT_ADMIN_EMAIL).split(/[\s,;]+/).map((email) => email.trim()).filter(Boolean)
         await req.payload.sendEmail({ to: configuredEmails, subject: operation === 'create' ? `New reservation request: ${date}` : `Reservation ${doc.status}: ${date}`, html: body })

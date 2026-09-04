@@ -142,6 +142,9 @@ This file summarizes the project requests made before prompt-by-prompt logging b
 - Requested room numbers appear only once in room labels, omitting duplicate English names when identical.
 - Requested deletion of existing room reservations.
 - Requested multiple room-reservation approval recipient emails in Site Settings.
+- Requested room numbers appear in reservation request and approval emails.
+- Requested the building directory image link appear at the bottom of reservation emails.
+- Entered `1111`.
 - Requested adding `lc-directory.jpg` to the reservation page.
 - Requested the building directory image appear at the bottom of the reservation page.
 - Requested top margin separation before the directory image.
