@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react'
 
-type Booking = { id: string | number; date: string; startTime: string; endTime: string; purpose: string; room?: { nameKo?: string; nameEn?: string } | string; repeatRule?: string; repeatUntil?: string }
+type Booking = { id: string | number; date: string; startTime: string; endTime: string; purpose: string; room?: { roomNumber?: number; nameKo?: string; nameEn?: string } | string; repeatRule?: string; repeatUntil?: string }
 
 function key(date: Date) { return date.toISOString().slice(0, 10) }
 function daysInMonth(year: number, month: number) { return new Date(year, month + 1, 0).getDate() }

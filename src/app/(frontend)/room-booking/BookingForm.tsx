@@ -3,6 +3,7 @@ import { useRef, useState } from 'react'
 import Script from 'next/script'
 
 export default function BookingForm({ rooms }: { rooms: any[] }) {
+  const roomLabel = (room: any) => `${room.roomNumber ?? ''}${room.roomNumber ? ' ' : ''}${room.nameKo}${room.nameEn && room.nameEn !== room.nameKo ? ` · ${room.nameEn}` : ''}`
   const [message, setMessage] = useState('')
   const [busy, setBusy] = useState(false)
   const [turnstileToken, setTurnstileToken] = useState('')
@@ -24,7 +25,7 @@ export default function BookingForm({ rooms }: { rooms: any[] }) {
     formRef.current?.reset(); setTurnstileToken(''); setMessage('예약 요청이 접수되었습니다. 관리자 승인 이메일을 기다려 주세요.')
   }
   return <><form onSubmit={submit} className="form-grid" style={{ maxWidth: 720 }}>
-    <label>공간 <select name="room" required defaultValue=""><option value="" disabled>선택하세요</option>{rooms.map(room => <option key={room.id} value={room.id}>{room.nameKo} · {room.nameEn}</option>)}</select></label>
+    <label>공간 <select name="room" required defaultValue=""><option value="" disabled>선택하세요</option>{rooms.map(room => <option key={room.id} value={room.id}>{roomLabel(room)}</option>)}</select></label>
     <label>날짜 <input name="date" type="date" required min={new Date().toISOString().slice(0, 10)} /></label>
     <div className="form-row"><label>시작 시간 <input name="startTime" type="time" required /></label><label>종료 시간 <input name="endTime" type="time" required /></label></div>
     <label>신청자 이름 <input name="name" required /></label><label>목적 <input name="purpose" required placeholder="예) 행복구역 구역모임" /></label>

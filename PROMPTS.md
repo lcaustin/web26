@@ -136,3 +136,17 @@ This file summarizes the project requests made before prompt-by-prompt logging b
 - Requested displayed Bible Study order numbers remain unchanged until the Save button is pressed.
 - Reported that the public Bible Studies page was not respecting saved group order.
 - Clarified that the summary list above the cards must use the same within-group order as the cards.
+- Requested parsing the attached building blueprint PDF and regenerating reservation rooms from its directory.
+- Clarified that regenerated room names must include the blueprint room numbers.
+- Clarified that room numbers should be stored as integer values.
+- Requested room numbers appear only once in room labels, omitting duplicate English names when identical.
+- Requested deletion of existing room reservations.
+- Requested multiple room-reservation approval recipient emails in Site Settings.
+- Requested adding `lc-directory.jpg` to the reservation page.
+- Requested the building directory image appear at the bottom of the reservation page.
+- Requested top margin separation before the directory image.
+- Requested reused approval links show `Already processed` after an admin has approved or rejected the reservation.
+- Requested a room `reservable` flag so admins can hide rooms from booking choices.
+- Requested the Rooms admin list use ascending order.
+- Clarified that Rooms should sort by `room_number` ascending only.
+- Requested room number be used as the primary key; clarified that Payload IDs must remain primary keys, so room number is enforced as a unique key.

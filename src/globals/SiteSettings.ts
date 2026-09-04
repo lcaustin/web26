@@ -118,7 +118,7 @@ export const SiteSettings: GlobalConfig = {
       name: 'reservations',
       label: 'Room Reservations',
       fields: [
-        { name: 'adminEmail', type: 'email', label: 'Notification Email', admin: { description: 'Reservation requests and status notifications are sent to this address.' } },
+        { name: 'adminEmail', type: 'textarea', label: 'Notification Emails', admin: { description: 'Enter one or more recipient addresses separated by commas or new lines. Reservation requests are sent to all.' } },
       ],
     },
   ],

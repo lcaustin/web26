@@ -361,6 +361,9 @@ section { padding: 56px 0; }
 .news-item--linked:hover .news-title { color: var(--gld); }
 
 .dept-section { padding: 56px 0; }
+.room-directory-image { margin: 3rem auto 2.5rem; max-width: 960px; text-align: center; }
+.room-directory-image img { display: block; width: 100%; height: auto; border: 1px solid var(--bdr); border-radius: 8px; }
+.room-directory-image figcaption { margin-top: 0.6rem; color: var(--t2); font-size: 0.85rem; }
 .dept-row { display: grid; gap: 10px; grid-template-columns: repeat(4, 1fr); }
 .dept-row + .dept-row { margin-top: 10px; }
 @media (max-width: 860px) {

@@ -33,8 +33,8 @@ export const RoomReservations: CollectionConfig = {
         const date = String(doc.date).slice(0, 10)
         const body = `<p>${room?.nameKo || ''} (${room?.nameEn || ''})</p><p>Date: ${date}<br>Time: ${doc.startTime} ~ ${doc.endTime}</p><p>${doc.name}<br>${doc.email}<br>${doc.phone}</p><p>${doc.purpose || ''}</p>${operation === 'create' && doc.approvalToken ? `<p><a href="${process.env.NEXT_PUBLIC_SERVER_URL || 'https://2026.lcaustin.org'}/api/room-reservations/approve?token=${encodeURIComponent(doc.approvalToken)}">Approve reservation</a></p>` : ''}`
         const settings = await req.payload.findGlobal({ slug: 'site-settings' }).catch(() => null)
-        const adminEmail = settings?.reservations?.adminEmail || process.env.RESERVATION_ADMIN_EMAIL || DEFAULT_ADMIN_EMAIL
-        await req.payload.sendEmail({ to: adminEmail, subject: operation === 'create' ? `New reservation request: ${date}` : `Reservation ${doc.status}: ${date}`, html: body })
+        const configuredEmails = String(settings?.reservations?.adminEmail || process.env.RESERVATION_ADMIN_EMAIL || DEFAULT_ADMIN_EMAIL).split(/[\s,;]+/).map((email) => email.trim()).filter(Boolean)
+        await req.payload.sendEmail({ to: configuredEmails, subject: operation === 'create' ? `New reservation request: ${date}` : `Reservation ${doc.status}: ${date}`, html: body })
         if (operation !== 'create' && doc.email) await req.payload.sendEmail({ to: doc.email, subject: `Room reservation ${doc.status}: ${date}`, html: body })
       }
       return doc
