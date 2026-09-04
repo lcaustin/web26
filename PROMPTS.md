@@ -145,6 +145,8 @@ This file summarizes the project requests made before prompt-by-prompt logging b
 - Requested room numbers appear in reservation request and approval emails.
 - Requested the building directory image link appear at the bottom of reservation emails.
 - Entered `1111`.
+- Requested labeled detail fields in reservation emails for room, date, time, requester, phone, email, and purpose.
+- Asked whether the booking calendar shows only approved reservations and reported missing room numbers in calendar entries.
 - Requested adding `lc-directory.jpg` to the reservation page.
 - Requested the building directory image appear at the bottom of the reservation page.
 - Requested top margin separation before the directory image.
